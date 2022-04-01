@@ -25,7 +25,7 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 
 ### 기술 스택: react.js node.js express.js
 
-### git 
+### git flow, git 명령어, git 컨벤션 
 
 <a id="git"></a>
 
