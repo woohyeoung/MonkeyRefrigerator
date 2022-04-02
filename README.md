@@ -2,14 +2,22 @@
 Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 - 레시피 데이터를 이용한 웹 어플리케이션 서비스
 
+--- 
+
 ## git flow, git 명령어, git 컨벤션
 <a href="#git" style= " font-size:35px">click!!</a> 
+
+--- 
 
 ## 구성
 #### 프로젝트 구성 : 요구사항 분석 -> 계획 -> 설계 -> 구현 -> 시험
 #### 발표 구성 : 요구사항 분석(문제인식, 문제분석, 해결전제) -> 전략 -> 전략에 대한 문제점-> 해결방안
 
+---
+
 ## 전체 구성 단계
+
+---
 
 ## 기능
 - 회원가입
@@ -21,24 +29,32 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
    - 카테고리별, 재료별   
 - 레시피 냉장고
 
+---
+
 ### 개발 환경 도구 : vscode
 
 ### 기술 스택: react.js node.js express.js
+
+---
 
 ### git flow, git 명령어, git 컨벤션 
 
 <a id="git"></a>
 
-받기전에  add , commit 필수!!!
+▶▶▶▶▶ upstream main을 받을때는 rebase나 merge를 합시다. ◀◀◀◀◀ <br>
+▶▶▶▶▶ 받기전에  add , commit 필수!!!◀◀◀◀◀
+
+```
 - 원격 개인저장소 및 원격 조직 저장소에 올리기
 - 올리기전에 pull이나 fetch로 변경점 확인
 
-▶▶▶▶▶ upstream main을 받을때는 rebase나 merge를 
 git fetch upstream
 git rebase upstream/main
+```
 
---- 기본 올리는 명령어
+##### git 기본 명령어
 
+```
 1. add : 변경된 파일 스테이징
 
 . 모든 파일 스테이징
@@ -53,7 +69,28 @@ git commit -m "커밋 메시지"
 3. push : 원격저장소에 변경된 파일 올리기
 git push origin main
 ```
-- team4 git commit 컨벤션
+
+```
+- 깃 초기 셋팅(원하는 본인의 디렉토리에서)
+git init
+
+- 프로젝트 clone
+git clone 주소
+
+- 원격 연결 확인
+git remote -v
+
+- 원격 연결
+git remote add upstream 조직주소
+git remote add origin 개인주소
+
+- pull : 원격 저장소의 정보를 가져오면서 자동으로 로컬 브랜치에 병합(Merge)까지 수행해주는 명령어 
+git pull upstream main
+
+```
+
+##### team4 git commit 컨벤션
+
 ```
 추가시
 feat:3/18, add news menu 
@@ -65,7 +102,8 @@ docs:3/20, add web/js
 refator:3/21, refactor web/js/main.js
 ```
 
-- local에 upastream 최신화 후 작업하기
+##### local에 upastream 최신화 후 작업하기
+
 ```
 --- 작업 전 upstream/main 과 merge , 병합, 합치기 (소스트리에 pull 이라고 생각합시다.)
 
@@ -95,25 +133,7 @@ git push origin main
 pull request 시 title과 content에 커밋메시지 보다 더 구체적으로 적어주세요.
 ```
 
-- git 명령어 
-```
-- 깃 초기 셋팅(원하는 본인의 디렉토리에서)
-git init
-
-- 프로젝트 clone
-git clone 주소
-
-- 원격 연결 확인
-git remote -v
-
-- 원격 연결
-git remote add upstream 조직주소
-git remote add origin 개인주소
-
-- pull : 원격 저장소의 정보를 가져오면서 자동으로 로컬 브랜치에 병합(Merge)까지 수행해주는 명령어 
-git pull upstream main
-
-==================================================
+---
 
 ##### background-color
 ##### font
