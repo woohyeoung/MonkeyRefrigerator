@@ -1,12 +1,9 @@
 # MonkeyRefrigerator
 Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
+- 자취생, 주부, 요리를 잘못하는 아버지도 다양한 레시피로 요리를 해먹자 
 - 레시피 데이터를 이용한 웹 어플리케이션 서비스
-
 --- 
-
-## git flow, git 명령어, git 컨벤션
-<a href="#git" style= " font-size:35px">click!!</a> 
-
+## git을 모르겠어요 <a href="#git" style= " font-size:35px">click!!</a> 
 --- 
 
 ## 구성
@@ -35,7 +32,11 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 
 ### 개발 환경 도구 : vscode
 
-### 기술 스택: react.js node.js express.js
+### 기술 스택:
+- javascript , node.js
+- front-end : react.js 
+- back-end : express.js
+- oracle
 
 ---
 
@@ -91,8 +92,8 @@ git pull upstream main
 
 ```
 
-##### team4 git commit 컨벤션
-
+##### team4 git commit 컨벤션 
+▶▶▶▶▶ 직관!!!◀◀◀◀◀
 ```
 추가시
 feat:3/18, add news menu 
@@ -104,7 +105,8 @@ docs:3/20, add web/js
 refator:3/21, refactor web/js/main.js
 ```
 
-##### local에 upastream 최신화 후 작업하기
+##### local에 upastream 최신화 후 작업하기 
+▶▶▶▶▶ 중요!!!◀◀◀◀◀
 
 ```
 --- 작업 전 upstream/main 과 merge , 병합, 합치기 (소스트리에 pull 이라고 생각합시다.)
