@@ -171,13 +171,15 @@ pull request 시 title과 content에 커밋메시지 보다 더 구체적으로 
 ---
 
 ##### background-color
+rgb(242,243,245)
+
 ##### font
 - 다양한 google Fonts 및 kopub체 , 배달의 민족체, 엘리스체
+- 헤더 팀명: Jua체 
+- 헤더 nav: kopub체
+- 컨테이너(본문) : Do Hyeon체
+- 푸터: kopub체
 
-헤더 팀명: Jua체 
-헤더 nav: kopub체
-컨테이너(본문) : Do Hyeon체
-푸터: kopub체
 ##### icon
 - [material](https://material.io/search.html?q=filled)
 
