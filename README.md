@@ -27,9 +27,9 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 
 ## 기능별 역할분담
   - 회원 
-    - 
+    - 희수, 우형
   - 게시물
-    -
+    - 재빈, 상윤
   
   
 ### ERD  
