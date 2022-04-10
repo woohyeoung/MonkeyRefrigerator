@@ -1,0 +1,1 @@
+//BoardDetail.js
