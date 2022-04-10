@@ -1,5 +1,5 @@
 # MonkeyRefrigerator
-##### 최종 수정 : 220408 정재빈 
+##### 최종 수정 : 220410 정재빈 
 Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 - 자취생, 주부, 요리를 잘못하는 아버지도 다양한 레시피로 요리를 해먹자 
 - 레시피 데이터를 이용한 웹 어플리케이션 서비스
@@ -10,6 +10,10 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 ## 구성
 #### 프로젝트 구성 : 요구사항 분석 -> 계획 -> 설계 -> 구현 -> 시험
 #### 발표 구성 : 요구사항 분석(문제인식, 문제분석, 해결전제) -> 전략 -> 전략에 대한 문제점-> 해결방안
+
+### [스토리보드](https://ovenapp.io/view/RY03iHLvicj9EbCmSsBtuFAkUPoPhPvK/WtQlw)
+### [플로우차트]()
+### [ERD](https://aquerytool.com/aquerymain/index/?rurl=9813bafe-98ff-43ee-b8db-9fec37264918)
 
 ---
 
@@ -31,9 +35,7 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
     - 희수, 우형
   - 게시물
     - 재빈, 상윤
-  
-  
-### ERD  
+    
 ---
 
 ## 기능 (★★★기능 우선순위 포함★★★)
@@ -99,7 +101,10 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 - javascript , node.js
 - front-end : react.js 
 - back-end : express.js
-- oracle
+- DB : oracle
+
+### 버전관리 및 소스코드 관리 :
+- git
 
 ---
 
