@@ -1,16 +1,32 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
+import React, { useContext, useEffect, useState } from 'react';
 import './App.css';
+//redux
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import rootReducer from './store/reducers/indexReducer';
+
+//Header & Footer
+import Header from './components/Header';
+import Footer from './components/Footer';
+
+//Main
+import Main from './components/Main';
+
+//store
+const store = createStore(rootReducer);
 
 //최상위 컴포넌트 App
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-      최상위 컴포넌트 App
-    
-      </header>
-    </div>
-  );
+	return (
+		<Provider store={store}>
+			<Header />
+			<div className="container">
+				<Main />
+			</div>
+			<Footer />
+		</Provider>
+	);
 }
 
 export default App;
