@@ -1,10 +1,8 @@
-var express = require('express');
-var router = express.Router();
+//indexRoute, 뿌리 Route
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-	// res.render('index', { title: 'Express' });
-	res.json(JSON.stringify({ title: 'Express' }));
-});
-
-module.exports = router;
+module.exports = function (app) {
+	const index = require('../controller/IndexContoller');
+	app.route('/').get(index.findIndex);
+	require('./boardRoute')(app);
+	// require('./userRoute')(app);
+};
