@@ -6,16 +6,12 @@ const { pool } = require('../config/database');
 module.exports = {
 	selectBoardList: async function () {
 		try {
-			// getConnection 연결
+			const query = `select * from board;`;
 			const connection = await pool.getConnection(async (conn) => conn);
-			console.log('11231231231223123');
-			const query = `select * from board`;
-
-			let [row] = await connection.query(query);
-
+			const [rows] = await connection.query(query);
 			connection.release();
-			console(row);
-			return row;
+			console.log(rows);
+			return rows;
 		} catch (err) {
 			return res.json(
 				response.successFalse(

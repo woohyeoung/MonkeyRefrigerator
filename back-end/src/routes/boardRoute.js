@@ -1,5 +1,4 @@
-//jwt valid func --> 미들웨어
-const { Router } = require('express');
+//jwt valid function --> 미들웨어
 const jwt = require('../config/jwt');
 
 module.exports = function (app) {
