@@ -4,11 +4,10 @@ import './App.css';
 //redux
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import rootReducer from './store/reducers/indexReducer';
+import rootReducer from './store/indexReducer';
 
-//Header & Footer
+//Header
 import Header from './components/Header';
-import Footer from './components/Footer';
 
 //Main
 import Main from './components/Main';
@@ -24,7 +23,6 @@ function App() {
 			<div className="container">
 				<Main />
 			</div>
-			<Footer />
 		</Provider>
 	);
 }

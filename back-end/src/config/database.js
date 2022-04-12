@@ -1,19 +1,24 @@
-<<<<<<< HEAD
-//database.js
-=======
-// //database.js
-// const oracledb = require('oracledb');
-// let pool;
+const mysql = require('mysql2/promise');
+const env = require('dotenv').config();
+let pool;
 
-// pool = oracledb.createPool({
-// 	connectString: 'kosa2.iptime.org:50136/DEVDB',
-// 	user: 'DEVDB',
-// 	password: '1234',
-// 	externalAuth: false,
-// 	// connectionLimit: 20,
-// 	// multipleStatements: true,
-// });
-// module.exports = {
-// 	pool: pool,
-// };
->>>>>>> f283122 (test:4/8, test)
+console.log('잘 들어왔니??');
+console.log(env.parsed.DB_HOST);
+
+pool = mysql.createPool({
+	connectionLimit: 20,
+	host: env.parsed.DB_HOST,
+	port: env.parsed.DB_PORT,
+	user: env.parsed.DB_USER,
+	password: env.parsed.DB_PWD,
+	database: env.parsed.DB_NAME,
+	multipleStatements: true,
+});
+// console.log(pool);
+// console.log(pool.pool);
+// console.log(pool.config);
+
+module.exports = {
+	pool: pool,
+};
+//module.exports = app
