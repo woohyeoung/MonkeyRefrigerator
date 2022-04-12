@@ -1,4 +1,4 @@
-//db 연동 테스트입니다.
+//오라클 db 연동 테스트입니다.
 var express = require('express');
 var http = require('http');
 var path = require('path');

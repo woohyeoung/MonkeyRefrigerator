@@ -1,3 +1,11 @@
+//jwt valid func --> 미들웨어
+const { Router } = require('express');
+const jwt = require('../config/jwt');
+
 module.exports = function (app) {
-	// const board =
+	const board = require('../controller/BoardController');
+	// const jwtMiddleware = require('../config/jwt');
+
+	app.route('/board').get(board.findBoardAll);
+	// app.route('/board/detail').get(board.findBoardAll);
 };
