@@ -6,7 +6,7 @@ const { pool } = require('../config/database');
 module.exports = {
 	selectBoardList: async function () {
 		try {
-			const query = `select * from board;`;
+			const query = `select b.id,b.title,b.subtitle, b.createAt,u.nickname,u.profileImg from board b join useraccount u on b.userId = u.id;`;
 			const connection = await pool.getConnection(async (conn) => conn);
 			const [rows] = await connection.query(query);
 			connection.release();

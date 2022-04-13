@@ -1,13 +1,45 @@
 //BoardList.js
 
-import React from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { boardList } from '../../store/actions/BoardAction';
+import { Navbar, Nav, NavDropdown, Button, Jumbotron } from 'react-bootstrap';
+import { Card } from 'antd';
 import Icon from '@mdi/react';
 import ScrollTo from '../shared/ScrollTo';
+import BoardCard from './BoardCard';
+import Footer from '../Footer';
+import Grid from '@mui/material/Grid';
 
 function BoardList() {
+	const boardStore = useSelector((state) => state.boardReducer);
+
+	const dispatch = useDispatch();
+
+	const [boards, setBoards] = useState([]);
+	const [boardId, setBoardId] = useState(0);
+	const [height, setHeight] = useState(window.innerHeight);
+
+	useEffect(() => {
+		dispatch(boardList());
+	}, []);
+
+	useEffect(() => {
+		if (boardStore.boardList.data) {
+			console.log(boardStore.boardList.data.data.result);
+			setBoards([...boardStore.boardList.data.data.result]);
+		}
+	}, [boardStore.boardList.data]);
+
 	return (
 		<>
 			<div>
+				{/* <BoardCard /> */}
+				<Grid container direction={'row'}>
+					{boards.map((item, index) => {
+						return <BoardCard item={item} key={index} />;
+					})}
+				</Grid>
 				2010-11 시즌 2010-11 시즌을 앞둔 프리시즌 경기에서 손흥민은 첼시를
 				상대로 역전골을 넣는 등 탁월한 골 결정력으로 인해 주목을 받기
 				시작하였다.[17] 그러나 바로 그 경기에서 입은 부상으로 시즌이 시작한 후
@@ -116,6 +148,7 @@ function BoardList() {
 				기록하였다.[28] 이로써 세 시즌 연속 두자릿수 득점을 올렸다.
 			</div>
 			<ScrollTo />
+			<Footer />
 		</>
 	);
 }
