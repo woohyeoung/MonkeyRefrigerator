@@ -18,7 +18,9 @@
 		"@testing-library/user-event": "^13.5.0",
 		"antd": "^4.19.5",
 		"axios": "^0.26.1",
+		"babel-loader": "^8.2.4",
 		"bootstrap": "4.6",
+		"css-loader": "^6.7.1",
 		"form-data": "^4.0.0",
 		"global": "^4.4.0",
 		"gsap": "^3.10.3",
@@ -33,11 +35,14 @@
 		"react-transition-group": "^4.4.2",
 		"redux": "^4.1.2",
 		"redux-thunk": "^2.4.1",
+		"sass": "^1.50.0",
+		"sass-loader": "^12.6.0",
+		"style-loader": "^3.3.1",
 		"styled-components": "^5.3.5",
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {
-		"start": "react-scripts start",
+		"start": "set PORT=8080 && react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject"

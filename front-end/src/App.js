@@ -22,7 +22,7 @@ function App() {
 	return (
 		<Provider store={store}>
 			<Header />
-			<div className="container">
+			<div className="container" style={{ background: '#fcf6f5ff' }}>
 				<BrowserRouter>
 					<Main />
 				</BrowserRouter>

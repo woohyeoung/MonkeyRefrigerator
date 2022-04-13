@@ -1,5 +1,6 @@
 /* App.css */
+@import '~antd/dist/antd.css';
 .container {
-  padding-top: 90px;
-  padding-bottom: 90px;
+	padding-top: 90px;
+	padding-bottom: 90px;
 }

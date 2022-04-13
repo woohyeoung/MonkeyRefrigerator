@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
-app.use(cors({ origin: ['http://localhost:3000', '*'] }));
+app.use(cors({ origin: ['http://localhost:3000', 'http://localhost:8080','*'] }));
 // app.use(function (req, res, next) {
 // 	res.header('Access-Control-Allow-Origin', '*');
 // 	res.header(

@@ -1,5 +1,10 @@
 /* Main.css */
-.center {
-	margin: 1% 7% 0 7%;
-	padding: 1% 7% 0 7%;
+@import '~antd/dist/antd.css';
+.content {
+	background-color: white;
+	margin: 10px 10px 50px 10px;
+	padding: 10px;
+}
+.container {
+	background-color: white;
 }
