@@ -23,6 +23,7 @@ module.exports = {
 			// 		boardList
 			// 	)
 			// );
+			console.log("왔어요 / 엔드 포인트로!!")
 		} catch (err) {
 			return res.json(
 				response.successFalse(
