@@ -192,6 +192,9 @@ git rebase upstream/main
 
 git add .
 git commit -m "merge: fix conflict and merge to upstream main"
+git rebase --continue
+
+한번 확인 하라는 창 뜹니다 :wq
 
 ... 작업 중...
 
