@@ -1,11 +1,11 @@
 import axios from "axios";
 import { baseUrl } from "./BaseUrl";
 
-export const findUser = (data) => {
-  const resultLogin = axios
+export const findUser = async (data) => {
+  const resultLogin = await axios
     .post(`${baseUrl}login`, data)
-    .then((result) => result.data)
-    .then((resolve) => resolve)
+    .then((promiseData) => promiseData.data)
+    .then((resolve) => resolve.result)
     .catch();
   return resultLogin;
 };

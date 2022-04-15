@@ -12,15 +12,15 @@ module.exports = {
       if (user === undefined) {
         return res.json(response.successFalse(6770, "유저 목록이 없습니다."));
       }
+      let accessToken = generateToken(user[0].email);
+
       return res.json(
-        response.successTrue(6771, "유저 정보를 전달하였습니다.", user)
+        response.successTrue(6771, "토큰을 전달하였습니다.", accessToken)
       );
     } catch (err) {
-      return res.json(
-        response.successFalse(
-          1001,
-          "서버와 통신에 실패하였습니다. UserController/UserDao error - findUser"
-        )
+      return response.successFalse(
+        1001,
+        "서버와 통신에 실패하였습니다. UserController/UserDao error - findUser"
       );
     }
   },

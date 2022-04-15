@@ -1,22 +1,20 @@
-import { Link } from "react-router-dom";
+import { Cookies } from "react-cookie";
+
 import { findUser } from "../../api/UserApi";
 export const LOGIN_VALI = "LOGIN_VALI";
 
+const cookies = new Cookies();
+const setCookie = (name, value, option) => {
+  return cookies.set(name, value, { ...option });
+};
 export const loginVali = (email, pw) => async (dispatch) => {
   dispatch({ type: LOGIN_VALI });
   const data = { email: email, pw: pw };
   try {
-    console.log("여기 액션");
     const user = await findUser(data);
-    validate(user, email);
+    console.log(user);
+    if (user !== undefined) {
+      setCookie(email, user, { path: "/", secure: true, sameSite: "none" });
+    }
   } catch (e) {}
-};
-
-const validate = (data, e) => {
-  if (data.result.length < 1) {
-    alert("이메일 또는 비밀번호가 맞지 않습니다.");
-  } else {
-    alert("로그인 성공");
-    //return <Link to="/"></Link>;
-  }
 };
