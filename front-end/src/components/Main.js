@@ -27,7 +27,7 @@ function Main() {
 						<Route path="/board">
 							<BoardList />
 						</Route>
-						<Route path={'/login'}>
+						<Route path="/login">
 							<Login />
 						</Route>
 					</Switch>
