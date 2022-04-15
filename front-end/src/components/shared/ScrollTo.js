@@ -1,19 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import Icon from '@mdi/react';
 import './scroll_to.css';
 import { mdiArrowUpDropCircle } from '@mdi/js';
 import { mdiArrowDownDropCircle } from '@mdi/js';
 import $ from 'jquery';
 import gsap from 'gsap';
+import ScrollToPlugin from 'gsap/ScrollToPlugin';
 
-/* 오른쪽 하단 스크롤 올리기 내리기 숨기기 */
-var windowHeight = document.body.scrollHeight;
-console.log(windowHeight);
-// 페이지 맨위로 올리기
-const toTopEl = $('#to-top');
-
-// 페이지 맨아래로 내리기
-const toBottomEl = $('#to-bottom');
+gsap.registerPlugin(ScrollToPlugin);
 
 $(window).scroll(function () {
 	$('#to-top').hide();
@@ -24,18 +18,7 @@ $(window).scroll(function () {
 		this,
 		'scrollTimer',
 		setTimeout(function () {
-			/**
-			 * $(window).scrollTop()
-			 * : 스크롤의 위치에 따라 변하는 값 (세로 좌표)
-			 * : 맨 위에서 0으로 시작하여 맨아래 도달시 스크롤 길이 max값을 가짐.
-			 * */
-
-			if (
-				Math.round($(window).scrollTop()) ===
-				$(document).height() - $(window).height()
-			) {
-				$('#to-top').show();
-			} else if ($(this).scrollTop()) {
+			if ($(this).scrollTop()) {
 				$('#to-top').show();
 				$('#to-bottom').show();
 			} else {
@@ -44,48 +27,69 @@ $(window).scroll(function () {
 		}, 250)
 	);
 });
+// 윈도우 높이 구하기
+function getWindowDimensions() {
+	const { innerWidth: width, innerHeight: height } = window;
+	return {
+		width,
+		height,
+	};
+}
 
-// // 페이지 맨위로 올리기
-// toTopEl.addEventListener('click', function () {
-// 	// 페이지 위치를 최상단으로 부드럽게(0.7초 동안) 이동.
-// 	gsap.to(window, 0.4, {
-// 		scrollTo: 0,
-// 	});
-// });
+function useWindowDimensions() {
+	const [windowDimensions, setWindowDimensions] = useState(
+		getWindowDimensions()
+	);
 
-// // 페이지 맨아래로 내리기
-// toBottomEl.addEventListener('click', function () {
-// 	// 페이지 위치를 최상단으로 부드럽게(0.7초 동안) 이동.
-// 	gsap.to(window, 0.4, {
-// 		scrollTo: windowHeight,
-// 	});
-// });
+	useEffect(() => {
+		function handleResize() {
+			setWindowDimensions(getWindowDimensions());
+		}
+
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	}, []);
+
+	return windowDimensions;
+}
 
 function ScrollTo() {
-	// 페이지 맨위로 올리기
-	toTopEl.on('click', () => {
-		// 페이지 위치를 최상단으로 부드럽게(0.7초 동안) 이동.
-		gsap.to(window, 0.4, {
-			scrollTo: 0,
-		});
-	});
+	// 스크롤을 하면서 실행할 내용을 이곳에 추가합니다.
+	let { innerHeight } = window;
+	// 브라우저창 내용의 크기 (스크롤을 포함하지 않음)
+	let { scrollHeight } = document.body;
+	// 브라우저 총 내용의 크기 (스크롤을 포함한다)
+	let { scrollTop } = document.documentElement;
+	const [height_, setHeight_] = useState();
+	useEffect(() => {
+		setHeight_($(document).height() - $(window).height() + 1);
+	}, []);
 
-	// 페이지 맨아래로 내리기
-	toBottomEl.on('click', () => {
-		// 페이지 위치를 최상단으로 부드럽게(0.7초 동안) 이동.
-		gsap.to(window, 0.4, {
-			scrollTo: windowHeight,
+	const toTop = useRef();
+	const toBottom = useRef();
+
+	const onTop = () => {
+		// 	// 페이지 위치를 최상단으로 부드럽게(1초 동안) 이동.
+		gsap.to(window, { duration: 1, scrollTo: 0 });
+	};
+	const onBottom = () => {
+		// 	// 페이지 위치를 최하단으로 부드럽게(1초 동안) 이동.
+		gsap.to(window, {
+			duration: 1,
+			scrollTo: height_,
 		});
-	});
+		setHeight_(height_ + $(document).height() - $(window).height() + 1);
+	};
+
 	return (
 		<>
 			{/* <!--TO BOTTOM BUTTON--> */}
-			<div id="to-bottom">
-				<Icon path={mdiArrowUpDropCircle} title="search" size={2} />
+			<div onClick={onBottom} ref={toTop} id="to-bottom">
+				<Icon path={mdiArrowDownDropCircle} title="search" size={2} />
 			</div>
 			{/* <!--TO TOP BUTTON--> */}
-			<div id="to-top">
-				<Icon path={mdiArrowDownDropCircle} title="search" size={2} />
+			<div onClick={onTop} ref={toBottom} id="to-top">
+				<Icon path={mdiArrowUpDropCircle} title="search" size={2} />
 			</div>
 		</>
 	);

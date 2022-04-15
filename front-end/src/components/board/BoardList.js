@@ -2,14 +2,19 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { boardList } from '../../store/actions/BoardAction';
-import { Navbar, Nav, NavDropdown, Button, Jumbotron } from 'react-bootstrap';
+import { boardList, boardListAfter } from '../../store/actions/BoardAction';
+import { Navbar, Nav, NavDropdown, Jumbotron, Button } from 'react-bootstrap';
 import { Card } from 'antd';
 import Icon from '@mdi/react';
 import ScrollTo from '../shared/ScrollTo';
 import BoardCard from './BoardCard';
-import Footer from '../Footer';
 import Grid from '@mui/material/Grid';
+// import Button from '@mui/material/Button';
+import './BoardList.css';
+import Loading from '../shared/CustomLoading';
+import '../shared/loading.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from 'react-router-dom';
 
 function BoardList() {
 	const boardStore = useSelector((state) => state.boardReducer);
@@ -17,138 +22,199 @@ function BoardList() {
 	const dispatch = useDispatch();
 
 	const [boards, setBoards] = useState([]);
+	const [likeBoards, setLikeBoards] = useState([]);
 	const [boardId, setBoardId] = useState(0);
-	const [height, setHeight] = useState(window.innerHeight);
+	const [page, setPage] = useState({
+		id: 0,
+		createAt: 0,
+	});
+	const [loading, setLoading] = useState(false);
+	const [selected, setSelected] = useState(1);
+	const [boardCount, setBoardCount] = useState(0);
 
+	const btn1 = useRef();
+	const btn2 = useRef();
+	const btn1Click = () => {
+		btn1.current.disabled = true;
+		btn2.current.disabled = false;
+		setSelected(1);
+	};
+	const btn2Click = () => {
+		btn1.current.disabled = false;
+		btn2.current.disabled = true;
+		setSelected(2);
+	};
 	useEffect(() => {
-		dispatch(boardList());
+		async function fetchBoardList() {
+			setLoading(true);
+			await dispatch(boardList());
+			setLoading(false);
+			btn1.current.disabled = true;
+		}
+		fetchBoardList();
 	}, []);
 
 	useEffect(() => {
 		if (boardStore.boardList.data) {
-			console.log(boardStore.boardList.data.data.result);
 			setBoards([...boardStore.boardList.data.data.result]);
 		}
 	}, [boardStore.boardList.data]);
 
+	useEffect(() => {
+		if (boards[0]) {
+			setBoardCount(boards[0].boardCount);
+			setPage({
+				id: boards[boards.length - 1].id,
+				createAt: boards[boards.length - 1].createAt,
+			});
+		}
+	}, [boards]);
+	useEffect(() => {
+		if (boardStore.boardListAfter.data) {
+			setBoards([...boards, ...boardStore.boardListAfter.data.data.result]);
+		}
+	}, [boardStore.boardListAfter.data]);
+
+	useEffect(() => {
+		console.log('추천순으로 바뀌어라 얍');
+	}, [selected]);
+
+	const handleScroll = useCallback(async () => {
+		// 스크롤을 하면서 실행할 내용을 이곳에 추가합니다.
+		const { innerHeight } = window;
+		// 브라우저창 내용의 크기 (스크롤을 포함하지 않음)
+		const { scrollHeight } = document.body;
+		// 브라우저 총 내용의 크기 (스크롤을 포함한다)
+		const { scrollTop } = document.documentElement;
+		// 현재 스크롤바의 위치
+		if (Math.round(scrollTop + innerHeight) >= scrollHeight) {
+			// scrollTop과 innerHeight를 더한 값이 scrollHeight보다 크다면, 가장 아래에 도달했다는 의미이다.
+
+			await dispatch(boardListAfter(page));
+		}
+	}, [page, boards]);
+
+	useEffect(() => {
+		window.addEventListener('scroll', handleScroll, true);
+		// 스크롤이 발생할때마다 handleScroll 함수를 호출하도록 추가합니다.
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll, true);
+			// 해당 컴포넌트가 언마운트 될때, 스크롤 이벤트를 제거합니다.
+		};
+	}, [handleScroll]);
+
 	return (
 		<>
-			<div>
-				{/* <BoardCard /> */}
-				<Grid container direction={'row'}>
-					{boards.map((item, index) => {
-						return <BoardCard item={item} key={index} />;
-					})}
-				</Grid>
-				2010-11 시즌 2010-11 시즌을 앞둔 프리시즌 경기에서 손흥민은 첼시를
-				상대로 역전골을 넣는 등 탁월한 골 결정력으로 인해 주목을 받기
-				시작하였다.[17] 그러나 바로 그 경기에서 입은 부상으로 시즌이 시작한 후
-				2010년 10월 28일 아인트라흐트 프랑크푸르트와의 DFB-포칼 경기에서
-				데뷔전을 가졌다.[18] 2010년 10월 30일 1. FC 쾰른전에서 분데스리가리그
-				데뷔와 함께 데뷔골을 넣었다.[19] 그는 18세의 나이로 골을 넣으며 39년동안
-				계속되던 만프레트 칼츠의 함부르크 최연소 득점 기록을 새로 세웠다. 2010년
-				11월 20일 하노버와의 리그 경기에서 시즌 2, 3호골 득점을 했다. 팀이 0:1로
-				뒤진 전반 40분 동점골을 넣었고, 후반 9분에는 역전골을 넣었으나 팀은
-				2:3으로 역전패했다.[20] 2011-12 시즌 7월 19일 열린 리가 토탈컵
-				준결승전에서 최전방스트라이커로 나선 손흥민은 바이에른 뮌헨을 상대로
-				멀티골을 기록, 2:1로 팀을 결승전으로 이끌어 프리시즌 7경기 17골의
-				골폭풍행진이 우연이 아님을 증명하며, 독일언론을 흥분시켰다.[21]
-				11-12시즌을 앞둔 프리시즌에 10경기 18골로 엄청난 득점력을 선보이며
-				새시즌에 대한 기대감을 높였다. 2011년 8월 13일 헤르타 베를린과의 리그
-				2라운드에서 첫 출전하여 풀타임을 소화하면서 시즌 첫 골을 기록하였고, 8월
-				27일에 열린 4라운드 1. FC 쾰른전에서 2:2로 맞선 후반 17분 역전골을 넣어
-				2호골을 기록하였다. 그 다음경기인 4월 21일 1. FC 뉘른베르크전에서도
-				흘러나온 공을 터닝 슈팅으로 마무리하며 2경기 연속골을 터트렸다. 토르스텐
-				핑크 감독이 부임하면서 시즌 내내 주전권을 확보하는 데 어려움을 겪었으나,
-				팀이 강등권으로 몰린 시즌 후반기에 하노버 96전과 1. FC 뉘른베르크전에서
-				득점을 올리는 등의 활약을 펼치며 팀을 강등권에서 구출하는데
-				일조하였다.[22] 2012-13 시즌 손흥민이 2012-13 시즌 베르더 브레멘과의
-				경기에서 엘제로 엘리아를 상대하고 있다. 2012-13 시즌 아인트라흐트
-				프랑크푸르트와의 3라운드 원정경기에서 손흥민은 시즌 첫 골을 성공시켰다.
-				하지만 팀은 2:3으로 패배했다. 또한 보루시아 도르트문트와의 4라운드
-				경기에서 시즌 2호 골과 3호 골을 연달아 넣으며 3:2 승리에 일조했다. 이후
-				그로이터 퓌르트와의 7라운드 경기에서 1골을 넣어 팀의 1:0 승리를
-				이끌었으며, 리그 득점 랭킹을 공동 2위로 올렸다. FC 아우크스부르크와의
-				9라운드 원정경기에서 선제골이자 5호 골을 터뜨려 팀의 2:0 승리를
-				이끌었다. 마인츠 05와의 12라운드 경기에서 6호 골을 터뜨려 함부르크의 1:0
-				승리의 결승골을 넣었다. 베르더 브레멘과의 19라운드 경기에는 0:1로 뒤지던
-				전반전에 자신에게 오는 크로스를 받아 측면 돌파에 이은 슈팅으로 7호
-				골이자 동점골을 넣어 팀의 3:2 역전승에 큰 도움을 줬다. 보루시아
-				도르트문트와의 21라운드 경기에서는 1:1로 맞서던 전반전에 수비수 한명을
-				제치고 측면 돌파후 왼발 감아차기 슈팅으로 시즌 8호 골이자 역전골을
-				넣었고, 후반 44분 낮은 크로스를 오른발 슈팅으로 연결해 9호 골을 넣으면서
-				팀의 4:1 승리를 이끌었고, 최고 평점을 받음과 동시에 함부르크 SV의 리그
-				순위 또한 5위로 상승하였다.[23] 4월 14일 마인츠 05와의 경기에서 10호,
-				11호 2골을 몰아쳐 팀의 2:1 승리에 크게 기여하는 동시에 대한민국 선수로는
-				차범근, 설기현, 박주영에 이어 네 번째 유럽파 두자릿 수 득점을
-				달성했으며, 특히 빅리그(잉글랜드 프리미어리그, 독일 푸스발-분데스리가,
-				스페인 라리가, 이탈리아 세리에 A)에서는 차범근에 이어 두 번째이다.[24]
-				뒤이어 어린 나이에 12호 골도 성공시켰다. 그러나 함부르크는 최종전을 꼭
-				승리해야 UEFA 유로파리그에 진출할 수 있었다. 그러나 상대는 3위 바이어 04
-				레버쿠젠이었다. 후반 종료 직전까지 동점을 이어왔으나 슈테판 키슬링의
-				슈팅이 골로 들어가 0:1로 패배 하였다. 손흥민은 시즌이 종료된 후
-				이적시장이 시작되자 프리미어리그에서는 맨체스터 유나이티드, 첼시, 토트넘
-				홋스퍼 등이 노렸고 분데스리가에서는 보루시아 도르트문트, 바이어 04
-				레버쿠젠이 영입전을 벌였다. 하지만 손흥민은 자신이 주전으로 뛸 수 있고
-				경쟁력이 충분히 있는 팀이라는 조건에 부합했던 바이어 04 레버쿠젠으로
-				이적을 확정지었다. 바이어 04 레버쿠젠 2013-14 시즌 바이어 04 레버쿠젠은
-				2013년 6월 13일 손흥민과 5년 계약을 맺었다고 발표했다.[25] 이적료는 1천
-				만 유로로 추정된다.[25] 프리시즌 3경기에서 경기당 1골씩을 넣었다. 6부
-				리그 소속 SV 립슈타트와의 DFB-포칼 1라운드(64강)에서 레버쿠젠 이적 후 첫
-				공식 시즌 1호골을 넣었고 1도움도 기록했다. 분데스리가 개막전 SC
-				프라이부르크와의 경기에서 시드니 샘의 도움을 받으며 1골을 기록했고(리그
-				1호골이자 시즌 2호골), DFB-포칼 2라운드(32강)에서 아르미니아
-				빌레펠트와의 경기에서 라르스 벤더의 패스를 받아 오른발 슈팅으로 마무리해
-				득점을 올렸고, 1도움도 기록하며 팀의 2:0의 승리를 이끌었다. 2013년 11월
-				9일에 열린 친정팀 함부르크 SV와의 경기에서 해트트릭(리그 2,3,4호골)을
-				기록하였고 후에 슈테판 키슬링의 골을 도우면서 팀의 5:3 승리에 큰 역할을
-				하였다.(3골 1도움) 이 해트트릭은 설기현에 이어 두번째로 한국 선수가 유럽
-				리그에서 기록한 해트트릭이고, 아시아에선 4번째로 기록됐으며, 이 골은
-				91일만에 넣은 골이라 더욱 의미 있는 해트트릭이었다. 이 활약으로 평점
-				만점을 받았으며 MOM (Man Of the Match)에도 선정되었다. 또한 FIFA는 10일
-				홈페이지 '메인화면'에 37경기 무패행진으로 독일 분데스리가 신기록을
-				수립한 FC 바이에른 뮌헨과 더불어 함부르크전에서 해트트릭을 기록한
-				손흥민의 활약상을 집중 조명했다. 그리고 손흥민은 '키커'지와 '빌트'지,
-				'유로 스포르트', 그리고 골닷컴 독일판 등 독일 유력 언론사들 선정
-				12라운드 베스트 일레븐을 싹쓸이했으며, 영국 통계 전문 사이트
-				후스코어드닷컴도 분데스리가 12라운드 베스트 11을 발표하며 미드필더 중 한
-				명으로 손흥민을 포함했다. 이날 손흥민은 아드리안 라모스(헤르타 BSC)와
-				함께 최고 평점인 10점을 받았다. 또한 FC 바이에른 뮌헨의 에이스 프랑크
-				리베리와 프랑크푸르트전 2골의 주인공 티보 베르너를 제치고 손흥민이
-				'키커'지 선정 2013/14 시즌 12라운드 이 주의 선수(1명 선정)에 올랐다. 또
-				손흥민은 분데스리가 12라운드 MVP에도 뽑혔다. 분데스리가 공식 홈페이지는
-				12일 "최우수선수 투표결과 손흥민이 52%의 득표로 12라운드 최고의 선수로
-				뽑혔다"라고 밝혔다. 11월 31일 FC 뉘른베르크와의 14라운드 경기에서 전반
-				36분 곤살로 카스트로의 측면 패스를 오른발 논스톱 슈팅으로 성공시키며
-				리그 5호골을 기록하였고 후반 31분 마찬가지로 곤살로 카스트로의 패스를
-				받아 왼발슛으로 리그 6호골을 기록하며 멀티골로 팀의 3:0 승리에
-				기여했다.[26] 한 경기에서 두 골의 활약을 펼친 손흥민은 경기가 끝난 뒤
-				실시된 독일 현지 언론 평가에서 최고점인 평점 10점을 획득하였다.[27]
-				보루시아 도르트문트와의 15라운드 경기에서 전반 18분 곤살로 카스트로의
-				패스를 받아 골키퍼를 제치고 왼발로 선제골이자 결승골인 리그 7호 골을
-				기록해 팀의 1:0 승리를 이끌었다. 20라운드 묀헨글라드바흐와의 경기에서
-				후반 16분 시드니 샘의 패스를 받아 오른발 중거리 슛으로 선제골이자
-				결승골을 넣어 팀의 1:0 승리를 이끌었다. SV 베르더 브레멘와의 34라운드
-				경기에서 후반 53분 헤딩으로 결승골인 리그 10호 골로 팀의 2:1 승리를
-				이끌었다. 이로써 두 시즌 연속 두 자릿수 득점을 달성했다. 2014-15 시즌 SL
-				벤피카와의 UEFA 챔피언스리그 조별리그 C조 2차전에서 전반 34분 팀의 두
-				번째 골을 터트렸다. 레버쿠젠이 3-1로 승리하면서 손흥민의 골은 결승골이
-				됐다. UEFA는 10월 3일 인터넷 홈페이지를 통해 2라운드 베스트11을 발표하며
-				손흥민을 포함시켰다. 제니트전서의 손흥민 11월 5일 열린 UEFA 챔피언스리그
-				조별리그 4라운드에서 FC 제니트 상트 페테르부르크를 상대로 챔피언스리그
-				2, 3호 골로 멀티골을 득점하였으며 팀은 2:1 로 승리, MOM에 선정되었고,
-				UEFA는 "손흥민이 2골을 터뜨려 레버쿠젠이 3연승을 달릴 수 있었다" 고
-				평가했다. 그리고 2라운드에 이어 챔피언스리그 주간 베스트 11에
-				선정되었다. 2015년 2월 14일 푸스발-분데스리가 2014-15 21라운드 VfL
-				볼프스부르크와의 경기에서 통산 2번째 해트트릭을 기록했으나 바스 도스트가
-				4골을 넣는 활약을 하며 4-5로 패배하였다. 경기가 끝난 후에는 케빈 더
-				브라위너와 유니폼을 교환하는 모습을 보이기도 했다. 이 경기는 VfL
-				볼프스부르크가 바이아레나에서 기록한 첫 승이기도 하다. 2015년 4월 11일
-				마인츠와의 리그 경기에서 1골을 성공시켜 리그 11호골이자 시즌 17호골을
-				기록하였다.[28] 이로써 세 시즌 연속 두자릿수 득점을 올렸다.
-			</div>
-			<ScrollTo />
-			<Footer />
+			{selected === 1 ? (
+				<>
+					{loading ? (
+						<div>
+							<Loading />
+						</div>
+					) : (
+						<>
+							<div className="">
+								{/* count */}
+								<div className="row row-title">
+									<div className="count_d">
+										총 "{boardCount ? boardCount : ''}" 개의 레시피가 여러분을
+										기다립니다.
+									</div>
+
+									{/* Button */}
+									<div className="button_d">
+										{/* disabled={true} */}
+										<Button
+											onClick={btn1Click}
+											variant="outline-primary"
+											ref={btn1}
+										>
+											조회순
+										</Button>
+										<Button
+											onClick={btn2Click}
+											variant="outline-primary"
+											ref={btn2}
+										>
+											추천순
+										</Button>
+									</div>
+								</div>
+								{/* <BoardCard /> */}
+								<Grid
+									container
+									direction="rows"
+									justifyContent="center"
+									alignItems="center"
+								>
+									{boards.map((item, index) => {
+										return (
+											<div>
+												<Link to="/board/:id">
+													<BoardCard item={item} key={index} />
+												</Link>
+											</div>
+										);
+									})}
+								</Grid>
+							</div>
+							<ScrollTo />
+						</>
+					)}
+				</>
+			) : (
+				<>
+					{loading ? (
+						<div>
+							<Loading />
+						</div>
+					) : (
+						<>
+							<div className="">
+								{/* count */}
+								<div className="row row-title">
+									<div className="count_d">
+										총 "{boardCount ? boardCount : ''}" 개의 레시피가 여러분을
+										기다립니다.
+									</div>
+
+									{/* Button */}
+									<div className="button_d">
+										{/* disabled={true} */}
+										<Button
+											onClick={btn1Click}
+											variant="outline-primary"
+											ref={btn1}
+										>
+											조회순
+										</Button>
+										<Button
+											onClick={btn2Click}
+											variant="outline-primary"
+											ref={btn2}
+										>
+											추천순
+										</Button>
+									</div>
+								</div>
+								{/* <BoardCard /> */}
+								<Grid
+									container
+									direction="rows"
+									justifyContent="center"
+									alignItems="center"
+								>
+									{likeBoards.map((item, index) => {
+										return <BoardCard item={item} key={index} />;
+									})}
+								</Grid>
+							</div>
+							<ScrollTo />
+						</>
+					)}
+				</>
+			)}
 		</>
 	);
 }

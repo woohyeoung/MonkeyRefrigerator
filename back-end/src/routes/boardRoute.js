@@ -6,5 +6,6 @@ module.exports = function (app) {
 	// const jwtMiddleware = require('../config/jwt');
 
 	app.route('/board').get(board.findBoardAll);
-	// app.route('/board/detail').get(board.findBoardAll);
+	app.route('/board/page').get(board.findBoardAllAfter);
+	// app.route('/board/detail').get(board.findBoardOne);
 };
