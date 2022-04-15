@@ -1,6 +1,7 @@
 //UserController.js
 const response = require("../utils/response");
 const userDao = require("../dao/UserDao");
+const generateToken = require("../config/secret");
 
 module.exports = {
   findUser: async (req, res) => {

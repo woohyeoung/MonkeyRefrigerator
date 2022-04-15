@@ -1,25 +1,20 @@
 //JWT Admin
 require("dotenv").config();
-const jwt = require("jsonwebtoken");
 const secretKey = process.env.ACCESS_TOKEN_SECRET;
+const jwt = require("jsonwebtoken");
+const resposnse = require("../utils/response");
 
 //Callback function
-exports.auth = (req, res, next) => {
+exports.module = auth = (req, res, next) => {
   try {
     req.decoded = jwt.verify(req.headers.authorization, secretKey);
     return next();
   } catch (error) {
     switch (error.name) {
       case "TokenExpiredError":
-        return res.status(419).json({
-          code: 419,
-          message: "토큰이 만료되었습니다",
-        });
+        return resposnse.successFalse(419, "토큰이 만료되었습니다.");
       case "JsonWebTokenError":
-        return res.status(401).json({
-          code: 401,
-          message: "유효하지 않은 토큰입니다.",
-        });
+        return resposnse.successFalse(401, "유효하지 않은 토큰입니다.");
     }
   }
 };

@@ -14,9 +14,6 @@ import Header from "./components/Header";
 //Main
 import Main from "./components/Main";
 
-//Login
-import { Login } from "./components/user/Login";
-
 //store
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
@@ -28,9 +25,6 @@ function App() {
       <div className="container" style={{ background: "#fcf6f5ff" }}>
         <BrowserRouter>
           <Main />
-          <Route path={"/login"}>
-            <Login />
-          </Route>
         </BrowserRouter>
       </div>
     </Provider>

@@ -17,6 +17,6 @@ const validate = (data, e) => {
     alert("이메일 또는 비밀번호가 맞지 않습니다.");
   } else {
     alert("로그인 성공");
-    return <Link to="/"></Link>;
+    //return <Link to="/"></Link>;
   }
 };
