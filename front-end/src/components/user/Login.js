@@ -25,8 +25,8 @@ export const Login = () => {
     if (email === "") alert("이메일이 입력되어있지 않습니다.");
     else if (pw === "") alert("비밀번호가 입력되어있지 않습니다.");
     else dispatch(loginVali(email, pw));
-    setEmail("");
-    setPw("");
+    // setEmail("");
+    // setPw("");
   };
   return (
     <div className="loginContainer">
