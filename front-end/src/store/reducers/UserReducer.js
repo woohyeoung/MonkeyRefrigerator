@@ -6,7 +6,7 @@ import {
 import { reducerUtils, handleAsyncActions } from "../../api/AsyncUtil";
 
 const initialState = {
-  loginUser: reducerUtils.initial(),
+  loginVali: reducerUtils.initial(),
 };
 export default function UserReducer(state = initialState, action) {
   switch (action.type) {
