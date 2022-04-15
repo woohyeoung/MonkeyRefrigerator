@@ -1,9 +1,14 @@
 //Header.js
 import React, { useState } from 'react';
 import './Header.css';
-import { mdiMagnify } from '@mdi/js';
-import { mdiFridge } from '@mdi/js';
-import { mdiAccount } from '@mdi/js';
+import {
+	mdiMagnify,
+	mdiFridgeOutline,
+	mdiAccount,
+	mdiFridge,
+	mdiAccountArrowRight,
+} from '@mdi/js';
+
 import {
 	MailOutlined,
 	AppstoreOutlined,
@@ -25,22 +30,29 @@ function Header() {
 				<div className="header">
 					<div className="row">
 						<div className="h-logo">
-							<div className="row">
-								<img src={logoImg} width={90} height={90}></img>
-								<div className="h-title">
-									<span>❗Monkey Refrigerator❗</span>
-								</div>
-							</div>
+							<img src={logoImg} width={90} height={90}></img>
 						</div>
-
+						<div className="h-title">
+							<span>Monkey Refrigerator</span>
+						</div>
 						{/* antd nav */}
 						<div className="h-menu">{/* <Navigator /> */}</div>
 
 						<div className="h-icon">
 							{!isLogin ? (
 								<>
-									<Icon path={mdiMagnify} title="search" size={2} />
-									<Icon path={mdiFridge} title="refrigerator" size={2} />
+									<Icon
+										path={mdiMagnify}
+										title="search"
+										size={2}
+										color="white"
+									/>
+									<Icon
+										path={mdiFridge}
+										title="refrigerator"
+										size={2}
+										color="white"
+									/>
 									<Link to="/signUp">
 										<Icon path={mdiAccount} title="profile" size={2} />
 									</Link>
@@ -49,10 +61,10 @@ function Header() {
 								<>
 									<Link to="/signUp">
 										<Icon
-											path={mdiAccount}
+											path={mdiAccountArrowRight}
 											title="search"
 											size={2}
-											color={'red'}
+											color={'white'}
 										/>
 									</Link>
 								</>

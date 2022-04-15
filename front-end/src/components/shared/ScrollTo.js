@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import Icon from '@mdi/react';
 import './scroll_to.css';
 import { mdiArrowUpDropCircle } from '@mdi/js';
@@ -9,10 +9,6 @@ import ScrollToPlugin from 'gsap/ScrollToPlugin';
 
 gsap.registerPlugin(ScrollToPlugin);
 
-// var windowHeight = document.body.scrollHeight;
-// var windowHeight = $(document).height() - $(window).height();
-/* 오른쪽 하단 스크롤 올리기 내리기 숨기기 */
-//스크롤시 버튼 사라지게 하기 제이쿼리
 $(window).scroll(function () {
 	$('#to-top').hide();
 	$('#to-bottom').hide();
@@ -22,19 +18,7 @@ $(window).scroll(function () {
 		this,
 		'scrollTimer',
 		setTimeout(function () {
-			/**
-			 * $(window).scrollTop()
-			 * : 스크롤의 위치에 따라 변하는 값 (세로 좌표)
-			 * : 맨 위에서 0으로 시작하여 맨아래 도달시 스크롤 길이 max값을 가짐.
-			 * */
-			// console.log($(document).height() - $(window).height());
-			// console.log(Math.round($(window).scrollTop()));
-			if (
-				Math.round($(window).scrollTop()) >=
-				$(document).height() - $(window).height()
-			) {
-				$('#to-top').show();
-			} else if ($(this).scrollTop()) {
+			if ($(this).scrollTop()) {
 				$('#to-top').show();
 				$('#to-bottom').show();
 			} else {
@@ -70,26 +54,33 @@ function useWindowDimensions() {
 }
 
 function ScrollTo() {
-	// const { height, width } = useWindowDimensions();
+	// 스크롤을 하면서 실행할 내용을 이곳에 추가합니다.
+	let { innerHeight } = window;
+	// 브라우저창 내용의 크기 (스크롤을 포함하지 않음)
+	let { scrollHeight } = document.body;
+	// 브라우저 총 내용의 크기 (스크롤을 포함한다)
+	let { scrollTop } = document.documentElement;
 	const [height_, setHeight_] = useState();
-	// console.log($(document).height() - $(window).height() + 1);
-	// console.log(height_);
-
-	const height = $(document).height() - $(window).height() + 1;
 	useEffect(() => {
-		setHeight_(height);
-	}, [$(window).scrollTop()]);
+		setHeight_($(document).height() - $(window).height() + 1);
+	}, []);
+
 	const toTop = useRef();
 	const toBottom = useRef();
-	// // 페이지 맨위로 올리기
+
 	const onTop = () => {
-		// 	// 페이지 위치를 최상단으로 부드럽게(0.5초 동안) 이동.
-		gsap.to(window, { duration: 0.5, scrollTo: 0 });
+		// 	// 페이지 위치를 최상단으로 부드럽게(1초 동안) 이동.
+		gsap.to(window, { duration: 1, scrollTo: 0 });
 	};
 	const onBottom = () => {
-		// 	// 페이지 위치를 최상단으로 부드럽게(0.7초 동안) 이동.
-		gsap.to(window, { duration: 0.7, scrollTo: height_ });
+		// 	// 페이지 위치를 최하단으로 부드럽게(1초 동안) 이동.
+		gsap.to(window, {
+			duration: 1,
+			scrollTo: height_,
+		});
+		setHeight_(height_ + $(document).height() - $(window).height() + 1);
 	};
+
 	return (
 		<>
 			{/* <!--TO BOTTOM BUTTON--> */}

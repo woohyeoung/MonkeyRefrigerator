@@ -5,17 +5,24 @@
 	font-weight: normal;
 	font-style: normal;
 }
-.button_d {
-	position: absolute;
-	right: 200px;
-	top: 150px;
-}
-.count_d {
-	position: absolute;
-	left: 200px;
-	top: 150px;
-	font-family: 'BMDOHYEON';
-}
-.btn_m {
+.row-title {
+	justify-content: center;
 	margin: 10px;
 }
+
+.row-title .count_d {
+	/* position: absolute;
+	left: 200px;
+	top: 150px; */
+	font-family: 'BMDOHYEON';
+	margin-right: 40px;
+	font-size: 20px;
+}
+.row-title .button_d {
+	/* position: absolute;
+	right: 200px;
+	top: 150px; */
+}
+/* .btn_m {
+	margin: 10px;
+} */

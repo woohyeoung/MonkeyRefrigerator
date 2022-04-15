@@ -28,26 +28,19 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function BoardCard(props) {
-	// console.log(props);
 	const [expanded, setExpanded] = React.useState(false);
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
 	};
 	const [board, setBoard] = useState(props.item);
-	useEffect(() => {
-		// console.log(board);
-	}, []);
+	useEffect(() => {}, []);
 
 	return (
 		<Card className="card" sx={{ maxWidth: 345, width: 345 }}>
 			<CardHeader
 				avatar={
-					<Avatar
-						sx={{ bgcolor: red[500] }}
-						aria-label="recipe"
-						src={board.profileImg}
-					>
+					<Avatar aria-label="recipe" src={board.profileImg}>
 						사진
 					</Avatar>
 				}
@@ -63,33 +56,38 @@ export default function BoardCard(props) {
 			{board.boardImgPath ? (
 				<CardMedia
 					component="img"
-					width={'100%'}
-					height={'100%'}
+					width={'300px'}
+					height={'300px'}
 					src={board.boardImgPath}
 				/>
 			) : (
 				<CardMedia
 					component="img"
-					width={'100%'}
-					height={'100%'}
+					width={'300px'}
+					height={'300px'}
 					src={'/monkey_2.png'}
 					alt="douzone monkey"
 				/>
 			)}
 
 			<CardContent>
-				<Typography variant="body2" color="text.secondary">
+				<Typography
+					variant="body2"
+					color="text.secondary"
+					style={{ fontFamily: 'BMDOHYEON' }}
+				>
 					{board.title}
 				</Typography>
 			</CardContent>
 			<CardActions disableSpacing>
 				<FavoriteIcon sx={{ color: red[500] }} />
+				<div>좋아요수</div>
 				{/* <IconButton aria-label="add to favorites">
 					
 				</IconButton> */}
-				<IconButton aria-label="share">
+				{/* <IconButton aria-label="share">
 					<ShareIcon />
-				</IconButton>
+				</IconButton> */}
 				<ExpandMore
 					expand={expanded}
 					onClick={handleExpandClick}
@@ -101,7 +99,7 @@ export default function BoardCard(props) {
 			</CardActions>
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<CardContent>
-					<Typography paragraph>
+					<Typography paragraph style={{ fontFamily: 'BMDOHYEON' }}>
 						{board.subtitle ? board.subtitle : '부제목이 없네용'}
 					</Typography>
 				</CardContent>

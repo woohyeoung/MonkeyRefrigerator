@@ -6,6 +6,8 @@
 	font-style: normal;
 }
 .card {
-	font-family: 'BMDOHYEON';
 	margin: 20px;
+}
+.text {
+	font-family: 'BMDOHYEON';
 }
