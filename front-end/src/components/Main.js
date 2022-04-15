@@ -23,7 +23,6 @@ function Main() {
 					<Switch>
 						<Route exact path="/">
 							메인 페이지 - Router 들어가야함
-							<br />
 						</Route>
 						<Route path="/board">
 							<BoardList />
