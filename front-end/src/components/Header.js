@@ -34,9 +34,7 @@ function Header() {
 						</div>
 
 						{/* antd nav */}
-						<div className="h-menu">
-							<Navigator />
-						</div>
+						<div className="h-menu">{/* <Navigator /> */}</div>
 
 						<div className="h-icon">
 							{!isLogin ? (

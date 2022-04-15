@@ -13,7 +13,7 @@ const { SubMenu } = Menu;
 function Navigator() {
 	const [current, setCurrent] = useState('mail');
 	const handleClick = (e) => {
-		console.log('click ', e);
+		// console.log('click ', e);
 		this.setState({ current: e.key });
 	};
 	return (
