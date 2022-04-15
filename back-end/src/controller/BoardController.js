@@ -38,8 +38,10 @@ module.exports = {
         try {
             let id = req.query.id;
             let createAt = req.query.createAt;
+            let newCreateAt = new Date(createAt);
+            console.log(newCreateAt)
+            const boardList = await boardDao.selectBoardList(id, newCreateAt);
 
-            const boardList = await boardDao.selectBoardList(id, createAt);
             if (boardList === undefined) {
                 return res.json(
                     response.successFalse(1002, '전체 게시물 목록 첫번째 이후 목록이 없습니다.')

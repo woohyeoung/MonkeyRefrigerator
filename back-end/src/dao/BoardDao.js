@@ -18,7 +18,7 @@ module.exports = {
                                     join useraccount u on b.userId = u.id
                                     join category c on b.categoryId = c.id
                                     left join boardImage bi on b.id = bi.boardId
-                           order by b.createAt desc, b.id limit 3;`;
+                           order by b.createAt desc, b.id limit 12;`;
 
             const connection = await pool.getConnection(async (conn) => conn);
             const [rows] = await connection.query(query);
@@ -50,10 +50,10 @@ module.exports = {
                                     join category c on b.categoryId = c.id
                                     left join boardImage bi on b.id = bi.boardId
                            where b.createAt <= ?
-                             and b.id < ?
-                           order by b.createAt desc, b.id limit 3;`;
-            const params = [id, creataAt]
-
+                             and b.id > ?
+                           order by b.createAt desc, b.id limit 12;`;
+            const params = [createAt, id];
+            console.log(params)
             const connection = await pool.getConnection(async (conn) => conn);
             const [rows] = await connection.query(query, params);
             connection.release();
