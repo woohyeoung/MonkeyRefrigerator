@@ -4,7 +4,7 @@ const userDao = require("../dao/UserDao");
 const generateToken = require("../config/secret");
 
 module.exports = {
-  findUser: async (req, res) => {
+  getToken: async (req, res) => {
     const email = req.body.email;
     const pw = req.body.pw;
     try {
@@ -20,7 +20,7 @@ module.exports = {
     } catch (err) {
       return response.successFalse(
         1001,
-        "서버와 통신에 실패하였습니다. UserController/UserDao error - findUser"
+        "서버와 통신에 실패하였습니다. UserController/UserDao error - getToken"
       );
     }
   },
