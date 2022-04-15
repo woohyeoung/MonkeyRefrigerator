@@ -71,3 +71,16 @@ h3 {
   text-align: center;
   border: 1px solid #aaa;
 }
+
+/* LoginPage Style */
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+}
+.loginFormCon {
+  display: flex;
+  flex-direction: column;
+}
