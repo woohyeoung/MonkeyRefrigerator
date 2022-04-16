@@ -24,4 +24,28 @@ module.exports = {
       );
     }
   },
+  idDoubleChk: async (req, res) => {
+    const id = req.body.id;
+    try {
+      const user = await userDao.selectIdDoubleChk(id);
+      if (user !== undefined) {
+        if (user[0].cnt === 0) {
+          return res.json(
+            response.successTrue(7000, "중복된 아이디가 없습니다.", user[0].cnt)
+          );
+        } else if (user[0].cnt > 0) {
+          return res.json(
+            response.successTrue(7002, "중복된 아이디가 있습니다.", user[0].cnt)
+          );
+        }
+      }
+    } catch (err) {
+      return res.json(
+        response.successFalse(
+          1001,
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - idDoubleChk"
+        )
+      );
+    }
+  },
 };

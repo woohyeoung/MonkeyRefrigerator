@@ -46,20 +46,21 @@ h3 {
 .box_id {
   width: 100%;
   display: flex;
+  margin-bottom: 20px;
 }
 
-#idCheck {
-  margin-left: 7px;
-  margin-top: 15px;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #bcbcbc;
-  cursor: pointer;
+.pwchk {
+  margin-bottom: 20px;
 }
-
+.box_pwchk {
+  width: 100%;
+  display: flex;
+}
+.doublechk {
+  margin-top: 10px;
+}
 .step_url {
-  height: 50px;
+  height: 30px;
   margin: 10px;
   font-size: 15px;
 }

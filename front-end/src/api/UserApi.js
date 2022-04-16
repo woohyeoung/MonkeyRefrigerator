@@ -9,3 +9,14 @@ export const getToken = async (data) => {
     .catch();
   return resultLogin;
 };
+
+export const idDoubleChk = (data) => {
+  const resultIdChk = axios
+    .post(`${baseUrl}idChk`, data)
+    .then(function (response) {
+      //console.log(response.data.isSuccess);
+      return response.data;
+    });
+  console.log(resultIdChk);
+  return resultIdChk;
+};
