@@ -35,6 +35,6 @@ export const idChk = (id) => async (dispatch) => {
   dispatch({ type: ID_CHK });
   const data = { id: id };
   const idData = await idDoubleChk(data);
-  console.log(idData);
+  // console.log(idData);
   return idData;
 };

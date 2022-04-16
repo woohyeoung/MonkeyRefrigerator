@@ -92,14 +92,14 @@ function SignUp() {
     }
 
     const idstore = dispatch(idChk(id));
-    console.log(idstore);
+    //console.log(idstore);
 
     console.log(userStore.idDoubleChk);
   };
 
   useEffect(() => {
-    console.log(userStore.idDoubleChk);
-  }, [userStore.idDoubleChk]);
+    // console.log(userStore.idDoubleChk);
+  }, [userStore.idDoubleChk.data]);
 
   // useEffect(() => {
   //   console.log(userStore + "#$#$#$#$");

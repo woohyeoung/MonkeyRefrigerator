@@ -29,15 +29,13 @@ module.exports = {
     try {
       const user = await userDao.selectIdDoubleChk(id);
       if (user !== undefined) {
-        if (user[0].cnt === 0) {
-          return res.json(
-            response.successTrue(7000, "중복된 아이디가 없습니다.", user[0].cnt)
-          );
-        } else if (user[0].cnt > 0) {
-          return res.json(
-            response.successTrue(7002, "중복된 아이디가 있습니다.", user[0].cnt)
-          );
-        }
+        return res.json(
+          response.successTrue(7000, "중복된 아이디가 있습니다.", user)
+        );
+      } else {
+        return res.json(
+          response.successTrue(7002, "중복된 아이디가 없습니다.", user)
+        );
       }
     } catch (err) {
       return res.json(

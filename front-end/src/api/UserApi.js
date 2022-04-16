@@ -17,6 +17,6 @@ export const idDoubleChk = (data) => {
       //console.log(response.data.isSuccess);
       return response.data;
     });
-  console.log(resultIdChk);
+  //console.log(resultIdChk);
   return resultIdChk;
 };

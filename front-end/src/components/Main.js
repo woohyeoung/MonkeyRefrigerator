@@ -14,6 +14,8 @@ import Icon from "@mdi/react";
 import Box from "@mui/material/Box";
 //Login
 import { Login } from "./user/Login";
+//Signup
+import Signup from "./user/SignUp";
 
 function Main() {
   return (
@@ -29,6 +31,9 @@ function Main() {
             </Route>
             <Route path="/login">
               <Login />
+            </Route>
+            <Route path="/signup">
+              <Signup />
             </Route>
           </Switch>
         </div>
