@@ -15,6 +15,14 @@
 	font-weight: normal;
 	font-style: normal;
 }
+@media screen and (max-width: 768px) {
+	.row .h-title span {
+		display: none;
+	}
+	.row .h-logo {
+		/* display: none; */
+	}
+}
 
 .header {
 	position: fixed;
@@ -58,11 +66,7 @@
 	font-weight: bold;
 	font-family: 'BMDOHYEON';
 }
-.row .h-logo .h-title > span {
-	padding: 5% 0 5% 0;
-	font-size: xx-large;
-	font-family: 'Jua';
-}
+
 .row .h-menu {
 	border-radius: 10px;
 	width: 800px;
