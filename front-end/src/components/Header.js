@@ -59,7 +59,7 @@ function Header() {
                 </>
               ) : (
                 <>
-                  <Link to="/signUp">
+                  <Link to="/signup">
                     <Icon
                       path={mdiAccountArrowRight}
                       title="search"
