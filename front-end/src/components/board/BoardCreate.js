@@ -7,7 +7,7 @@ import React, {
 	useMemo,
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { categoryList } from '../../store/actions/BoardAction';
+import { categoryList, materialList } from '../../store/actions/BoardAction';
 import { Form, Button } from 'react-bootstrap';
 import Card from '@mui/material/Card';
 import Icon from '@mdi/react';
@@ -26,6 +26,8 @@ import { TimePicker } from 'antd';
 import moment from 'moment';
 import ImageUploader from 'react-images-upload';
 import Grid from '@mui/material/Grid';
+import { Modal } from 'react-bootstrap';
+import { height, width } from '@mui/system';
 
 function BoardCreate() {
 	const boardStore = useSelector((state) => state.boardReducer);
@@ -60,6 +62,17 @@ function BoardCreate() {
 	const [tag, setTag] = useState('');
 	const [tags, setTags] = useState([]);
 	const [tagName, setTagName] = useState('');
+
+	const [keyword, setKeyword] = useState('');
+	const [material, setMaterial] = useState({
+		id: 0,
+		key: '',
+	});
+	const [materialList, setMaterialList] = useState([]);
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
 
 	const [pictures, setPictures] = useState([]);
 	const onDrop = (picture) => {
@@ -158,9 +171,50 @@ function BoardCreate() {
 		setTags([...subs.splice(index, 1, '')]);
 	};
 
+	const handleChangeSearch = (event) => {
+		setKeyword(event.target.value);
+	};
+
+	const searchKeyword = () => {
+		dispatch();
+	};
+
 	return (
 		<>
 			<div className="abc">
+				<Modal show={show} onHide={handleClose}>
+					<Modal.Header closeButton>
+						<Modal.Title>재료 검색</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+							<div style={{ display: 'flex', width: '100%' }}>
+								<Form.Control
+									onChange={handleChangeSearch}
+									type="text"
+									placeholder="ex) 양파"
+									style={{ width: '80%' }}
+								/>
+								<Button
+									size="sm"
+									variant="outline-primary"
+									onClick={searchKeyword}
+								>
+									검색
+								</Button>
+							</div>
+						</Form.Group>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button variant="secondary" onClick={handleClose}>
+							닫기
+						</Button>
+						<Button variant="primary" onClick={handleClose}>
+							저장
+						</Button>
+					</Modal.Footer>
+				</Modal>
+
 				<Card
 					style={{
 						display: 'flex',
@@ -374,6 +428,20 @@ function BoardCreate() {
 
 						{/* material */}
 						<Form.Label>material</Form.Label>
+						<div>
+							<Button
+								style={{
+									marginLeft: '10px',
+									justifyContent: 'center',
+									alignItems: 'center',
+									verticalAlign: 'middle',
+								}}
+								onClick={handleShow}
+							>
+								재료찾기
+							</Button>
+						</div>
+						{}
 						<hr></hr>
 
 						{/* sub material */}
@@ -462,7 +530,7 @@ function BoardCreate() {
 							style={{ display: 'flex', flexDirection: 'row', width: '100%' }}
 						>
 							<div
-								style={{ display: 'flex', flexDirection: 'row', width: '50%' }}
+								style={{ display: 'flex', flexDirection: 'row', width: '30%' }}
 							>
 								<Form.Label style={{ marginRight: '10px' }}>tagName</Form.Label>
 
