@@ -10,20 +10,6 @@ const s3 = require('../utils/awsS3');
 module.exports = {
 	findIndex: async function (req, res) {
 		try {
-			// const boardList = await boardDao.selectBoardList();
-			// if (boardList === undefined) {
-			// 	return res.json(
-			// 		response.successFalse(1002, '전체 게시물 목록이 없습니다.')
-			// 	);
-			// }
-			// return res.json(
-			// 	response.successTrue(
-			// 		2001,
-			// 		'전체 게시물 목록 조회에 성공하였습니다.',
-			// 		boardList
-			// 	)
-			// );
-			console.log("왔어요 / 엔드 포인트로!!")
 		} catch (err) {
 			return res.json(
 				response.successFalse(
