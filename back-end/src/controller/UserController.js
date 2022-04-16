@@ -25,18 +25,21 @@ module.exports = {
     }
   },
   idDoubleChk: async (req, res) => {
-    const id = req.body.id;
+    const id = req.query.id;
+    const type = req.query.type;
+
     try {
-      const user = await userDao.selectIdDoubleChk(id);
-      if (user !== undefined) {
+      const cnt = await userDao.selectIdDoubleChk(id, type);
+
+      if (!cnt) {
         return res.json(
-          response.successTrue(7000, "중복된 아이디가 있습니다.", user)
-        );
-      } else {
-        return res.json(
-          response.successTrue(7002, "중복된 아이디가 없습니다.", user)
+          response.successFalse(7101, "결과 값이 존재 하지 않습니다.")
         );
       }
+
+      return res.json(
+        response.successTrue(7002, "결과 값 조회에 성공했습니다.", cnt)
+      );
     } catch (err) {
       return res.json(
         response.successFalse(

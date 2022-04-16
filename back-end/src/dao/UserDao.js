@@ -18,11 +18,10 @@ module.exports = {
       );
     }
   },
-  selectIdDoubleChk: async function (id) {
+  selectIdDoubleChk: async function (id, type) {
     try {
-      const query = `SELECT count(*) as cnt FROM useraccount WHERE email='${id}';`;
+      const query = `SELECT count(*) as cnt FROM useraccount WHERE ${type}='${id}';`;
       const connection = await pool.getConnection(async (conn) => conn);
-
       const [info] = await connection.query(query);
       console.log(info);
       connection.release();

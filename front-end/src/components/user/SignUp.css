@@ -85,3 +85,9 @@ h3 {
   display: flex;
   flex-direction: column;
 }
+
+.btn_submt {
+  width: 100%;
+  margin-left: 252px;
+  margin-bottom: 20px;
+}

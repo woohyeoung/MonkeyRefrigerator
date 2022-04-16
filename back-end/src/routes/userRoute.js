@@ -5,6 +5,6 @@ module.exports = function (app) {
   const jwtMiddleware = require("../config/jwt");
 
   app.route("/login").post(user.getToken);
-  app.route("/idChk").post(user.idDoubleChk);
+  app.route("/idChk").get(user.idDoubleChk);
   //app.route("/user").get(user.);
 };
