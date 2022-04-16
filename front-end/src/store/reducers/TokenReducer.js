@@ -1,14 +1,33 @@
-//토큰담을거에용
-import { LOGIN_VALI } from "../actions/UserAction";
-import { reducerUtils, handleAsyncActions } from "../../api/AsyncUtil";
+import {
+  HEADER_TOKEN,
+  HEADER_TOKEN_GET,
+  HEADER_TOKEN_OUT,
+} from "../actions/UserAction";
 
 const initialState = {
-  token: reducerUtils.initial(),
+  loading: true,
+  token: null,
 };
-export default function UserReducer(state = initialState, action) {
+export default function tokenReducer(state = initialState, action) {
   switch (action.type) {
-    case LOGIN_VALI:
-      return handleAsyncActions(LOGIN_VALI, "loginUser")(state, action);
+    case HEADER_TOKEN:
+      return {
+        ...state,
+        loading: false,
+        token: null,
+      };
+    case HEADER_TOKEN_GET:
+      return {
+        ...state,
+        loading: false,
+        token: action.token,
+      };
+    case HEADER_TOKEN_OUT:
+      return {
+        ...state,
+        loading: false,
+        token: null,
+      };
     default:
       return state;
   }

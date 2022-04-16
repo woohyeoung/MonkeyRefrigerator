@@ -1,7 +1,7 @@
 //Login.js
 //Install Component;
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginVali } from "../../store/actions/UserAction";
 //User Component
 //Style
@@ -24,10 +24,7 @@ export const Login = () => {
     e.preventDefault();
     if (email === "") alert("이메일이 입력되어있지 않습니다.");
     else if (pw === "") alert("비밀번호가 입력되어있지 않습니다.");
-    else {
-      let a = dispatch(loginVali(email, pw));
-      console.log(a);
-    }
+    else dispatch(loginVali(email, pw));
     setEmail("");
     setPw("");
   };
