@@ -75,19 +75,29 @@ function SignUp() {
 
   //formsubmit
   const signUpFormSubmit = (e) => {
-    if (!isEmail(id)) {
-      alert("아이디(이메일)이 형식에 맞지 않습니다.");
-      idInput.current.focus();
-    }
+    let flag = false;
 
-    // let form ={
-    //   id : id
-    //   email :email
-    // }
+    isSubmit(flag);
+
+    let formData = {
+      email: id,
+      nickname: nickName,
+      name: name,
+      jobId: job,
+      gener: gender,
+      birth: birth,
+    };
     // console.log(form)
     // setUserForm(form)
     // dispatch
   };
+
+  function isSubmit(flag) {
+    if (!isEmail(id)) {
+      alert("아이디(이메일)이 형식에 맞지 않습니다.");
+      idInput.current.focus();
+    }
+  }
 
   //이메일 정규식 확인
   const isEmail = (email) => {
