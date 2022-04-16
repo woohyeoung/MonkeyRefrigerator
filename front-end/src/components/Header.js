@@ -7,6 +7,8 @@ import {
 	mdiAccount,
 	mdiFridge,
 	mdiAccountArrowRight,
+	mdiClipboardText,
+	mdiClipboardPlus,
 } from '@mdi/js';
 
 import {
@@ -20,10 +22,11 @@ import logoImg from '../assets/monkey_2.png';
 import Navigator from './Navigator';
 
 //router
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function Header() {
-	const [isLogin, setIsLogin] = useState(true);
+	const [isLogin, setIsLogin] = useState(false);
+	const history = useHistory();
 	return (
 		<>
 			<header>
@@ -38,15 +41,25 @@ function Header() {
 						{/* antd nav */}
 						<div className="h-menu">{/* <Navigator /> */}</div>
 
-						<div className="h-icon">
+						<div className="h-icon ">
+							<Icon path={mdiMagnify} title="search" size={2} color="white" />
+
+							<Icon
+								path={mdiClipboardText}
+								title="board"
+								size={2}
+								color="white"
+							/>
+
 							{!isLogin ? (
 								<>
 									<Icon
-										path={mdiMagnify}
-										title="search"
+										path={mdiClipboardPlus}
+										title="register"
 										size={2}
 										color="white"
 									/>
+
 									<Icon
 										path={mdiFridge}
 										title="refrigerator"
@@ -59,10 +72,10 @@ function Header() {
 								</>
 							) : (
 								<>
-									<Link to="/signup">
+									<Link to="/signUp">
 										<Icon
 											path={mdiAccountArrowRight}
-											title="search"
+											title="signup"
 											size={2}
 											color={'white'}
 										/>

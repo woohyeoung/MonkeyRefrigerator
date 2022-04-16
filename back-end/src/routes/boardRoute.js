@@ -7,5 +7,6 @@ module.exports = function (app) {
 
 	app.route('/board').get(board.findBoardAll);
 	app.route('/board/page').get(board.findBoardAllAfter);
+	app.route('/board/category').get(board.findBoardCategory);
 	// app.route('/board/detail').get(board.findBoardOne);
 };

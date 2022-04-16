@@ -39,7 +39,7 @@ module.exports = {
             let id = req.query.id;
             let createAt = req.query.createAt;
             let newCreateAt = new Date(createAt);
-            console.log(newCreateAt)
+
             const boardList = await boardDao.selectBoardList(id, newCreateAt);
 
             if (boardList === undefined) {
@@ -64,4 +64,32 @@ module.exports = {
             );
         }
     },
+    findBoardCategory: async function (req, res) {
+        try {
+
+            const categoryList = await boardDao.selectBoardCategory();
+            console.log(categoryList)
+            if (categoryList === undefined) {
+                return res.json(
+                    response.successFalse(1002, '카테고리 목록이 없습니다.')
+                );
+            }
+
+            return res.json(
+                response.successTrue(
+                    2001,
+                    '카테고리 목록 조회에 성공하였습니다.',
+                    categoryList
+                )
+            );
+        } catch (err) {
+            return res.json(
+                response.successFalse(
+                    1001,
+                    '서버와 통신에 실패하였습니다. BoardController/BoardDao error - findBoardCategory'
+                )
+            );
+        }
+    },
+
 };

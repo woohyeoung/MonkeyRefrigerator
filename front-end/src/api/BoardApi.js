@@ -18,3 +18,9 @@ export const findBoardAllAfter = (page) => {
 	});
 	return result;
 };
+
+//board category API -- 카테고리 목록 조회
+export const findBoardCategory = () => {
+	const result = axios.get(baseUrl + 'board/category');
+	return result;
+};
