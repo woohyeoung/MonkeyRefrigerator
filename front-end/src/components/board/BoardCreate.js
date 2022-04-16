@@ -7,7 +7,7 @@ import React, {
 	useMemo,
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { categoryList, materialList } from '../../store/actions/BoardAction';
+import { categoryList } from '../../store/actions/BoardAction';
 import { Form, Button } from 'react-bootstrap';
 import Card from '@mui/material/Card';
 import Icon from '@mdi/react';

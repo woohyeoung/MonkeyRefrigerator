@@ -16,9 +16,6 @@ export const CATEGORYLIST_GET = 'CATEGORYLIST_GET';
 export const CATEGORYLIST_GET_SUCCESS = 'CATEGORYLIST_GET_SUCCESS';
 export const CATEGORYLIST_GET_ERROR = 'CATEGORYLIST_GET_ERROR';
 //키워드로 비슷한 재료 상위 5개 조회
-export const MATERRIALLIST_GET = 'MATERRIALLIST_GET';
-export const MATERRIALLIST_GET_SUCCESS = 'MATERRIALLIST_GET_SUCCESS';
-export const MATERRIALLIST_GET_ERROR = 'MATERRIALLIST_GET_ERROR';
 
 export const boardList = createPromiseThunk(
 	BOARDLIST_GET,
@@ -32,8 +29,3 @@ export const categoryList = createPromiseThunk(
 	CATEGORYLIST_GET,
 	BoardApi.findBoardCategory
 );
-
-// export const materialList = createPromiseThunk(
-// 	MATERRIALLIST_GET,
-// 	BoardApi.findMaterialTopFive
-// );
