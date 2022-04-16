@@ -22,11 +22,14 @@ export const Login = () => {
 
   const onClickLogin = async (e) => {
     e.preventDefault();
-    if (email === "") alert("이메일이 입력되어있지 않습니다.");
-    else if (pw === "") alert("비밀번호가 입력되어있지 않습니다.");
-    else dispatch(loginVali(email, pw));
+    if (email === "" || pw === "") {
+      window.alert("이메일과 비밀번호를 확인해주세요.");
+      return;
+    }
+    dispatch(loginVali(email, pw));
     setEmail("");
     setPw("");
+    window.location.href = "/";
   };
   return (
     <div className="loginContainer">

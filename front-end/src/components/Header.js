@@ -20,6 +20,7 @@ import Icon from "@mdi/react";
 import { Menu } from "antd";
 import logoImg from "../assets/monkey_2.png";
 import Navigator from "./Navigator";
+import { IsLogin } from "./user/IsLogin";
 
 //router
 import { Link, useHistory } from "react-router-dom";
@@ -27,14 +28,19 @@ import { Link, useHistory } from "react-router-dom";
 function Header() {
   const [isLogin, setIsLogin] = useState(false);
   const history = useHistory();
+  useEffect(() => {
+    setIsLogin(IsLogin);
+  }, [IsLogin]);
   return (
     <>
       <header>
         <div className="header">
           <div className="row">
-            <div className="h-logo">
-              <img src={logoImg} width={90} height={90}></img>
-            </div>
+            <Link to="/">
+              <div className="h-logo">
+                <img src={logoImg} width={90} height={90}></img>
+              </div>
+            </Link>
             <div className="h-title">
               <span>Monkey Refrigerator</span>
             </div>
@@ -42,17 +48,22 @@ function Header() {
             <div className="h-menu">{/* <Navigator /> */}</div>
 
             <div className="h-icon ">
-              <Icon path={mdiMagnify} title="search" size={2} color="white" />
-
-              <Icon
-                path={mdiClipboardText}
-                title="board"
-                size={2}
-                color="white"
-              />
-
-              {!isLogin ? (
+              {isLogin ? (
                 <>
+                  <Link to="/board">
+                    <Icon
+                      path={mdiClipboardText}
+                      title="board"
+                      size={2}
+                      color="white"
+                    />
+                  </Link>
+                  <Icon
+                    path={mdiMagnify}
+                    title="search"
+                    size={2}
+                    color="white"
+                  />
                   <Icon
                     path={mdiClipboardPlus}
                     title="register"
@@ -66,16 +77,14 @@ function Header() {
                     size={2}
                     color="white"
                   />
-                  <Link to="/signUp">
-                    <Icon path={mdiAccount} title="profile" size={2} />
-                  </Link>
+                  <Icon path={mdiAccount} title="profile" size={2} />
                 </>
               ) : (
                 <>
-                  <Link to="/signUp">
+                  <Link to="/login">
                     <Icon
                       path={mdiAccountArrowRight}
-                      title="signup"
+                      title="login"
                       size={2}
                       color={"white"}
                     />
