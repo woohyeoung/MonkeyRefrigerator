@@ -1,10 +1,8 @@
 /* Main.css */
-@import '~antd/dist/antd.css';
-/* .content {
-	background-color: white;
-	margin: 10px 10px 50px 10px;
-	padding: 10px;
+/* @import '~antd/dist/antd.css'; */
+
+.mainContainer {
+	padding-top: 90px;
+	padding-bottom: 90px;
+	background: '#fcf6f5ff';
 }
-.container {
-	background-color: white;
-} */
