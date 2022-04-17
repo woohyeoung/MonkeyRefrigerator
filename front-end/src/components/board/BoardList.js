@@ -21,8 +21,13 @@ function BoardList() {
 
 	const dispatch = useDispatch();
 
+	//날짜순
 	const [boards, setBoards] = useState([]);
+	//조회순
+	const [viewBoards, setViewBoards] = useState([]);
+	//최신순
 	const [likeBoards, setLikeBoards] = useState([]);
+
 	const [boardId, setBoardId] = useState(0);
 	const [page, setPage] = useState({
 		id: 0,
@@ -34,15 +39,25 @@ function BoardList() {
 
 	const btn1 = useRef();
 	const btn2 = useRef();
+	const btn3 = useRef();
+
 	const btn1Click = () => {
 		btn1.current.disabled = true;
 		btn2.current.disabled = false;
+		btn3.current.disabled = false;
 		setSelected(1);
 	};
 	const btn2Click = () => {
 		btn1.current.disabled = false;
 		btn2.current.disabled = true;
+		btn3.current.disabled = false;
 		setSelected(2);
+	};
+	const btn3Click = () => {
+		btn1.current.disabled = false;
+		btn2.current.disabled = false;
+		btn3.current.disabled = true;
+		setSelected(3);
 	};
 	useEffect(() => {
 		async function fetchBoardList() {
@@ -75,9 +90,7 @@ function BoardList() {
 		}
 	}, [boardStore.boardListAfter.data]);
 
-	useEffect(() => {
-		console.log('추천순으로 바뀌어라 얍');
-	}, [selected]);
+	useEffect(() => {}, [selected]);
 
 	const handleScroll = useCallback(async () => {
 		// 스크롤을 하면서 실행할 내용을 이곳에 추가합니다.
@@ -106,6 +119,7 @@ function BoardList() {
 
 	return (
 		<>
+			{/* 날짜순 조회 */}
 			{selected === 1 ? (
 				<>
 					{loading ? (
@@ -130,12 +144,19 @@ function BoardList() {
 											variant="outline-primary"
 											ref={btn1}
 										>
-											조회순
+											최신순
 										</Button>
 										<Button
 											onClick={btn2Click}
 											variant="outline-primary"
 											ref={btn2}
+										>
+											조회순
+										</Button>
+										<Button
+											onClick={btn3Click}
+											variant="outline-primary"
+											ref={btn3}
 										>
 											추천순
 										</Button>
@@ -164,6 +185,10 @@ function BoardList() {
 					)}
 				</>
 			) : (
+				<></>
+			)}
+			{/* 조회순 조회 */}
+			{selected === 2 ? (
 				<>
 					{loading ? (
 						<div>
@@ -187,18 +212,98 @@ function BoardList() {
 											variant="outline-primary"
 											ref={btn1}
 										>
-											조회순
+											최신순
 										</Button>
 										<Button
 											onClick={btn2Click}
 											variant="outline-primary"
 											ref={btn2}
 										>
+											조회순
+										</Button>
+										<Button
+											onClick={btn3Click}
+											variant="outline-primary"
+											ref={btn3}
+										>
 											추천순
 										</Button>
 									</div>
 								</div>
 								{/* <BoardCard /> */}
+								조회순
+								<Grid
+									container
+									direction="rows"
+									justifyContent="center"
+									alignItems="center"
+								>
+									{viewBoards.map((item, index) => {
+										return (
+											<div>
+												<Link to="/board/:id">
+													<BoardCard item={item} key={index} />
+												</Link>
+											</div>
+										);
+									})}
+								</Grid>
+							</div>
+							<ScrollTo />
+						</>
+					)}
+				</>
+			) : (
+				<></>
+			)}
+			{/* 추천순(좋아요순 조회) */}
+			{selected === 3 ? (
+				<>
+					{loading ? (
+						<div>
+							<Loading />
+						</div>
+					) : (
+						<>
+							<div className="">
+								{/* count */}
+								<div className="row row-title">
+									<div className="count_d">
+										총 "{boardCount ? boardCount : ''}" 개의 레시피가 여러분을
+										기다립니다.
+									</div>
+
+									{/* Button */}
+									<div className="button_d">
+										{/* disabled={true} */}
+										<div className="button_d">
+											{/* disabled={true} */}
+											<Button
+												onClick={btn1Click}
+												variant="outline-primary"
+												ref={btn1}
+											>
+												최신순
+											</Button>
+											<Button
+												onClick={btn2Click}
+												variant="outline-primary"
+												ref={btn2}
+											>
+												조회순
+											</Button>
+											<Button
+												onClick={btn3Click}
+												variant="outline-primary"
+												ref={btn3}
+											>
+												추천순
+											</Button>
+										</div>
+									</div>
+								</div>
+								{/* <BoardCard /> */}
+								추천순
 								<Grid
 									container
 									direction="rows"
@@ -214,6 +319,8 @@ function BoardList() {
 						</>
 					)}
 				</>
+			) : (
+				<></>
 			)}
 		</>
 	);

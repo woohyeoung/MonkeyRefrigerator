@@ -47,7 +47,7 @@ function Main() {
 						exact
 					/>
 					<PublicRoute component={BoardList} path="/board" exact />
-					<PrivateRoute component={BoardCreate} path="/create" exact />
+					<PublicRoute component={BoardCreate} path="/create" exact />
 				</Switch>
 			</div>
 		</>
