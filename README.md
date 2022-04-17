@@ -1,5 +1,5 @@
 # MonkeyRefrigerator
-##### 최종 수정 : 220410 정재빈 
+##### 최종 수정 : 220417 정재빈 
 Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 - 자취생, 주부, 요리를 잘못하는 아버지도 다양한 레시피로 요리를 해먹자 
 - 레시피 데이터를 이용한 웹 어플리케이션 서비스
@@ -18,8 +18,62 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 ---
 
 ## 전체 구성 단계 (SPA 형식)
+- front-end
 
-### 역할분담( 4/1~ )
+  - component
+```
+index.js
+        ㄴ App.js
+                ㄴHeader.js (nav)
+                        ㄴ monkey logo
+                        ㄴ title
+                        ㄴ before-login
+                                      ㄴloginButton
+                                      ㄴsignUpButton
+                        ㄴ after-login
+                                      ㄴprofileButton
+                                      ㄴsearchButton
+                                      ㄴrefrigeratorButton
+                                      ㄴboardListButton
+                                      ㄴboardCreateButton
+                ㄴMain.js
+                        ㄴ Login.js
+                        ㄴ Signup.js
+                        ㄴ boardList.js
+                                      ㄴboardCard.js
+                                      ㄴboardDetail.js
+                        ㄴ boardCreate.js
+                        ㄴ refrigerator.js
+                       
+```
+  - redux
+```
+ event(onclick) -> action                         -> store                      -> reducer                     ->subscribe
+                    ㄴaction type                                                  ㄴstate
+                    ㄴaction method                                                   ㄴ상태변경 전 initialState
+                      - createPrimiseThunk- > api                                     ㄴapi 호출 후 상태변경 후
+                                                                                      ㄴapi 호출 실패
+```
+- back-end
+  
+  - express - mysql
+```
+app.js
+      ㄴ indexRoute
+                  ㄴ boardRoute
+                              ㄴboardController
+                                              ㄴboardDao
+                  ㄴ userRoute
+                              ㄴuserController
+                                              ㄴuserDao
+                  ㄴ cartRoute
+                              ㄴcartController
+                                              ㄴcartDao
+                  ㄴ materialRoute
+                              ㄴmaterailController
+                                              ㄴmaterialDao
+```
+## 역할분담( 4/1~ )
 
 - 아이디어 기획, 구상
   - 재빈, 상윤, 희수, 우형 
@@ -68,7 +122,7 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 - 레시피 게시물 - 회원 좋아요 저장 , 조회, 삭제
  
 ### 2순위 -- 일단 여기까지 만듭니다.
-- 이메일 인증(회원가입 부분) 
+- 이메일 인증(회원가입) 
 - 아이디/비밀번호 찾기 -> 이메일 인증을 통한 비밀번호 변경
 
 - 레시피 게시물 댓글 조회 저장 
@@ -86,7 +140,7 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 - 레시피 게시물 오픈그래프 공유 (인스타, 페이스북 ,카카오)
 
 ### 4순위
-- 휴대폰 인증, 카카오 지갑 인증(회원가입)
+- 휴대폰 인증 (회원가입)
 - 자동입력방지(로그인 -> 로봇이 아닙니다. 영문자 적으세요)
 - 카카오톡 채널
 
@@ -101,14 +155,14 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 - javascript , node.js
 - front-end : react.js 
 - back-end : express.js
-- DB : oracle
+- DB : oracle ---> mysql 로 변경 (oracle 연동은 다했으나 커리큘럼과 일치를 위해)
 
 ### 버전관리 및 소스코드 관리 :
 - git
 
 ---
 
-### git flow, git 명령어, git 컨벤션 
+### git flow, git 명령어, git 컨벤션 (수정 4/17)
 
 <a id="git"></a>
 
