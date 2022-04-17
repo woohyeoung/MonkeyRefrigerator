@@ -21,7 +21,10 @@ import "./SignUp.css";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
-
+  let flag = true;
+  console.log(flag);
+  console.log(!flag);
+  console.log(!!flag);
   const dispatch = useDispatch();
   //Handler
   const emailHandler = (e) => {
