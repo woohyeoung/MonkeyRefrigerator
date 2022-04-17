@@ -281,18 +281,27 @@ pull request 시 title과 content에 커밋메시지 보다 더 구체적으로 
 
 ---
 
+##### UI component
+- react-bootstrap
+- antd
+- mui
+
 ##### background-color
-rgb(242,243,245)
+- #fcf6f5ff  (살색 - Main 바탕) ,
+- white (흰색 - Main 바탕 밖),
+- rgb(242,243,245) (회색), 
+- rgb(157 36 55) (레드 와인 자주색 - 헤더색) ,
 
 ##### font
+
 - 다양한 google Fonts 및 kopub체 , 배달의 민족체, 엘리스체
-- 헤더 팀명: Jua체 
-- 헤더 nav: kopub체
+- 헤더 와 nav: Do Hyeon 체
 - 컨테이너(본문) : Do Hyeon체
-- 푸터: kopub체
+
 
 ##### icon
 - [material](https://material.io/search.html?q=filled)
+- [material design](https://materialdesignicons.com/)
 
 
 
