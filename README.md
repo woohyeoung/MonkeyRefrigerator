@@ -171,8 +171,9 @@ app.js
 
 <a id="git"></a>
 
-▶▶▶▶▶ upstream main을 받을때는 fetch 후 rebase나 merge를 합시다. --> pull 보다는 fetch + rebase가 안전하다. 변경점마다 확인가능!!!◀◀◀◀◀ <br>
-▶▶▶▶▶ 받기전에  add , commit 필수!!!◀◀◀◀◀
+▶▶▶▶▶ upstream main을 받을때는 fetch 후 rebase나 merge를 합시다. <br>
+--> pull 보다는 fetch + rebase가 안전하다. 변경점마다 확인가능!!!◀◀◀◀◀ <br>
+▶▶▶▶▶ 받기전에  add , commit 필수!!!◀◀◀◀◀<br>
 
 ```
 - 원격 개인저장소(origin [브런치 이름]) 에 올리기
