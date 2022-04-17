@@ -1,13 +1,14 @@
 import { Cookies } from "react-cookie";
 import { getToken } from "../../api/UserApi";
 const cookies = new Cookies();
-
 const setCookie = (name, value, option) => {
   return cookies.set(name, value, { ...option });
 };
 const getCookie = (name) => {
-  console.log(name, "hh");
   return cookies.get(name);
+};
+const removeCookie = (name, option) => {
+  cookies.remove(name, { ...option });
 };
 export const HEADER_TOKEN = "HEADER_TOKEN";
 export const HEADER_TOKEN_GET = "HEADER_TOKEN_GET";
@@ -31,6 +32,18 @@ export const loginVali = (email, pw) => {
       dispatch({ type: HEADER_TOKEN_OUT, token: e, error: true });
     }
   };
+};
+export const handleLogout = (data) => async (dispatch) => {
+  console.log(data);
+  if (data) {
+    removeCookie("accessToken", { path: "/", domain: ".localhost:8080" });
+  }
+  // let token = getCookie("accessToken");
+  // console.log(token);
+  // if (token === undefined) {
+  //   dispatch({ type: SET_TOKEN, result: false, token: null });
+  //   dispatch({ type: HEADER_TOKEN_OUT, token: null });
+  // }
 };
 
 export const SET_TOKEN = "SET_TOKEN";
