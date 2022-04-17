@@ -48,8 +48,8 @@ index.js
 ```
   - redux
 ```
- event(onclick) -> action                         -> store                      -> reducer                     ->subscribe
-                    ㄴaction type                                                  ㄴstate
+ event(onclick) -> action                         -> store                      -> reducer                         ->subscribe
+                    ㄴaction type                     ㄴdispatch                      ㄴstate
                     ㄴaction method                                                   ㄴ상태변경 전 initialState
                       - createPrimiseThunk- > api                                     ㄴapi 호출 후 상태변경 후
                                                                                       ㄴapi 호출 실패
