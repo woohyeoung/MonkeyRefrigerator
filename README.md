@@ -171,15 +171,16 @@ app.js
 
 <a id="git"></a>
 
-▶▶▶▶▶ upstream main을 받을때는 rebase나 merge를 합시다. ◀◀◀◀◀ <br>
+▶▶▶▶▶ upstream main을 받을때는 fetch 후 rebase나 merge를 합시다. --> pull 보다는 fetch + rebase가 안전하다. 변경점마다 확인가능!!!◀◀◀◀◀ <br>
 ▶▶▶▶▶ 받기전에  add , commit 필수!!!◀◀◀◀◀
 
 ```
-- 원격 개인저장소 및 원격 조직 저장소에 올리기
-- 올리기전에 pull이나 fetch로 변경점 확인
+- 원격 개인저장소(origin [브런치 이름]) 에 올리기
+- 원격 조직 저장소(upstream [브런치 이름])에 pr 하기
+- 올리기전에 fetch로 변경점 확인
 
 git fetch upstream
-git rebase upstream/main
+git rebase upstream/master
 ```
 
 ##### git 기본 명령어
@@ -201,7 +202,7 @@ git push origin main
 ```
 
 ```
-- 깃 초기 셋팅(원하는 본인의 디렉토리에서)
+- 깃 초기 셋팅(원하는 본인의 디렉토리에서) , .git 파일이 만들어진다.
 git init
 
 - 프로젝트 clone
@@ -214,8 +215,8 @@ git remote -v
 git remote add upstream 조직주소
 git remote add origin 개인주소
 
-- pull : 원격 저장소의 정보를 가져오면서 자동으로 로컬 브랜치에 병합(Merge)까지 수행해주는 명령어 
-git pull upstream main
+- pull : 원격 저장소의 정보를 가져오면서 자동으로 로컬 브랜치에 병합(Merge)까지 수행해주는 명령어 -> fetch + merge
+git pull upstream 
 
 ```
 
@@ -227,9 +228,11 @@ feat:3/18, add news menu
 feat:3/18, add index.html  
 feat:3/18, 메인페이지 추가
 feat:3/18, 장소 메뉴 추가
-fix:3/19, fix location.html
+fix:3/19, fix err location.html
 docs:3/20, add web/js
 refator:3/21, refactor web/js/main.js
+rebase:3/14, rebase-1
+merge:3/14, local merge master to boardList-1
 ```
 
 ##### local에 upastream 최신화 후 작업하기 
@@ -242,29 +245,37 @@ git fetch upstream
 
 git add .
 
-git commit -m "merge,feat:3/23, merge to upstream main before, feat 메인페이지 진행중"
+git commit -m "feat:4/17, main.js ing 메인페이지 진행중(60%), before rebase"
 
-git rebase upstream/main
+git rebase upstream/master
 
+--------------------------------------------------------------------------------------------
 <여기서 충돌나면 충돌 고쳐주세요>
 충돌을 다 고쳤다면
 
 git add .
-git commit -m "merge: fix conflict and merge to upstream main"
+git commit -m "reabse:4/17, rebase-1"
 git rebase --continue
 
+rebase 개수 만큼 반복
+...
+
 한번 확인 하라는 창 뜹니다 :wq
+
+rebase 완료
+-----------------------------------------------------------------------------------------------
 
 ... 작업 중...
 
 --- 작업 후 ---
 git add . 
 git commit -m "feat:3/23, 메인페이지 완료나 진행중"
-git push origin main
+git push origin master
 
 
-그리고 pull request
+그리고 pull request는 올린 브런치를 병합
 pull request 시 title과 content에 커밋메시지 보다 더 구체적으로 적어주세요.
+
 ```
 
 ---
