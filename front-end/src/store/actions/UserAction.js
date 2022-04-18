@@ -1,4 +1,4 @@
-import { Cookies } from "react-cookie";
+import { Cookies, useCookies } from "react-cookie";
 import * as UserApi from "../../api/UserApi";
 import { createPromiseThunk } from "../../api/AsyncUtil";
 const cookies = new Cookies();
@@ -11,7 +11,6 @@ const getCookie = (name) => {
 const removeCookie = (name, option) => {
   cookies.remove(name, { ...option });
 };
-
 export const HEADER_TOKEN = "HEADER_TOKEN";
 export const HEADER_TOKEN_GET = "HEADER_TOKEN_GET";
 export const HEADER_TOKEN_OUT = "HEADER_TOKEN_OUT";
@@ -31,8 +30,6 @@ export const loginVali = (email, pw) => {
         // console.log(TokenAdmin("GET"));
         setCookie("accessToken", token, {
           path: "/",
-          secure: true,
-          sameSite: "none",
         });
       }
       dispatch({ type: HEADER_TOKEN_GET, token: token });
@@ -41,18 +38,6 @@ export const loginVali = (email, pw) => {
     }
   };
 };
-// export const handleLogout = (data) => async (dispatch) => {
-//   console.log(data);
-//   if (data) {
-//     removeCookie("accessToken", { path: "/", domain: ".localhost:8080" });
-//   }
-//   let token = getCookie("accessToken");
-//   console.log(token);
-//   if (token === undefined) {
-//     dispatch({ type: SET_TOKEN, result: false, token: null });
-//     dispatch({ type: HEADER_TOKEN_OUT, token: null });
-//   }
-// };
 
 export const SET_TOKEN = "SET_TOKEN";
 export const handleLogin = () => {
