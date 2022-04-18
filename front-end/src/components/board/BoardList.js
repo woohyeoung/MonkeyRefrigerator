@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { boardList, boardListAfter } from "../../store/actions/BoardAction";
 import { Navbar, Nav, NavDropdown, Jumbotron, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { Card } from "antd";
 import Icon from "@mdi/react";
 import ScrollTo from "../shared/ScrollTo";

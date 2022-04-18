@@ -41,48 +41,50 @@ function BoardDetail() {
 
   return (
     <>
-      <div class="detailRecipeImg">
-        <div id="box">
-          <img src={board[0].boardImgPath} alt="mainImg" />
-          <div>등록일({board[0].modifiedAt})</div>
+      <div class="mainContainer">
+        <div class="detailRecipeImg">
+          <div id="box">
+            <img src={board[0].boardImgPath} alt="mainImg" />
+            <div>등록일({board[0].modifiedAt})</div>
+          </div>
         </div>
-      </div>
 
-      <div class="detailContent">
-        <ul>
-          <div id="recipeTitle">
-            <li>
-              <b>{board[0].title}</b>
-            </li>
-          </div>
-          <div id="recipedate">
-            <li></li>
-          </div>
-        </ul>
+        <div class="detailContent">
+          <ul>
+            <div id="recipeTitle">
+              <li>
+                <b>{board[0].title}</b>
+              </li>
+            </div>
+            <div id="recipedate">
+              <li></li>
+            </div>
+          </ul>
 
-        <div style={{ fontSize: "30px" }}>
-          <b>재료</b>
-          <span
-            style={{
-              color: "#CCC",
-              fontStyle: "italic",
-              paddingLeft: "10px",
-            }}
-          >
-            ingredients
-          </span>
+          <div style={{ fontSize: "30px" }}>
+            <b>재료</b>
+            <span
+              style={{
+                color: "#CCC",
+                fontStyle: "italic",
+                paddingLeft: "10px",
+              }}
+            >
+              ingredients
+            </span>
+          </div>
+          <div style={{ padding: "10%" }}></div>
+          <div></div>
+          <div></div>
+          <ul>
+            <div id="recipeTitle">
+              <li>{board[0].title}</li>
+            </div>
+            <div id="recipedate">
+              <li>등록일({board[0].modifiedAt})</li>
+            </div>
+          </ul>
         </div>
-        <div style={{ padding: "10%" }}></div>
-        <div></div>
-        <div></div>
-        <ul>
-          <div id="recipeTitle">
-            <li>{board[0].title}</li>
-          </div>
-          <div id="recipedate">
-            <li>등록일({board[0].modifiedAt})</li>
-          </div>
-        </ul>
       </div>
     </>
   );
