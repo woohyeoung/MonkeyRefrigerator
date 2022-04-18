@@ -14,7 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Assignment from "@mui/icons-material/Assignment";
 //User Component
-import { loginVali } from "../../store/actions/UserAction";
+import { handleLogin, loginVali } from "../../store/actions/UserAction";
 //Style
 import "./SignUp.css";
 
@@ -30,19 +30,19 @@ export const Login = () => {
   const pwHandler = (e) => {
     setPw(e.currentTarget.value);
   };
-
   const onClickLogin = async (e) => {
     e.preventDefault();
     if (email === "" || pw === "") {
       window.alert("이메일과 비밀번호를 확인해주세요.");
       return;
     }
-    console.log(email);
     dispatch(loginVali(email, pw));
+    dispatch(handleLogin());
     setEmail("");
     setPw("");
-    if (tokenReducer) window.location.href = "/";
-    else alert("일치하는 회원정보가 없습니다.");
+    if (tokenReducer) {
+      window.location.href = "/";
+    }
   };
   return (
     <div className="loginContainer">
