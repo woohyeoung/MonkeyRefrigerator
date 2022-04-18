@@ -98,7 +98,7 @@ module.exports = {
                             b.subMaterial,
                             b.tagName,
                             b.viewCount,
-                            b.modifiedAt,
+                            date_format(b.modifiedAt,'%Y-%m-%d') as modifiedAt,
                             u.nickname,
                             u.profileImg,
                             c.name  category,
