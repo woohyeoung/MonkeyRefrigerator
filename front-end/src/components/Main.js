@@ -18,7 +18,7 @@ import { handleLogin } from "../store/actions/UserAction";
 import PublicRoute from "./user/PublicRoute";
 import PrivateRoute from "./user/PrivateRoute";
 import Header from "./Header";
-
+import BoardDetail from "./board/BoardDetail";
 function Main() {
   const dispatch = useDispatch();
   const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
@@ -48,6 +48,9 @@ function Main() {
           />
           <PublicRoute component={BoardList} path="/board" exact />
           <PublicRoute component={BoardCreate} path="/create" exact />
+          <Route path="/board/:id">
+            <BoardDetail />
+          </Route>
         </Switch>
       </div>
     </>

@@ -105,7 +105,6 @@ function BoardList() {
       await dispatch(boardListAfter(page));
     }
   }, [page, boards]);
-
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, true);
     // 스크롤이 발생할때마다 handleScroll 함수를 호출하도록 추가합니다.
