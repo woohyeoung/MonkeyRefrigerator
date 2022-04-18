@@ -27,7 +27,6 @@ module.exports = {
     try {
       const query = `SELECT email FROM useraccount WHERE email='${email}' and password='${pw}';`;
       const connection = await pool.getConnection(async (conn) => conn);
-      console.log(connection.query(query));
       const [info] = await connection.query(query);
       connection.release();
       return info;

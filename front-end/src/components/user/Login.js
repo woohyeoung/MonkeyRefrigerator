@@ -1,7 +1,7 @@
 //Login.js
 //Install Component;
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -21,10 +21,7 @@ import "./SignUp.css";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
-  let flag = true;
-  console.log(flag);
-  console.log(!flag);
-  console.log(!!flag);
+  const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
   const dispatch = useDispatch();
   //Handler
   const emailHandler = (e) => {
@@ -43,7 +40,8 @@ export const Login = () => {
     dispatch(loginVali(email, pw));
     setEmail("");
     setPw("");
-    window.location.href = "/";
+    if (tokenReducer) window.location.href = "/";
+    else alert("일치하는 회원정보가 없습니다.");
   };
   return (
     <div className="loginContainer">
