@@ -7,6 +7,8 @@ const initialState = {
 };
 export default function UserReducer(state = initialState, action) {
   switch (action.type) {
+    case SIGNUPFORM_INSERT:
+      return;
     default:
       return state;
   }

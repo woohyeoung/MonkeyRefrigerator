@@ -1,6 +1,5 @@
 import axios from "axios";
 import { baseUrl } from "./BaseUrl";
-import { useHistory } from "react-router-dom";
 
 export const getToken = async (data) => {
   const resultLogin = await axios
@@ -10,8 +9,6 @@ export const getToken = async (data) => {
     .catch();
   return resultLogin;
 };
-
-const history = useHistory;
 
 //signupFrom API - 회원가입
 export const insertSignupForm = (data) => {
