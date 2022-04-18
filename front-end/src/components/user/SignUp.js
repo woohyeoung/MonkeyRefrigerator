@@ -1,13 +1,14 @@
 //SingUp.js
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector, useStore } from "react-redux";
+import { Cookies } from "react-cookie";
 import "./SignUp.css";
 import Card from "@mui/material/Card";
 import { CardContent } from "@mui/material";
 import BirthPick from "./DatePicker";
 import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { signupform } from "../../store/actions/UserAction";
+import { signupform, handleLogin } from "../../store/actions/UserAction";
 import axios from "axios";
 import moment from "moment";
 import { baseUrl } from "../../api/BaseUrl";
@@ -228,6 +229,7 @@ function SignUp() {
         <div id="signup_content">
           <Card>
             <CardContent>
+              <h2>회원가입</h2>
               <h3>
                 <label for="id">ID(Email)</label>
               </h3>

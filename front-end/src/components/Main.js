@@ -19,10 +19,11 @@ import PublicRoute from "./user/PublicRoute";
 import PrivateRoute from "./user/PrivateRoute";
 import Header from "./Header";
 import BoardDetail from "./board/BoardDetail";
+import Profile from "./user/Profile";
+
 function Main() {
   const dispatch = useDispatch();
   const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
-  console.log(tokenReducer);
   useEffect(() => {
     dispatch(handleLogin());
   }, [dispatch]);
@@ -45,6 +46,12 @@ function Main() {
             restricted={true}
             component={SignUp}
             path="/signup"
+            exact
+          />
+          <PublicRoute
+            restricted={true}
+            component={SignUp}
+            path="/profile"
             exact
           />
           <PublicRoute component={BoardList} path="/board" exact />
