@@ -13,6 +13,11 @@ export const SET_TOKEN = "SET_TOKEN";
 //회원가입 insert
 export const SIGNUPFORM_INSERT = "SIGNUPFORM_INSERT";
 
+//사용자 프로필 GET
+export const USERINFORMATION_GET = "USERINFORMATION_GET";
+export const USERINFORMATION_GET_SUCCESS = "USERINFORMATION_GET_SUCCESS";
+export const USERINFORMATION_GET_ERROR = "USERINFORMATION_GET_ERROR";
+
 export const loginVali = (email, pw) => {
   const data = { email: email, pw: pw };
   return async (dispatch) => {
@@ -60,4 +65,9 @@ export const handleLogin = () => {
 export const signupform = createPromiseThunk(
   SIGNUPFORM_INSERT,
   UserApi.insertSignupForm
+);
+
+export const userInformation = createPromiseThunk(
+  USERINFORMATION_GET,
+  UserApi.selectUserInformation
 );

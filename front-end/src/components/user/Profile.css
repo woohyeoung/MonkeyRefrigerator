@@ -1,0 +1,30 @@
+/* Profile.css */
+
+#profile_content {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%);
+  width: 800px;
+  margin-top: 20px;
+}
+
+h2 {
+  margin: 10px 9 8px 20px;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+h3 {
+  margin: 10px 9 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.profile_img {
+  width: 200px;
+}
+
+.profile_imgtext {
+  width: 200px;
+  text-align: center;
+}

@@ -84,4 +84,18 @@ module.exports = {
       );
     }
   },
+  selectUserInfo: async function (id) {
+    try {
+      const query = `SELECT * FROM useraccount WHERE email='${id}';`;
+      const connection = await pool.getConnection(async (conn) => conn);
+      const [info] = await connection.query(query);
+      connection.release();
+      return info;
+    } catch (err) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo"
+      );
+    }
+  },
 };

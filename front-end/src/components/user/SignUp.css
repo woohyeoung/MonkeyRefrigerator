@@ -1,15 +1,29 @@
 /* Signup.css */
 
+@font-face {
+  font-family: "BMDOHYEON";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
 #signup_content {
   position: relative;
   left: 50%;
   transform: translate(-50%);
   width: 600px;
+  margin-top: 20px;
+}
+
+h2 {
+  font-size: 25px;
+  font-family: BMDOHYEON;
 }
 
 h3 {
   margin: 10px 9 8px;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
 }
 
@@ -73,6 +87,25 @@ h3 {
   border: 1px solid #aaa;
 }
 
+.react-datepicker__input-container {
+  display: block;
+  width: 28%;
+  height: 50px;
+  border: solid 1px #dadada;
+  padding: 10px 14px 10px 14px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.react-datepicker__input-container > input {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 30px;
+  border: none;
+  background-color: #fff;
+  font-size: 15px;
+}
 /* LoginPage Style */
 .loginContainer {
   display: flex;
@@ -90,4 +123,33 @@ h3 {
   width: 100%;
   margin-left: 252px;
   margin-bottom: 20px;
+}
+
+/* Profile Style */
+
+#profile_content {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%);
+  width: 800px;
+  margin-top: 20px;
+}
+
+/* .profile_imgdiv {
+  width: 100%;
+  align-items: center;
+  margin: auto;
+} */
+
+.profile_img {
+  width: 200px;
+}
+
+.profile_imgtext {
+  width: 200px;
+  text-align: center;
+}
+
+.account_content {
+  margin-top: 30px;
 }

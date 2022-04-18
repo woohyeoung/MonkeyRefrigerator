@@ -3,6 +3,7 @@ const response = require("../utils/response");
 const userDao = require("../dao/UserDao");
 const generateToken = require("../config/secret");
 const UserDao = require("../dao/UserDao");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
   getToken: async (req, res) => {
@@ -58,6 +59,35 @@ module.exports = {
         response.successFalse(
           1001,
           "서버와 통신에 실패하였습니다. UserController/UserDao error - signupInsert"
+        )
+      );
+    }
+  },
+  getUserInformation: async function (req, res) {
+    try {
+      const token = req.query.token;
+      const secretkey = process.env.ACCESS_TOKEN_SECRET;
+      const id = jwt.decode(token).email;
+      console.log(id);
+      const userInfo = await UserDao.selectUserInfo(id);
+      if (userInfo === undefined) {
+        return res.json(
+          response.successFalse(1002, "전체 게시물 목록이 없습니다.")
+        );
+      } else {
+        return res.json(
+          response.successTrue(
+            2001,
+            "게시물 목록 조회에 성공하였습니다.",
+            userInfo
+          )
+        );
+      }
+    } catch (err) {
+      return res.json(
+        response.successFalse(
+          1001,
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - getUserInformation"
         )
       );
     }

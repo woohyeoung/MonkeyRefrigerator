@@ -8,6 +8,7 @@ import React, {
   Suspense,
 } from "react";
 import "./Main.css";
+
 import BoardList from "./board/BoardList";
 import BoardCreate from "./board/BoardCreate";
 import { Link, Route, Switch } from "react-router-dom";
@@ -19,10 +20,11 @@ import PublicRoute from "./user/PublicRoute";
 import PrivateRoute from "./user/PrivateRoute";
 import Header from "./Header";
 import BoardDetail from "./board/BoardDetail";
+import Profile from "./user/Profile";
+
 function Main() {
   const dispatch = useDispatch();
   const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
-  console.log(tokenReducer);
   useEffect(() => {
     dispatch(handleLogin());
   }, [dispatch]);
@@ -47,6 +49,7 @@ function Main() {
             path="/signup"
             exact
           />
+          <PrivateRoute component={Profile} path="/profile" exact />
           <PublicRoute component={BoardList} path="/board" exact />
           <PublicRoute component={BoardCreate} path="/create" exact />
           <Route path="/board/:id">

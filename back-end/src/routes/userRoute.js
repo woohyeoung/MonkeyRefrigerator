@@ -7,4 +7,5 @@ module.exports = function (app) {
   app.route("/login").post(user.getToken);
   app.route("/idChk").get(user.idDoubleChk);
   app.route("/signupInsert").post(user.signupInsert);
+  app.route("/profile").get(user.getUserInformation);
 };
