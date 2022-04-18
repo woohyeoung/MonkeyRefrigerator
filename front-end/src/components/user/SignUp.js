@@ -103,14 +103,9 @@ function SignUp() {
         gender: gender,
         birth: moment(startDate).format("YYYYMMDD"),
       };
-
       dispatch(signupform(formData));
-      window.location.href="/login";
+      window.location.href = "/login";
     }
-
-    // console.log(form)
-    // setUserForm(form)
-    // dispatch
   };
 
   function isSubmit() {

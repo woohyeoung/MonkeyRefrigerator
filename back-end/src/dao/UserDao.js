@@ -43,7 +43,6 @@ module.exports = {
       const query = `SELECT count(*) as cnt FROM useraccount WHERE ${type}='${id}';`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query);
-      console.log(info);
       connection.release();
       return info;
     } catch (err) {
