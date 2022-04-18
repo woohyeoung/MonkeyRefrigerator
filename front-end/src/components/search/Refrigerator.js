@@ -30,12 +30,22 @@ export const Refrigerator = () => {
   });
   return (
     <div className="compartmentRefri">
+      <div className="refriHeader">
+        <h3>My Refrigerator</h3>
+      </div>
       <table className="drawer">
         <thead></thead>
         <tbody>
           <tr className="topSpace">
             <td>
-              <RefriDoor msg={flag} />
+              <div
+                onClick={() => {
+                  flag ? setFlag(false) : setFlag(true);
+                }}
+              >
+                <RefriDoor msg={flag} />
+              </div>
+
               <div
                 className="searchModal"
                 style={{ overflow: style, transition: "0.4s" }}
@@ -46,11 +56,7 @@ export const Refrigerator = () => {
             </td>
           </tr>
           <tr className="bottomSpace">
-            <td
-              onClick={() => {
-                flag ? setFlag(false) : setFlag(true);
-              }}
-            ></td>
+            <td></td>
           </tr>
         </tbody>
       </table>

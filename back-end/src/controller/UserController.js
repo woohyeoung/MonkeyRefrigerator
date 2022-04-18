@@ -68,7 +68,6 @@ module.exports = {
       const token = req.query.token;
       const secretkey = process.env.ACCESS_TOKEN_SECRET;
       const id = jwt.decode(token).email;
-      console.log(id);
       const userInfo = await UserDao.selectUserInfo(id);
       if (userInfo === undefined) {
         return res.json(
