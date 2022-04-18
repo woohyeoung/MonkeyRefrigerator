@@ -8,6 +8,7 @@ import React, {
   Suspense,
 } from "react";
 import "./Main.css";
+
 import BoardList from "./board/BoardList";
 import BoardCreate from "./board/BoardCreate";
 import { Link, Route, Switch } from "react-router-dom";
@@ -48,12 +49,7 @@ function Main() {
             path="/signup"
             exact
           />
-          <PublicRoute
-            restricted={true}
-            component={SignUp}
-            path="/profile"
-            exact
-          />
+          <PrivateRoute component={Profile} path="/profile" exact />
           <PublicRoute component={BoardList} path="/board" exact />
           <PublicRoute component={BoardCreate} path="/create" exact />
           <Route path="/board/:id">

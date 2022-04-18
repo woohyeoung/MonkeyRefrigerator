@@ -1,13 +1,56 @@
 //Profile.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Card from "@mui/material/Card";
 import { CardContent } from "@mui/material";
 import "./SignUp.css";
 import BirthPick from "./DatePicker";
 import { Button } from "react-bootstrap";
+import { baseUrl } from "../../api/BaseUrl";
+import axios from "axios";
+import { userInformation, handleLogin } from "../../store/actions/UserAction";
 
 function Profile() {
+  const userStore = useSelector(
+    (state) => state.userReducer.userInformation.data
+  );
+  const dispatch = useDispatch();
+
+  const [flagToken, setFlagToken] = useState("");
+  const tokenReducer = useSelector((state) => state.tokenReducer.token);
+  const secretKey = process.env.ACCESS_TOKEN_SECRET;
+
   const [startDate, setStartDate] = useState(new Date());
+  const [id, setId] = useState("");
+  const [userInfo, setUserInfo] = useState();
+
+  // 토큰 복호화 axios api
+
+  //console.log(tokenReducer);
+  // const tokenDecode = async (token) => {
+  //   const result = axios.get(`${baseUrl}tokenDecode`, {
+  //     params: { token: token },
+  //   });
+
+  //   return result;
+  // };
+
+  useEffect(() => {
+    setFlagToken(tokenReducer);
+    setTimeout(() => {
+      dispatch(userInformation(flagToken));
+    }, 200);
+    console.log(userStore.result[0].email);
+    setUserInfo(userStore.result[0]);
+  }, [flagToken]);
+
+  //console.log(userStore.userInformation.data);
+  // useEffect(() => {
+
+  //   if (userStore.userInformation.data) {
+  //     //setuserInfo([...userInfo, ...boardStore.boardListAfter.data.data.result]);
+  //   }
+  // }, [userStore.userInformation]);
 
   return (
     <>
@@ -35,6 +78,7 @@ function Profile() {
                       id="idEamil"
                       class="int"
                       maxlength="20"
+                      // value={userInfo.email}
                       readOnly
                     />
                   </span>
@@ -69,6 +113,7 @@ function Profile() {
                       name="nickName"
                       class="int"
                       maxlength="20"
+                      // value={userInfo.nickname}
                       readOnly
                     />
                   </span>
@@ -79,9 +124,21 @@ function Profile() {
               </h3>
               <div class="box_id">
                 <div class="genderCheck">
-                  <input type="radio" id="gender" name="gender" value="m" />
+                  <input
+                    type="radio"
+                    id="gender"
+                    name="gender"
+                    value="m"
+                    // checked={userInfo.gender == "m" ? true : false}
+                  />
                   <label for="gender">남성</label>
-                  <input type="radio" id="gender" name="gender" value="w" />
+                  <input
+                    type="radio"
+                    id="gender"
+                    name="gender"
+                    value="w"
+                    // checked={userInfo.gender == "w" ? true : false}
+                  />
                   <label for="gender">여성</label>
                 </div>
               </div>

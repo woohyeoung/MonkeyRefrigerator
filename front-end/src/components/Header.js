@@ -37,7 +37,8 @@ function Header() {
   };
   useEffect(() => {
     tokenReducer ? setIsLogin(true) : setIsLogin(false);
-  }, tokenReducer);
+  });
+
   const onClickLogo = () => {};
   return (
     <>
@@ -121,7 +122,7 @@ function Header() {
 
                     <hr />
 
-                    <Link to="/refrigerator">
+                    <Link to="/profile">
                       <Icon path={mdiAccount} title="profile" size={2} />
                       <div className="sub-title">프로필</div>
                     </Link>
