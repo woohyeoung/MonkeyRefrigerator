@@ -1,4 +1,6 @@
+//UserReducer.js
 import { reducerUtils, handleAsyncActions } from "../../api/AsyncUtil";
+import { SIGNUPFORM_INSERT } from "../actions/UserAction";
 
 const initialState = {
   loginVali: reducerUtils.initial(),
