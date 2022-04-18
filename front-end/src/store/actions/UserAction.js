@@ -8,9 +8,10 @@ const setCookie = (name, value, option) => {
 const getCookie = (name) => {
   return cookies.get(name);
 };
-// const removeCookie = (name, option) => {
-//   cookies.remove(name, { ...option });
-// };
+const removeCookie = (name, option) => {
+  cookies.remove(name, { ...option });
+};
+
 export const HEADER_TOKEN = "HEADER_TOKEN";
 export const HEADER_TOKEN_GET = "HEADER_TOKEN_GET";
 export const HEADER_TOKEN_OUT = "HEADER_TOKEN_OUT";
@@ -25,6 +26,9 @@ export const loginVali = (email, pw) => {
     try {
       const token = await UserApi.getToken(data);
       if (token !== undefined) {
+        // TokenAdmin("SET", "accessToken", token, { path: "/", secure: true });
+        // window.alert("hi");
+        // console.log(TokenAdmin("GET"));
         setCookie("accessToken", token, {
           path: "/",
           secure: true,
@@ -54,6 +58,7 @@ export const SET_TOKEN = "SET_TOKEN";
 export const handleLogin = () => {
   return async (dispatch) => {
     let token = getCookie("accessToken");
+    // let token = TokenAdmin("GET");
     if (token) {
       dispatch({
         type: SET_TOKEN,

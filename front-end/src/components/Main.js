@@ -14,11 +14,13 @@ import { Link, Route, Switch } from "react-router-dom";
 import { Login } from "./user/Login";
 import SignUp from "./user/SignUp";
 import { useDispatch, useSelector } from "react-redux";
-import { handleLogin } from "../store/actions/UserAction";
+import { handleLogin, SET_TOKEN } from "../store/actions/UserAction";
 import PublicRoute from "./user/PublicRoute";
 import PrivateRoute from "./user/PrivateRoute";
 import Header from "./Header";
 import BoardDetail from "./board/BoardDetail";
+import { Cookies } from "react-cookie";
+import { IsLogin } from "./user/IsLogin";
 function Main() {
   const dispatch = useDispatch();
   const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
@@ -26,6 +28,15 @@ function Main() {
   useEffect(() => {
     dispatch(handleLogin());
   }, [dispatch]);
+
+  const logout = () => {
+    console.log("hi");
+    const cookie = new Cookies();
+    cookie.remove("accessToken");
+    dispatch({ type: SET_TOKEN });
+    window.location.href = "/";
+  };
+
   return (
     <>
       <Header />
@@ -33,6 +44,7 @@ function Main() {
         <Switch>
           <PublicRoute restricted={false} exact path="/">
             메인 페이지 - Router 들어가야함
+            <button onClick={logout}>로그아웃</button>
           </PublicRoute>
           <PublicRoute
             restricted={true}
