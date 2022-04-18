@@ -23,7 +23,7 @@ export const Login = () => {
   const [pw, setPw] = useState("");
   const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
   const dispatch = useDispatch();
-  //Handler
+
   const emailHandler = (e) => {
     setEmail(e.currentTarget.value);
   };
@@ -37,6 +37,7 @@ export const Login = () => {
       window.alert("이메일과 비밀번호를 확인해주세요.");
       return;
     }
+    console.log(email);
     dispatch(loginVali(email, pw));
     setEmail("");
     setPw("");

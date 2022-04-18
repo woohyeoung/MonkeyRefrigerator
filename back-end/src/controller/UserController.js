@@ -14,7 +14,6 @@ module.exports = {
         return res.json(response.successFalse(6770, "유저 목록이 없습니다."));
       }
       let accessToken = generateToken(user[0].email);
-
       return res.json(
         response.successTrue(6771, "토큰을 전달하였습니다.", accessToken)
       );
