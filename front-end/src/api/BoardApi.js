@@ -19,8 +19,8 @@ export const findBoardAllAfter = (page) => {
   return result;
 };
 
-export const findBoardDetail = (boards) => {
-  const result = axios.get(baseUrl + "board/detail", {
+export const findBoardDetail = async (boards) => {
+  const result = await axios.get(baseUrl + "board/detail", {
     params: {
       id: boards,
     },
@@ -30,6 +30,6 @@ export const findBoardDetail = (boards) => {
 
 //board category API -- 카테고리 목록 조회
 export const findBoardCategory = () => {
-	const result = axios.get(baseUrl + 'board/category');
-	return result;
+  const result = axios.get(baseUrl + "board/category");
+  return result;
 };

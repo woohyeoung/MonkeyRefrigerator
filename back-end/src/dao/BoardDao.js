@@ -89,7 +89,6 @@ module.exports = {
   selectBoardDetail: async function (id) {
     try {
       const query = `select b.id,
-                            b.id,
                             b.title,
                             b.subtitle,
                             b.content,
@@ -101,12 +100,15 @@ module.exports = {
                             date_format(b.modifiedAt,'%Y-%m-%d') as modifiedAt,
                             u.nickname,
                             u.profileImg,
+                            m.keyName,
                             c.name  category,
                             bi.path boardImgPath
                            from board b
                                     join useraccount u on b.userId = u.id
                                     join category c on b.categoryId = c.id
                                     left join boardImage bi on b.id = bi.boardId
+                                    join boardgetmaterial bgm on b.id =  bgm.boardId
+                                    join material_r m on bgm.materialId = m.id
                            where b.id = ?
                            order by b.id;`;
       const params = [id];
