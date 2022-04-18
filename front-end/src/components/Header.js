@@ -38,7 +38,6 @@ function Header() {
   useEffect(() => {
     tokenReducer ? setIsLogin(true) : setIsLogin(false);
   });
-
   const onClickLogo = () => {};
   return (
     <>
