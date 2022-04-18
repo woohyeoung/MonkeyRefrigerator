@@ -2,6 +2,7 @@
 const response = require("../utils/response");
 const userDao = require("../dao/UserDao");
 const generateToken = require("../config/secret");
+const UserDao = require("../dao/UserDao");
 
 module.exports = {
   getToken: async (req, res) => {
@@ -45,6 +46,19 @@ module.exports = {
         response.successFalse(
           1001,
           "서버와 통신에 실패하였습니다. UserController/UserDao error - idDoubleChk"
+        )
+      );
+    }
+  },
+  signupInsert: async function (req, res) {
+    const data = req.body;
+    try {
+      const signupformInsert = await UserDao.insertSignup(data);
+    } catch (err) {
+      return res.json(
+        response.successFalse(
+          1001,
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - signupInsert"
         )
       );
     }

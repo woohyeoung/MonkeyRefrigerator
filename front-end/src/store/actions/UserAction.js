@@ -1,5 +1,6 @@
 import { Cookies } from "react-cookie";
-import { getToken } from "../../api/UserApi";
+import * as UserApi from "../../api/UserApi";
+import { createPromiseThunk } from "../../api/AsyncUtil";
 const cookies = new Cookies();
 const setCookie = (name, value, option) => {
   return cookies.set(name, value, { ...option });
@@ -14,12 +15,15 @@ export const HEADER_TOKEN = "HEADER_TOKEN";
 export const HEADER_TOKEN_GET = "HEADER_TOKEN_GET";
 export const HEADER_TOKEN_OUT = "HEADER_TOKEN_OUT";
 
+//회원가입 insert
+export const SIGNUPFORM_INSERT = "SIGNUPFORM_INSERT";
+
 export const loginVali = (email, pw) => {
   const data = { email: email, pw: pw };
   return async (dispatch) => {
     dispatch({ type: HEADER_TOKEN });
     try {
-      const token = await getToken(data);
+      const token = await UserApi.getToken(data);
       if (token !== undefined) {
         setCookie("accessToken", token, {
           path: "/",
@@ -65,3 +69,8 @@ export const handleLogin = () => {
     }
   };
 };
+
+export const signupform = createPromiseThunk(
+  SIGNUPFORM_INSERT,
+  UserApi.insertSignupForm
+);

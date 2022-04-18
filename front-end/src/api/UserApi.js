@@ -9,3 +9,9 @@ export const getToken = async (data) => {
     .catch();
   return resultLogin;
 };
+
+//signupFrom API - 회원가입
+export const insertSignupForm = (data) => {
+  const result = axios.post(baseUrl + "signupInsert", data);
+  return result;
+};
