@@ -1,16 +1,9 @@
 //BoardDetail.js
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Card } from 'antd';
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Card } from "antd";
 
-
-function BoardDetail(){
-
-    return(
-    
-        <>
-            123
-        </>
-    )
+function BoardDetail() {
+  return <>123</>;
 }
-export default BoardDetail
+export default BoardDetail;
