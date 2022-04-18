@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 import "./Header.css";
 import {
   mdiMagnify,
-  mdiFridgeOutline,
   mdiAccount,
   mdiFridge,
   mdiAccountPlus,
@@ -11,13 +10,15 @@ import {
   mdiClipboardText,
   mdiClipboardPlus,
   mdiMenu,
+  mdiLogout,
 } from "@mdi/js";
 
 import Icon from "@mdi/react";
 import logoImg from "../assets/monkey_2.png";
-import { IsLogin } from "./user/IsLogin";
 //router
 import { Link } from "react-router-dom";
+import { Cookies } from "react-cookie";
+import { useSelector } from "react-redux";
 
 function Header() {
   const [isLogin, setIsLogin] = useState(false);
@@ -28,11 +29,15 @@ function Header() {
   const monkey = useRef();
   const menu1 = useRef();
   const menu2 = useRef();
-
+  const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
+  const logout = () => {
+    const cookie = new Cookies();
+    cookie.remove("accessToken");
+    window.location.href = "/";
+  };
   useEffect(() => {
-    console.log(IsLogin);
-    setIsLogin(false);
-  }, []);
+    tokenReducer ? setIsLogin(true) : setIsLogin(false);
+  }, tokenReducer);
   const onClickLogo = () => {};
   return (
     <>
@@ -120,6 +125,14 @@ function Header() {
                       <Icon path={mdiAccount} title="profile" size={2} />
                       <div className="sub-title">프로필</div>
                     </Link>
+                    <hr />
+                    <Icon
+                      path={mdiLogout}
+                      title="logout"
+                      size={2}
+                      onClick={logout}
+                    />
+                    <div className="logout">로그아웃</div>
                   </div>
                 </div>
               ) : (
