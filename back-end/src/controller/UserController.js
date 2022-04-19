@@ -14,7 +14,8 @@ module.exports = {
       if (user === undefined) {
         return res.json(response.successFalse(6770, "유저 목록이 없습니다."));
       }
-      let accessToken = generateToken(user[0].email);
+      console.log(user);
+      let accessToken = generateToken(user[0].id, user[0].email);
       return res.json(
         response.successTrue(6771, "토큰을 전달하였습니다.", accessToken)
       );
@@ -66,6 +67,7 @@ module.exports = {
   getUserInformation: async function (req, res) {
     try {
       const token = req.tokenInfo;
+      console.log(token);
       const userInfo = await UserDao.selectUserInfo(token.email);
       if (userInfo === undefined) {
         return res.json(

@@ -6,3 +6,15 @@
   padding-bottom: 90px;
   background: #fcf6f5ff;
 }
+.mainHeadLine {
+  margin-top: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mainVote {
+  margin-left: 100px;
+  min-width: 275px;
+  width: 30%;
+  border: 1px solid #000;
+}
