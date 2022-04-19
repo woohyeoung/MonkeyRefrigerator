@@ -17,7 +17,7 @@ export const insertSignupForm = (data) => {
 };
 
 //user information API - 프로필 조회
-export const selectUserInformation = (token) => {
+export const selectUserInformation = async (token) => {
   const result = axios
     .get(baseUrl + "profile", {
       headers: {

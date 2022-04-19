@@ -18,3 +18,21 @@
   width: 30%;
   border: 1px solid #000;
 }
+.mainBodyCon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mainBodyCon img {
+  width: 90px;
+  height: 90px;
+}
+@media screen and (max-width: 768px) {
+  .mainHeadLine {
+    flex-direction: column;
+  }
+  .mainVote {
+    margin: 0;
+    justify-content: center;
+  }
+}
