@@ -3,13 +3,8 @@ import { baseUrl } from "./BaseUrl";
 // console.log(baseUrl);
 
 //board API -- 조회순 첫번째 목록
-export const findBoardAll = (token) => {
-  console.log(token);
-  const result = axios.get(baseUrl + "board", {
-    headers: {
-      accessToken: token,
-    },
-  });
+export const findBoardAll = () => {
+  const result = axios.get(baseUrl + "board");
   return result;
 };
 
