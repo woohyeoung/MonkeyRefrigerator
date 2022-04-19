@@ -13,7 +13,7 @@ module.exports = {
                                   u.nickname,
                                   u.profileImg,
                                   c.name  category,
-                                  bi.path boardImgPath
+                                  bi.path as boardImgPath
                            from board b
                                     join useraccount u on b.userId = u.id
                                     join category c on b.categoryId = c.id

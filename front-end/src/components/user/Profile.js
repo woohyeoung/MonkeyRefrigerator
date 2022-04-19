@@ -17,28 +17,32 @@ function Profile() {
     (state) => state.userReducer.userInformation.data
   );
   const dispatch = useDispatch();
-  const [flagToken, setFlagToken] = useState(null);
   const tokenReducer = useSelector((state) => state.tokenReducer.token);
   const secretKey = process.env.ACCESS_TOKEN_SECRET;
 
   const [startDate, setStartDate] = useState(new Date());
   const [id, setId] = useState("");
   const [userInfo, setUserInfo] = useState();
-
+  useEffect(() => {
+    handleLogin();
+  });
+  useEffect(() => {
+    dispatch(userInformation(tokenReducer));
+  }, []);
   useEffect(() => {
     const testYoon = async () => {
-      setFlagToken(tokenReducer);
-      dispatch(userInformation(flagToken));
       setUserInfo(userStore.result[0]);
       setStartDate(userInfo.createAt);
     };
     testYoon();
+  }, [userStore]);
+  useEffect(() => {
     if (userStore && !userStore.isSuccess) {
       console.log(userStore.isSuccess);
       logout();
       alert("토큰이 만료되어 로그아웃되었습니다.");
     }
-  }, [flagToken]);
+  }, [tokenReducer]);
   const setValue = (type) => {
     switch (type) {
       case "email":
