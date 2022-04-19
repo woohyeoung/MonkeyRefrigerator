@@ -18,27 +18,26 @@ import logoImg from "../assets/monkey_2.png";
 //router
 import { Link } from "react-router-dom";
 import { Cookies } from "react-cookie";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { handleLogin } from "../store/actions/UserAction";
 
 function Header() {
   const [isLogin, setIsLogin] = useState(false);
   const [imgUrl, setImgUrl] = useState("/monkey_2.png");
   const [style, setStyle] = useState({ display: "none" });
   const [menu, setMenu] = useState(false);
-
+  const dispatch = useDispatch();
   const monkey = useRef();
   const menu1 = useRef();
   const menu2 = useRef();
   const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
-  const logout = () => {
-    const cookie = new Cookies();
-    cookie.remove("accessToken");
-    window.location.href = "/";
-  };
+
+  useEffect(() => {
+    dispatch(handleLogin());
+  });
   useEffect(() => {
     tokenReducer ? setIsLogin(true) : setIsLogin(false);
   });
-
   const onClickLogo = () => {};
   return (
     <>
@@ -191,5 +190,9 @@ function Header() {
     </>
   );
 }
-
+export const logout = () => {
+  const cookie = new Cookies();
+  cookie.remove("accessToken");
+  window.location.href = "/";
+};
 export default React.memo(Header);
