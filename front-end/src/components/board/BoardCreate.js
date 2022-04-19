@@ -30,7 +30,7 @@ import { searchMaterialList } from '../../store/actions/BoardAction';
 
 function BoardCreate() {
 	const boardStore = useSelector((state) => state.boardReducer);
-	const tokenStore = useSelector((state) => state.tokenStore);
+	const tokenStore = useSelector((state) => state.tokenReducer);
 
 	const dispatch = useDispatch();
 
@@ -245,11 +245,12 @@ function BoardCreate() {
 			return false;
 		}
 
-		if (pictures[0].length === 0) {
+		if (pictures.length === 0) {
 			window.alert('1장 이상의 사진을 업로드 해주세요');
 			return false;
 		}
-		if (pictures.length === 0) {
+
+		if (pictures[0].length === 0) {
 			window.alert('1장 이상의 사진을 업로드 해주세요');
 			return false;
 		}
@@ -333,6 +334,7 @@ function BoardCreate() {
 		formData.append('tags', tagsConver(tags));
 		formData.append('img', pictures);
 
+		console.log(tokenStore.token);
 		const boardForm = {
 			token: tokenStore.token,
 			formData: formData,

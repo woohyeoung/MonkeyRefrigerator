@@ -119,9 +119,8 @@ module.exports = {
 
 	saveBoardOne: async function (req, res) {
 		try {
-			let userId = req.tokenInfo.userId;
+			let token = req.tokenInfo;
 			console.log(req.tokenInfo);
-			console.log(userId);
 			let board = {
 				user: {
 					id: userId,
