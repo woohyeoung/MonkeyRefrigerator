@@ -43,3 +43,13 @@ export const findMaterial = (keyword) => {
 
 	return result;
 };
+
+export const saveBoardOne = (data) => {
+	const result = axios.post(baseUrl + 'board/create', data.formData, {
+		headers: {
+			'access-token': data.token,
+			'Content-Type': 'multipart/form-data',
+		},
+	});
+	return result;
+};

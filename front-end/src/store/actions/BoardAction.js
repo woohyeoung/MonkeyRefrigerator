@@ -26,6 +26,10 @@ export const BOARDDETAIL_GET_ERROR = 'BOARDDETAIL_GET_ERROR';
 export const MATERIALLIST_GET = 'MATERIALLIST_GET';
 export const MATERIALLIST_GET_SUCCESS = 'MATERIALLIST_GET_SUCCESS';
 export const MATERIALLIST_GET_ERROR = 'MATERIALLIST_GET_ERROR';
+// 게시물 저장(등록)
+export const BOARD_POST = 'BOARD_POST';
+export const BOARD_POST_SUCCESS = 'BOARD_POST_SUCCESS';
+export const BOARD_POST_ERROR = 'BOARD_POST_ERROR';
 
 export const boardList = createPromiseThunk(
 	BOARDLIST_GET,
@@ -47,4 +51,8 @@ export const searchMaterialList = createPromiseThunk(
 export const boardDetail = createPromiseThunk(
 	BOARDDETAIL_GET,
 	BoardApi.findBoardDetail
+);
+export const boardSaveOne = createPromiseThunk(
+	BOARD_POST,
+	BoardApi.saveBoardOne
 );
