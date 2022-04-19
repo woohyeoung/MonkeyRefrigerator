@@ -10,6 +10,7 @@ import { baseUrl } from "../../api/BaseUrl";
 import axios from "axios";
 import { userInformation, handleLogin } from "../../store/actions/UserAction";
 import Loading from "../shared/CustomLoading";
+import { logout } from "../Header";
 
 function Profile() {
   const userStore = useSelector(
@@ -24,17 +25,6 @@ function Profile() {
   const [id, setId] = useState("");
   const [userInfo, setUserInfo] = useState();
 
-  // 토큰 복호화 axios api
-
-  //console.log(tokenReducer);
-  // const tokenDecode = async (token) => {
-  //   const result = axios.get(`${baseUrl}tokenDecode`, {
-  //     params: { token: token },
-  //   });
-
-  //   return result;
-  // };
-
   useEffect(() => {
     const testYoon = async () => {
       setFlagToken(tokenReducer);
@@ -43,6 +33,11 @@ function Profile() {
       setStartDate(userInfo.createAt);
     };
     testYoon();
+    if (userStore && !userStore.isSuccess) {
+      console.log(userStore.isSuccess);
+      logout();
+      alert("토큰이 만료되어 로그아웃되었습니다.");
+    }
   }, [flagToken]);
   const setValue = (type) => {
     switch (type) {
@@ -58,25 +53,17 @@ function Profile() {
         return "none";
     }
   };
-  //console.log(userStore.userInformation.data);
-  // useEffect(() => {
-
-  //   if (userStore.userInformation.data) {
-  //     //setuserInfo([...userInfo, ...boardStore.boardListAfter.data.data.result]);
-  //   }
-  // }, [userStore.userInformation]);
-
   return (
     <>
       <div id="signup_content">
         {!userInfo ? (
-          <div>
+          <div style={{ marginTop: "150px" }}>
             <Loading />
           </div>
         ) : (
           <Card>
             <CardContent>
-              <h2>김희수님</h2>
+              <h2>{userInfo.name ? userInfo.name : "이름없음"}</h2>
               <div className="profile_imgdiv">
                 <img
                   class="profile_img"

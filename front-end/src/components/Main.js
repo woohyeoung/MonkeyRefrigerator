@@ -25,11 +25,10 @@ import { Refrigerator } from "./search/Refrigerator";
 
 function Main() {
   const dispatch = useDispatch();
-  const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
+  const tokenReducer = useSelector((state) => state.tokenReducer.token);
   useEffect(() => {
-    dispatch(handleLogin());
-  }, [dispatch]);
-
+    if (tokenReducer === null) dispatch(handleLogin());
+  });
   return (
     <>
       <Header />
@@ -51,7 +50,12 @@ function Main() {
             exact
           />
           <PrivateRoute component={Profile} path="/profile" exact />
-          <PublicRoute component={BoardList} path="/board" exact />
+          <PublicRoute
+            restricted={false}
+            component={BoardList}
+            path="/board"
+            exact
+          />
           <PublicRoute component={BoardCreate} path="/create" exact />
           <PrivateRoute component={Refrigerator} path="/refrigerator" exact />
           <Route path="/board/:id">

@@ -65,10 +65,8 @@ module.exports = {
   },
   getUserInformation: async function (req, res) {
     try {
-      const token = req.query.token;
-      const secretkey = process.env.ACCESS_TOKEN_SECRET;
-      const id = jwt.decode(token).email;
-      const userInfo = await UserDao.selectUserInfo(id);
+      const token = req.tokenInfo;
+      const userInfo = await UserDao.selectUserInfo(token.email);
       if (userInfo === undefined) {
         return res.json(
           response.successFalse(1002, "전체 게시물 목록이 없습니다.")

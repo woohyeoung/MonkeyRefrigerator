@@ -4,8 +4,11 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { DataGrid } from "@mui/x-data-grid";
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import gsap from "gsap";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 //User Component
+import headerIcon from "../../assets/monkey_2.png";
 //Style
 import "./Refrigerator.css";
 import { InputAdornment } from "@mui/material";
@@ -15,6 +18,19 @@ export const Refrigerator = () => {
   const modalRef = useRef(null);
   const [style, setStyle] = useState("hidden");
   const [flag, setFlag] = useState(false);
+  const onClickHandler = (type) => {
+    switch (type) {
+      case "SAVE":
+        return window.confirm("선택한 재료를 사용하여 검색하시겠습니까?")
+          ? alert("이동안하지롱")
+          : alert("선택완료 후 저장버튼을 눌러주세요.");
+      case "CANCEL":
+        return alert("취소버튼 눌렀음");
+      default:
+        return;
+    }
+  };
+
   useEffect(() => {
     if (flag) {
       setTimeout(() => {
@@ -31,7 +47,8 @@ export const Refrigerator = () => {
   return (
     <div className="compartmentRefri">
       <div className="refriHeader">
-        <h3>My Refrigerator</h3>
+        <img src={headerIcon} alt="headerIcon" />
+        <h3>냉장고 문을 열어 재료들을 넣어주세요!</h3>
       </div>
       <table className="drawer">
         <thead></thead>
@@ -60,6 +77,25 @@ export const Refrigerator = () => {
           </tr>
         </tbody>
       </table>
+      <div className="refriBtn">
+        <ThemeProvider theme={theme}>
+          <Button
+            onClick={() => onClickHandler("SAVE")}
+            variant="contained"
+            color="main"
+          >
+            저장
+          </Button>
+          &nbsp;
+          <Button
+            onClick={() => onClickHandler("CANCEL")}
+            variant="outlined"
+            color="main"
+          >
+            취소
+          </Button>
+        </ThemeProvider>
+      </div>
     </div>
   );
 };
@@ -125,3 +161,12 @@ const materials = [
   { id: 5, name: "yoon" },
   { id: 6, name: "yoon" },
 ];
+
+const { palette } = createTheme();
+const { augmentColor } = palette;
+const createColor = (mainColor) => augmentColor({ color: { main: mainColor } });
+const theme = createTheme({
+  palette: {
+    main: createColor("#9D2437"),
+  },
+});

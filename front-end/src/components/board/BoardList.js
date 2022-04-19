@@ -18,8 +18,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function BoardList() {
   const boardStore = useSelector((state) => state.boardReducer);
+  const tokenStore = useSelector((state) => state.tokenReducer);
 
   const dispatch = useDispatch();
+
+  const [token, setToken] = useState("");
 
   //날짜순
   const [boards, setBoards] = useState([]);
@@ -62,10 +65,11 @@ function BoardList() {
   useEffect(() => {
     async function fetchBoardList() {
       setLoading(true);
-      await dispatch(boardList());
+      await dispatch(boardList(token));
       setLoading(false);
       btn1.current.disabled = true;
     }
+
     fetchBoardList();
   }, []);
 

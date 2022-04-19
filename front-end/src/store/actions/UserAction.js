@@ -26,6 +26,7 @@ export const loginVali = (email, pw) => {
       if (token !== undefined) {
         setCookie("accessToken", token, {
           path: "/",
+          withCredentials: true,
         });
       }
       dispatch({

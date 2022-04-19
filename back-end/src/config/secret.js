@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 module.exports = function generateAccessToken(email) {
   let token = jwt.sign({ email }, secretKey, {
-    expiresIn: 60 * 60,
+    expiresIn: "1m",
   });
   return token;
 };

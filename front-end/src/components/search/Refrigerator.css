@@ -1,13 +1,30 @@
 .compartmentRefri {
   padding: 5% 0 0 50px;
+  text-align: center;
+  background-image: url("../../assets/backRefri.png");
+  background-repeat: no-repeat;
+  background-size: 1200px auto;
+  background-position-x: center;
+  background-position-y: 150%;
 }
 
 /* refrigerator body */
-.refriHeader,
 .drawer {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.refriHeader {
+  margin-bottom: 10px;
+  font-family: "BMDOHYEON";
+}
+.refriHeader img {
+  width: 70px;
+  height: 70px;
+  padding: 0 5px 5px 0;
+}
+.refriBtn {
+  margin-top: 10px;
 }
 .topSpace {
   width: 170px;
@@ -70,7 +87,7 @@
 
 /* search modal body */
 .modalContainer {
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgb(255, 255, 255);
   width: 300px;
   position: absolute;
 }

@@ -20,12 +20,11 @@ export const insertSignupForm = (data) => {
 export const selectUserInformation = (token) => {
   const result = axios
     .get(baseUrl + "profile", {
-      params: {
-        token: token,
+      headers: {
+        accessToken: token,
       },
     })
     .then((res) => res.data)
     .catch();
-
   return result;
 };
