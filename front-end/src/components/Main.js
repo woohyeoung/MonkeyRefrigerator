@@ -33,7 +33,7 @@ import { Route, Switch } from "react-router-dom";
 import { Login } from "./user/Login";
 import SignUp from "./user/SignUp";
 import { useDispatch, useSelector } from "react-redux";
-import { handleLogin } from "../store/actions/UserAction";
+import { handleLogin, handleLogout } from "../store/actions/UserAction";
 import PublicRoute from "./user/PublicRoute";
 import PrivateRoute from "./user/PrivateRoute";
 import Header from "./Header";
