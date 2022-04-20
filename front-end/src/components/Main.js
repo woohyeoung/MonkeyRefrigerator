@@ -310,15 +310,8 @@ const MainPage = () => {
   }, []);
 
   useEffect(() => {
-    setImgPath([]);
     if (boardReducer.boardList.data)
       setBoardRank([...boardReducer.boardList.data.data.result]);
-    for (let i = 0; i < boardRank.length; i++) {
-      imgPath.push(boardRank[i].boardImgPath);
-    }
-    setImgPath(imgPath);
-
-    imgPath.forEach((element) => {});
   }, [boardReducer.boardList.data]);
   return (
     <>
@@ -350,9 +343,9 @@ const MainPage = () => {
               <h4>Best 10 Recipe</h4>
             </div>
             <div className="mainBodyCon">
-              {imgPath.slice(offset, offset + 5).map((item, i) => (
+              {boardRank.slice(offset, offset + 5).map((item, i) => (
                 <RankCard
-                  path={item}
+                  path={boardRank[i].boardImgPath}
                   title={boardRank[i].title}
                   content={boardRank[i].content}
                 />
