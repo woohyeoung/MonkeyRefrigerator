@@ -19,14 +19,18 @@ import TextField from "@mui/material/TextField";
 import "./Profile.css";
 function Profile() {
   const userStore = useSelector((state) => state.userReducer);
-  const dispatch = useDispatch();
   const tokenReducer = useSelector((state) => state.tokenReducer);
+
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [userInfo, setUserInfo] = useState([]);
+
   useEffect(() => {
     if (!tokenReducer.token) dispatch(handleLogin());
   }, [tokenReducer.token]);
+
   useEffect(() => {
     setLoading(true);
     console.log(tokenReducer.token, " 토큰");
@@ -35,11 +39,13 @@ function Profile() {
       setLoading(false);
     }, 1500);
   }, []);
+
   useEffect(() => {
     if (userStore.userInformation.data) {
       setUserInfo([...userStore.userInformation.data.result]);
     }
   }, [userStore.userInformation.data]);
+
   console.log(userStore);
   console.log(userInfo);
   return <>{loading ? <Loading /> : <ProfileBody data={userInfo[0]} />}</>;
