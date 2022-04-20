@@ -13,25 +13,6 @@
   min-width: 500px;
 }
 
-.detailContainer #detailImg {
-  text-align: center;
-  width: 100%;
-  height: 500px;
-}
-
-.detailContainer #detailImg img {
-  margin-top: 5%;
-  width: 70%;
-  height: 80%;
-  max-width: 550px;
-  min-width: 400px;
-}
-
-.detailContainer #detailImg p {
-  text-align: right;
-  width: 80%;
-}
-
 #detailContent {
   width: 60%;
   margin-bottom: 5%;
@@ -107,8 +88,11 @@
   font-weight: 500;
 }
 
-.detailContainer #detailContent ul #recipedate {
-  width: 20%;
-  display: flex;
-  justify-content: flex-end;
+.detailContainer .horizontal {
+  text-align: center;
+  width: 65%;
+}
+
+.view_step {
+  padding: 35px 0 10px;
 }
