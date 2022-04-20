@@ -38,12 +38,16 @@ export const Login = () => {
     }
     dispatch(loginVali(email, pw));
     dispatch(handleLogin());
+    setTimeout(() => {
+      if (!Cookies.get("accessToken") && !tokenReducer) {
+        window.alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+        inputReset();
+      }
+    }, 200);
+  };
+  const inputReset = () => {
     setEmail("");
     setPw("");
-    setTimeout(() => {
-      if (!Cookies.get("accessToken") || !tokenReducer)
-        alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-    }, 500);
   };
   return (
     <div className="loginContainer">
@@ -94,7 +98,7 @@ export const Login = () => {
                 id="password"
                 autoComplete="current-password"
                 color="main"
-                // value={pw}
+                value={pw}
                 onChange={pwHandler}
                 placeholder="비밀번호를 입력하세요."
               />

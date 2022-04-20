@@ -68,19 +68,18 @@ module.exports = {
       const token = req.tokenInfo;
       const userInfo = await UserDao.selectUserInfo(token.email);
       console.log(userInfo);
-      if (userInfo === undefined) {
+      if (userInfo === undefined)
         return res.json(
           response.successFalse(1002, "전체 게시물 목록이 없습니다.")
         );
-      } else {
-        return res.json(
-          response.successTrue(
-            2001,
-            "게시물 목록 조회에 성공하였습니다.",
-            userInfo
-          )
-        );
-      }
+
+      return res.json(
+        response.successTrue(
+          2001,
+          "게시물 목록 조회에 성공하였습니다.",
+          userInfo
+        )
+      );
     } catch (err) {
       return res.json(
         response.successFalse(

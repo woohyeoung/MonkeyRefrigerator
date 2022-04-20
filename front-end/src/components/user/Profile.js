@@ -15,12 +15,13 @@ import {
 } from "../../store/actions/UserAction";
 import Loading from "../shared/CustomLoading";
 import { logout } from "../Header";
+import Cookies from "js-cookie";
 import TextField from "@mui/material/TextField";
 import "./Profile.css";
 function Profile() {
   const userStore = useSelector((state) => state.userReducer);
   const tokenReducer = useSelector((state) => state.tokenReducer);
-
+  const tokenStore = Cookies.get("accessToken");
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
@@ -28,13 +29,10 @@ function Profile() {
   const [userInfo, setUserInfo] = useState([]);
 
   useEffect(() => {
-    if (!tokenReducer.token) dispatch(handleLogin());
-  }, [tokenReducer.token]);
-
-  useEffect(() => {
     setLoading(true);
     console.log(tokenReducer.token, " 토큰");
-    dispatch(userInformation(tokenReducer.token));
+    if (tokenReducer.token) dispatch(userInformation(tokenReducer.token));
+    else dispatch(userInformation(tokenStore));
     setTimeout(() => {
       setLoading(false);
     }, 1500);
