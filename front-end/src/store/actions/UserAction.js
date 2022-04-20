@@ -18,6 +18,9 @@ export const USERINFORMATION_GET = "USERINFORMATION_GET";
 export const USERINFORMATION_GET_SUCCESS = "USERINFORMATION_GET_SUCCESS";
 export const USERINFORMATION_GET_ERROR = "USERINFORMATION_GET_ERROR";
 
+//사용자 프로필 비밀번호 변경
+export const PASSWORD_UPDATE = "PASSWORD_UPDATE";
+
 export const loginVali = (email, pw) => {
   const data = { email: email, pw: pw };
   return async (dispatch) => {
@@ -73,4 +76,9 @@ export const signupform = createPromiseThunk(
 export const userInformation = createPromiseThunk(
   USERINFORMATION_GET,
   UserApi.selectUserInformation
+);
+
+export const pwChange = createPromiseThunk(
+  PASSWORD_UPDATE,
+  UserApi.updatePassword
 );

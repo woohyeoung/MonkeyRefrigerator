@@ -4,11 +4,16 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 function BirthPick(props) {
-  var temp = new Date(
-    parseInt(props.birth.substr(0, 4)),
-    parseInt(props.birth.substr(5, 2)) - 1,
-    parseInt(props.birth.substr(8, 2)) + 1
-  );
+  var temp;
+  if (props.birth) {
+    temp = new Date(
+      parseInt(props.birth.substr(0, 4)),
+      parseInt(props.birth.substr(5, 2)) - 1,
+      parseInt(props.birth.substr(8, 2)) + 1
+    );
+  } else {
+    temp = props.setStartDate; //error
+  }
   const [startDate, setStartDate] = useState(new Date(temp));
 
   const range = (start, end) => {

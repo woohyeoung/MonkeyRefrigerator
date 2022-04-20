@@ -1,6 +1,5 @@
 //Profile.js
-import "./Profile.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Card from "@mui/material/Card";
 import { CardContent } from "@mui/material";
@@ -9,59 +8,66 @@ import BirthPick from "./DatePicker";
 import { Button } from "react-bootstrap";
 import { baseUrl } from "../../api/BaseUrl";
 import axios from "axios";
-import { userInformation, handleLogin } from "../../store/actions/UserAction";
+import {
+  userInformation,
+  handleLogin,
+  pwChange,
+} from "../../store/actions/UserAction";
 import Loading from "../shared/CustomLoading";
 import { logout } from "../Header";
 import TextField from "@mui/material/TextField";
-
+import "./Profile.css";
 function Profile() {
-  //console.log("profile.js");
-  const tokenReducer = useSelector((state) => state.tokenReducer.token);
-
   const userStore = useSelector((state) => state.userReducer);
-
-  //console.log(tokenReducer);
-  // useEffect(() => {
-  //   if (tokenReducer === null) dispatch(handleLogin());
-  // });
-
   const dispatch = useDispatch();
-  const [flag, setFlag] = useState(false);
-
-  const secretKey = process.env.ACCESS_TOKEN_SECRET;
+  const tokenReducer = useSelector((state) => state.tokenReducer);
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-
-  const [id, setId] = useState("");
-  const [userInfo, setUserInfo] = useState();
-
+  const [userInfo, setUserInfo] = useState([]);
   useEffect(() => {
-    // 프로필 조회 api (헤더에 토큰넣어서 )
-    console.log(tokenReducer);
-    dispatch(userInformation(tokenReducer));
+    if (!tokenReducer.token) dispatch(handleLogin());
+  }, [tokenReducer.token]);
+  useEffect(() => {
+    setLoading(true);
+    console.log(tokenReducer.token, " 토큰");
+    dispatch(userInformation(tokenReducer.token));
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
   }, []);
-
   useEffect(() => {
     if (userStore.userInformation.data) {
-      //console.log(userStore.userInformation.data);
-      setUserInfo(userStore.userInformation.data.result[0]);
-      //console.log(userInfo.birthday);
+      setUserInfo([...userStore.userInformation.data.result]);
     }
   }, [userStore.userInformation.data]);
+  console.log(userStore);
+  console.log(userInfo);
+  return <>{loading ? <Loading /> : <ProfileBody data={userInfo[0]} />}</>;
+}
 
-  // useEffect(() => {
-  //   if (userStore && !userStore.isSuccess) {
-  //     console.log(userStore);
-  //     console.log(userStore.isSuccess);
-  //     logout();
-  //     alert("토큰이 만료되어 로그아웃되었습니다.");
-  //   }
-  // }, [tokenReducer]);
+export default Profile;
 
-  // useEffect(() => {});
+const ProfileBody = (props) => {
+  console.log(props.data);
+  const [userInfo, setUserInfo] = useState(props.data);
+  const [startDate, setStartDate] = useState(new Date());
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleModal = (type) => {
+    switch (type) {
+      case "OPEN":
+        setModalOpen(true);
+        return;
+      case "CLOSE":
+      default:
+        setModalOpen(false);
+        return;
+    }
+  };
 
   const setValue = (type) => {
     switch (type) {
+      case "id":
+        return userInfo.id;
       case "email":
         return userInfo.email;
       case "password":
@@ -70,14 +76,24 @@ function Profile() {
         return userInfo.nickname;
       case "gender":
         return userInfo.gender;
-      case "birth":
-        return userInfo.birthday;
       default:
         return "none";
     }
   };
+  // useEffect(() => {
+  //   if (props.data) {
+  //     setUserInfo(props.data);
+  //   }
+  // }, [props]);
   return (
     <>
+      <div>
+        <PasswordModal
+          open={modalOpen}
+          close={() => handleModal("CLOSE")}
+          // userId={setValue("id")}
+        />
+      </div>
       <div id="signup_content">
         {!userInfo ? (
           <div style={{ marginTop: "150px" }}>
@@ -114,33 +130,15 @@ function Profile() {
                   </div>
                 </div>
                 <h3>
-                  <label for="pw">비밀번호</label>{" "}
+                  <label for="pw">비밀번호</label>
                   <Button
-                    onClick={() => {
-                      flag ? setFlag(false) : setFlag(true);
-                    }}
+                    onClick={() => handleModal("OPEN")}
                     variant="outline-dark"
                   >
                     변경
                   </Button>
-                  <PasswordModal flag={flag} />
                 </h3>
 
-                {/* <div class="pwchk">
-                  <div class="box_pwchk">
-                    <span class="box int_pw">
-                      <input
-                        type="password"
-                        id="pw"
-                        name="pwCheck"
-                        class="int"
-                        maxlength="20"
-                        readOnly
-                        value={setValue("password")}
-                      />
-                    </span>
-                  </div>
-                </div> */}
                 <h3>
                   <label for="nickName">닉네임</label>
                 </h3>
@@ -187,42 +185,40 @@ function Profile() {
                 </h3>
                 <div class="box_id">
                   <select class="signupList" name="jobList">
-                    <option value="0" selected="true">
-                      --선택--
-                    </option>
+                    <option value="0">--선택--</option>
                     <option
                       value="1"
-                      selected={userInfo.jobId === 1 ? "true" : "false"}
+                      selected={userInfo.jobId == 1 ? true : false}
                     >
                       학생
                     </option>
                     <option
                       value="2"
-                      selected={userInfo.jobId === 2 ? "true" : "false"}
+                      selected={userInfo.jobId == 2 ? true : false}
                     >
                       군인
                     </option>
                     <option
                       value="3"
-                      selected={userInfo.jobId === 3 ? "true" : "false"}
+                      selected={userInfo.jobId == 3 ? true : false}
                     >
                       주부
                     </option>
                     <option
                       value="4"
-                      selected={userInfo.jobId === 4 ? "true" : "false"}
+                      selected={userInfo.jobId == 4 ? true : false}
                     >
                       직장인
                     </option>
                     <option
                       value="5"
-                      selected={userInfo.jobId === 5 ? "true" : "false"}
+                      selected={userInfo.jobId == 5 ? true : false}
                     >
                       아빠
                     </option>
                     <option
                       value="6"
-                      selected={userInfo.jobId === 6 ? "true" : "false"}
+                      selected={userInfo.jobId == 6 ? true : false}
                     >
                       기타
                     </option>
@@ -237,60 +233,128 @@ function Profile() {
                     birth={userInfo.birthday}
                   />
                 </div>
-                <div class="pwchk">
-                  <div class="box_pwchk">
-                    <span class="box int_pw">
-                      <input
-                        type="text"
-                        id="birthday"
-                        name="birthday"
-                        class="int"
-                        maxlength="20"
-                        readOnly
-                      />
-                    </span>
-                  </div>
-                </div>
               </div>
             </CardContent>
             <div class="btn_submt">
               <Button variant="success" onClick={() => {}}>
                 수정
-              </Button>
+              </Button>{" "}
             </div>
           </Card>
         )}
       </div>
     </>
   );
-}
+};
 
-export default Profile;
 const PasswordModal = (props) => {
+  const dispatch = useDispatch();
+  const { open, close, header } = props;
   const [modalStyle, setModalStyle] = useState("none");
+  const [pw, setPw] = useState("");
+  const [pwCheck, setPwCheck] = useState("");
+  const [pwRegexCheck, setPwRegexCheck] = useState(false); //비밀번호 정규식 체크
+  const [passwordError, setPasswordError] = useState(false);
+  console.log(props.userId);
+  const onChangePassword = (e) => {
+    setPw(e.target.value);
+  };
+  const onChangePasswordChk = (e) => {
+    setPasswordError(e.target.value !== pw);
+    setPwCheck(e.target.value);
+  };
+
+  //비밀번호 정규식 적용
   useEffect(() => {
-    props.flag ? setModalStyle("block") : setModalStyle("none");
-  }, [props]);
+    setPwRegexCheck(isPw(pw));
+  }, [pw]);
+
+  const pwSubmit = () => {
+    if (!pw) {
+      alert("비밀번호를 입력해주세요.");
+      return false;
+    }
+    if (!pwCheck) {
+      alert("비밀번호 재확인을 입력해주세요.");
+      return false;
+    }
+    if (!pwRegexCheck) {
+      alert("비밀번호가 형식에 맞지 않습니다.");
+      return;
+    }
+    let formData = {
+      userId: props.userId,
+      password: pw,
+    };
+    dispatch(pwChange(formData));
+  };
+  //비밀번호 정규식 확인(8자 이상, 문자, 숫자, 특수문자 포함)
+  const isPw = (password) => {
+    const pwRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{7,}$/;
+    return pwRegex.test(password);
+  };
+
+  useEffect(() => {
+    open ? setModalStyle("block") : setModalStyle("none");
+  }, [open]);
   return (
-    <div className="modalBody">
-      <div
-        style={{
-          display: modalStyle,
-        }}
-      >
-        <TextField
-          label="Password"
-          type="password"
-          variant="outlined"
-          helperText="비밀번호를 입력해주세요."
-        />
-        <TextField
-          label="Password Confirm"
-          type="password"
-          variant="outlined"
-          helperText="비밀번호를 다시 입력해주세요."
-        />
-      </div>
+    <div className={open ? "openModal modal" : "modal"}>
+      {open ? (
+        <section>
+          <header>
+            비밀번호 변경
+            <button className="close" onClick={close}>
+              &times;
+            </button>
+          </header>
+          <main>
+            <div className="pwchange">
+              {/* <button /> */}
+              <TextField
+                style={{ marginRight: "15px" }}
+                label="Password"
+                type="password"
+                variant="outlined"
+                helperText="비밀번호를 입력해주세요."
+                onChange={onChangePassword}
+              />
+              <TextField
+                style={{ marginRight: "15px" }}
+                label="Password Confirm"
+                type="password"
+                variant="outlined"
+                helperText="비밀번호를 다시 입력해주세요."
+                onChange={onChangePasswordChk}
+              />
+            </div>
+          </main>
+          <footer>
+            <div
+              style={{ display: "flex", float: "right", marginBottom: "10px" }}
+            >
+              {passwordError && (
+                <div style={{ color: "red" }}>
+                  비밀번호가 일치하지 않습니다.
+                </div>
+              )}
+              <button style={{}} type="submit" onClick={pwSubmit}>
+                수정
+              </button>
+            </div>
+          </footer>
+        </section>
+      ) : null}
     </div>
+
+    // <div className="modalBody">
+    //   <div
+    //     style={{
+    //       display: modalStyle,
+    //     }}
+    //   >
+
+    //   </div>
+    // </div>
   );
 };
