@@ -30,7 +30,6 @@ function Header() {
   const menu1 = useRef();
   const menu2 = useRef();
   const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
-
   useEffect(() => {
     dispatch(handleLogin());
   });
@@ -71,16 +70,17 @@ function Header() {
               <span>Monkey Refrigerator</span>
             </div>
             <div className="h-nav-item-alw">
-              <Link to="/search">
-                <Icon
-                  className="searchIcon"
-                  path={mdiMagnify}
-                  title="search"
-                  size={2}
-                  color="white"
-                />
-                {/* <div className="sub-title">검색</div> */}
-              </Link>
+              <input className="inputbox" type="text" placeholder="Search" />
+              <Icon
+                className="searchIcon"
+                path={mdiMagnify}
+                title="search"
+                size={2}
+                color="white"
+              />
+              {/* <Link to="/search">
+                <div className="sub-title">검색</div>
+              </Link> */}
               <Link to="/board">
                 <Icon
                   className="boardIcon"
