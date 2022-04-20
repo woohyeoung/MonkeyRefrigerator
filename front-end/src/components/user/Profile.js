@@ -13,16 +13,25 @@ import Loading from "../shared/CustomLoading";
 import { logout } from "../Header";
 
 function Profile() {
+  //console.log("profile.js");
+  const tokenReducer = useSelector((state) => state.tokenReducer.token);
+  //console.log(tokenReducer);
+  useEffect(() => {
+    if (tokenReducer === null) dispatch(handleLogin());
+  });
   const userStore = useSelector(
     (state) => state.userReducer.userInformation.data
   );
   const dispatch = useDispatch();
-  const tokenReducer = useSelector((state) => state.tokenReducer.token);
+  const [flagToken, setFlagToken] = useState(null);
+
   const secretKey = process.env.ACCESS_TOKEN_SECRET;
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-  const [userInfo, setUserInfo] = useState();
+  console.log(startDate);
   const [id, setId] = useState("");
+  const [userInfo, setUserInfo] = useState();
+
   useEffect(() => {
     handleLogin();
   });
@@ -60,6 +69,8 @@ const ProfileBody = (props) => {
         return userInfo.nickname;
       case "gender":
         return userInfo.gender;
+      case "birth":
+        return userInfo.birthday;
       default:
         return "none";
     }
@@ -105,9 +116,11 @@ const ProfileBody = (props) => {
                   </div>
                 </div>
                 <h3>
-                  <label for="pw">비밀번호</label>
+                  <label for="pw">비밀번호</label>{" "}
+                  <Button variant="outline-dark">변경</Button>
                 </h3>
-                <div class="pwchk">
+
+                {/* <div class="pwchk">
                   <div class="box_pwchk">
                     <span class="box int_pw">
                       <input
@@ -121,7 +134,7 @@ const ProfileBody = (props) => {
                       />
                     </span>
                   </div>
-                </div>
+                </div> */}
                 <h3>
                   <label for="nickName">닉네임</label>
                 </h3>
@@ -181,7 +194,7 @@ const ProfileBody = (props) => {
                   <label for="birth">생년월일</label>
                 </h3>
                 <div class="box_id">
-                  {/* <BirthPick setStartDate={startDate} /> */}
+                  <BirthPick setStartDate={setValue("birth")} />
                 </div>
                 <div class="pwchk">
                   <div class="box_pwchk">

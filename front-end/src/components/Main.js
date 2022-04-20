@@ -40,6 +40,7 @@ export default function Main() {
   const tokenReducer = useSelector((state) => state.tokenReducer.token);
   useEffect(() => {
     if (tokenReducer === null) dispatch(handleLogin());
+    console.log("main.js");
   });
 
   return (
