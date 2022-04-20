@@ -53,7 +53,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-left: 30px;
+  margin-left: 100px;
   color: white;
   font-size: 30px;
   font-weight: bold;
@@ -64,29 +64,67 @@
   right: 30px;
   top: 20px;
 }
-.row-1 .h-nav {
-  display: "flex";
-  flex-direction: row;
-}
-.row-1 .h-nav .h-nav-item {
-  border: 1px solid #d3d3d3;
-  padding: 10px;
-  background-color: lightgray;
+.row-1 .h-menu:hover {
   position: absolute;
+  border: 5px outset rgba(208, 208, 208, 0.5);
+  border-radius: 10px;
   right: 30px;
-  top: 90px;
-  z-index: 7;
-}
-.row-1 .h-nav .h-nav-item .sub-title {
-  display: "flex";
-  justify-content: center;
-  align-items: center;
-  font-family: "BMDOHYEON";
-  color: "white";
+  top: 20px;
 }
 .h-nav-item-alw {
   position: relative;
   display: flex;
   margin-top: 25px;
-  right: 80px;
+  right: 90px;
 }
+.searchIcon {
+  margin-right: 5px;
+}
+.boardIcon:hover {
+  border: 5px outset rgba(208, 208, 208, 0.5);
+  border-radius: 10px;
+}
+.searchIcon:hover {
+  margin-right: 5px;
+  border: 5px outset rgba(208, 208, 208, 0.5);
+  border-radius: 10px;
+}
+.row-1 .h-nav {
+  display: "flex";
+  flex-direction: row;
+}
+.row-1 .h-nav .h-nav-item {
+  right: -100px;
+  top: 70px;
+  position: absolute;
+  text-align: center;
+  transition: all 0.4s;
+}
+.row-1 .h-nav .h-nav-items {
+  right: 30px;
+  top: 90px;
+  position: absolute;
+  text-align: center;
+  transition: all 0.4s;
+}
+.row-1 .h-nav .h-nav-items.active {
+  right: -100px;
+  top: 90px;
+  position: absolute;
+  text-align: center;
+  transition: all 0.4s;
+}
+.row-1 .h-nav .h-nav-item.active {
+  right: 30px;
+  top: 70px;
+  position: absolute;
+  text-align: center;
+  transition: all 0.4s;
+}
+/* .row-1 .h-nav .h-nav-item .sub-title {
+  display: "flex";
+  justify-content: center;
+  align-items: center;
+  font-family: "BMDOHYEON";
+  color: "white";
+} */
