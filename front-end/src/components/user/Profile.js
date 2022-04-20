@@ -19,15 +19,21 @@ function Profile() {
   const dispatch = useDispatch();
   const tokenReducer = useSelector((state) => state.tokenReducer.token);
   const secretKey = process.env.ACCESS_TOKEN_SECRET;
-
+  const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-  const [id, setId] = useState("");
   const [userInfo, setUserInfo] = useState();
+  const [id, setId] = useState("");
   useEffect(() => {
     handleLogin();
   });
   useEffect(() => {
-    dispatch(userInformation(tokenReducer));
+    const ddd = async () => {
+      setLoading(true);
+      dispatch(userInformation(tokenReducer));
+      setLoading(false);
+    };
+
+    ddd();
   }, []);
   useEffect(() => {
     const testYoon = async () => {
@@ -36,13 +42,13 @@ function Profile() {
     };
     testYoon();
   }, [userStore]);
-  useEffect(() => {
-    if (userStore && !userStore.isSuccess) {
-      console.log(userStore.isSuccess);
-      logout();
-      alert("토큰이 만료되어 로그아웃되었습니다.");
-    }
-  }, [tokenReducer]);
+  return <>{loading ? <Loading /> : <ProfileBody data={userInfo} />}</>;
+}
+
+export default Profile;
+
+const ProfileBody = (props) => {
+  const [userInfo, setUserInfo] = useState();
   const setValue = (type) => {
     switch (type) {
       case "email":
@@ -57,6 +63,9 @@ function Profile() {
         return "none";
     }
   };
+  useEffect(() => {
+    setUserInfo(props.data);
+  }, [props]);
   return (
     <>
       <div id="signup_content">
@@ -171,7 +180,7 @@ function Profile() {
                   <label for="birth">생년월일</label>
                 </h3>
                 <div class="box_id">
-                  <BirthPick setStartDate={startDate} />
+                  {/* <BirthPick setStartDate={startDate} /> */}
                 </div>
                 <div class="pwchk">
                   <div class="box_pwchk">
@@ -199,6 +208,4 @@ function Profile() {
       </div>
     </>
   );
-}
-
-export default Profile;
+};
