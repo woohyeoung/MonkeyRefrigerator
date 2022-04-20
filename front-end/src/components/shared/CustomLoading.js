@@ -14,11 +14,11 @@ const Loading = ({ type, color }) => (
 	<>
 		<Spinner
 			className="border"
-			text={'Loading...'}
+			text={'로딩중... '}
 			bgColor={'white'}
 			center={true}
-			width={'150px'}
-			height={'150px'}
+			width={'200px'}
+			height={'200px'}
 		/>
 	</>
 );

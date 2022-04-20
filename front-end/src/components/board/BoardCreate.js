@@ -27,12 +27,15 @@ import moment from 'moment';
 import ImageUploader from 'react-images-upload';
 import { Modal } from 'react-bootstrap';
 import { searchMaterialList } from '../../store/actions/BoardAction';
+import { Redirect, useHistory } from 'react-router-dom';
 
 function BoardCreate() {
 	const boardStore = useSelector((state) => state.boardReducer);
 	const tokenStore = useSelector((state) => state.tokenReducer);
 
 	const dispatch = useDispatch();
+
+	let history = useHistory();
 
 	const [loading, setLoading] = useState(false);
 
@@ -42,7 +45,6 @@ function BoardCreate() {
 
 	const [step, setStep] = useState('');
 	const [steps, setSteps] = useState([]);
-	const [content, setContent] = useState('');
 
 	const [selectCategory, setSelectCategory] = React.useState('');
 	// 카테고리 목록
@@ -65,21 +67,22 @@ function BoardCreate() {
 
 	const [materialList, setMaterialList] = useState([]);
 	const [show, setShow] = useState(false);
+	const [materialCount, setMaterialCount] = useState([]);
 
 	const [sub, setSub] = useState('');
 	const [subs, setSubs] = useState([]);
-	const [subMaterial, setSubMaterial] = useState('');
 
 	const [tag, setTag] = useState('');
 	const [tags, setTags] = useState([]);
-	const [tagName, setTagName] = useState('');
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
 	const [pictures, setPictures] = useState([]);
-	const onDrop = (picture) => {
-		setPictures([picture]);
+	const [dataURLs, setDataURLs] = useState([]);
+	const onDrop = (pictureFiles, pictureDataURLs) => {
+		setPictures([pictureFiles]);
+		setDataURLs([pictureDataURLs]);
 	};
 
 	//카테고리 목록
@@ -209,7 +212,7 @@ function BoardCreate() {
 	};
 
 	// 등록폼 검사
-	const validated = () => {
+	async function validated() {
 		if (title === '') {
 			window.alert('제목을 입력하세요');
 			titleInput.current.focus();
@@ -263,7 +266,7 @@ function BoardCreate() {
 			return false;
 		}
 		return true;
-	};
+	}
 
 	// 제출
 	const onSubmit = async () => {
@@ -271,79 +274,105 @@ function BoardCreate() {
 		if (!flag) {
 			return;
 		}
-		setLoading(true);
-		console.log('--------------------------------------');
-		console.log(title);
-		console.log(subTitle);
-		console.log(steps);
-		console.log(category);
-		console.log(difficulty);
-		console.log(cookTime);
-		console.log(materialList);
-		console.log(subs);
-		console.log(tags);
-		console.log(pictures);
-
-		const formData = new FormData();
-		formData.append('title', title);
-		formData.append('subTitle', subTitle);
-
-		const stepsConver = (steps) => {
-			let str = '';
-			for (let i = 0; i < steps.length; i++) {
-				str += i + 1 + '번 : ' + steps[i] + '\n';
+		async function onPress() {
+			let formData = new FormData();
+			formData.enctype = 'multipart/form-data';
+			for (let i = 0; i < pictures.length; i++) {
+				formData.append('image', pictures[0][i]);
 			}
-			return str;
-		};
-		formData.append('content', stepsConver(steps));
+			formData.append('title', title);
+			formData.append('subTitle', subTitle);
 
-		formData.append('category', category.id);
-
-		formData.append('difficulty', difficulty);
-		formData.append('cookTime', cookTime);
-
-		formData.append('material', materialList);
-		const subsConver = (subs) => {
-			let str = '';
-			for (let i = 0; i < subs.length; i++) {
-				if (i === subs.length - 1) {
-					str += subs[i];
-					continue;
+			const stepsConver = (steps) => {
+				let str = '';
+				for (let i = 0; i < steps.length; i++) {
+					str += i + 1 + '번 : ' + steps[i] + '\n';
 				}
-				str += subs[i] + ',';
+				return str;
+			};
+			formData.append('content', stepsConver(steps));
+
+			formData.append('category', category.id);
+
+			formData.append('difficulty', difficulty);
+			formData.append('cookTime', cookTime);
+			for (let i = 0; i < materialList.length; i++) {
+				formData.append('material', materialList[i].id);
 			}
-			return str;
-		};
-		formData.append('subs', subsConver(subs));
-		const tagsConver = (tags) => {
-			let str = '';
-			for (let i = 0; i < tags.length; i++) {
-				if (i === 0) {
-					str += "['" + tags[i] + "'";
-				}
-				if (i === tags.length - 1) {
-					str += "'" + tags[i] + "']";
-					continue;
-				}
-
-				str += ',';
+			for (let i = 0; i < materialCount.length; i++) {
+				formData.append('materialCount', materialCount[i]);
 			}
-			return str;
-		};
-		console.log(tagsConver(tags));
-		formData.append('tags', tagsConver(tags));
-		formData.append('img', pictures);
 
-		console.log(tokenStore.token);
-		const boardForm = {
-			token: tokenStore.token,
-			formData: formData,
-		};
+			const subsConver = (subs) => {
+				let str = '';
+				for (let i = 0; i < subs.length; i++) {
+					if (i === subs.length - 1) {
+						str += subs[i];
+						continue;
+					}
+					str += subs[i] + ',';
+				}
+				return str;
+			};
+			formData.append('subs', subsConver(subs));
 
-		// await dispatch(boardSaveOne(boardForm));
+			const tagsConver = (tags) => {
+				let str = '';
+				for (let i = 0; i < tags.length; i++) {
+					if (i === 0) {
+						str += '[';
+					}
+					str += "'" + tags[i] + "'";
+					if (i !== tags.length - 1) {
+						str += ',';
+					}
 
-		setLoading(false);
-		// window.location('/board');
+					if (i === tags.length - 1) {
+						str += ']';
+						continue;
+					}
+				}
+				return str;
+			};
+			formData.append('tags', tagsConver(tags));
+
+			const boardForm = {
+				token: tokenStore.token,
+				formData: formData,
+			};
+
+			setLoading(true);
+			await dispatch(boardSaveOne(boardForm));
+			setLoading(false);
+
+			setTitle('');
+			setSubTitle('');
+			setSteps([]);
+
+			setCategory({
+				id: 0,
+				name: '',
+			});
+			setSelectCategory('');
+
+			setDifficulty('');
+			setSelectDifficulty('');
+
+			setCookTime('');
+			setSelectCookTime(null);
+
+			setSubs([]);
+			setTags([]);
+
+			setMaterialList([]);
+		}
+
+		await onPress();
+
+		function redirect() {
+			history.push('/board');
+		}
+		redirect();
 	};
 
 	const titleInput = useRef();
@@ -425,6 +454,16 @@ function BoardCreate() {
 													window.alert('이미 들어있는 재료입니다.');
 													return;
 												}
+
+												do {
+													let result = window.prompt(
+														'수량 입력 : ex) 1T, 1개,반개 등등 '
+													);
+													setMaterialCount([...materialCount, result]);
+													if (result) {
+														break;
+													}
+												} while (true);
 											}}
 										>
 											선택
@@ -690,6 +729,7 @@ function BoardCreate() {
 										size="sm"
 										onClick={() => {
 											setMaterialList([]);
+											setMaterialCount([]);
 										}}
 										style={{ fontSize: '1px', margin: '0 0 0 10px' }}
 									>

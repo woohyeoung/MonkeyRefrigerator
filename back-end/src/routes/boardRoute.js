@@ -12,9 +12,9 @@ module.exports = function (app) {
 	app.route('/board/material/search').get(board.findMaterialKeyword);
 	app
 		.route('/board/create')
-		.get(
+		.post(
 			jwtMiddleware,
-			s3.upload('/board').array('img', 5),
+			s3.upload('/board').array('image', 5),
 			board.saveBoardOne
 		);
 };
