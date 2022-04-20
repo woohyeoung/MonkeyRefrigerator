@@ -11,7 +11,7 @@ module.exports = {
             const boardList = await boardDao.selectBoardListFirst();
             const boardCount = await boardDao.selectBoardCount();
             boardList[0].boardCount = boardCount[0].boardCount;
-            if (boardList === undefined) {
+            if (boardList.length ===0) {
                 return res.json(
                     response.successFalse(1001, '전체 게시물 목록이 없습니다.')
                 );
@@ -41,7 +41,7 @@ module.exports = {
 
             const boardList = await boardDao.selectBoardList(id, newCreateAt);
 
-            if (boardList === undefined) {
+            if (boardList.length ===0) {
                 return res.json(
                     response.successFalse(
                         1002,
@@ -69,7 +69,7 @@ module.exports = {
     findBoardCategory: async function (req, res) {
         try {
             const categoryList = await boardDao.selectBoardCategory();
-            if (categoryList === undefined) {
+            if (categoryList.length ===0) {
                 return res.json(
                     response.successFalse(1003, '카테고리 목록이 없습니다.')
                 );
@@ -96,7 +96,7 @@ module.exports = {
         try {
             let keyword = req.query.keyword;
             const materailList = await boardDao.selectMaterialKey(keyword);
-            if (materailList === undefined) {
+            if (materailList.length === 0) {
                 return res.json(response.successFalse(1004, '해당 재료가 없습니다.'));
             }
 
@@ -119,6 +119,7 @@ module.exports = {
 
     saveBoardOne: async function (req, res) {
         try {
+            console.log(req.files)
 
             let userId = req.tokenInfo.userId;
             let board = {
@@ -162,7 +163,6 @@ module.exports = {
                 }
             }
 
-
             let materialId;
             let materialCount;
             // 어떤것이 먼저 insert 되도 상관없기 때문에 promise
@@ -172,7 +172,6 @@ module.exports = {
                 await boardDao.insertBoardGetMaterial(boardId, materialId, materialCount);
             })
             await Promise.all(promiseMaterial);
-
 
             let boardimagePath;
             let boardimageType;
