@@ -11,7 +11,6 @@ module.exports = {
       const params = [email, password];
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query, params);
-      console.log(info);
       connection.release();
       return info;
     } catch (err) {
@@ -26,6 +25,7 @@ module.exports = {
       const query = `SELECT count(*) as cnt FROM useraccount WHERE ${type}='${id}';`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query);
+
       connection.release();
       return info;
     } catch (err) {

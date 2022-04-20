@@ -1,4 +1,5 @@
 //Profile.js
+import "./Profile.css";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Card from "@mui/material/Card";
@@ -11,54 +12,54 @@ import axios from "axios";
 import { userInformation, handleLogin } from "../../store/actions/UserAction";
 import Loading from "../shared/CustomLoading";
 import { logout } from "../Header";
+import TextField from "@mui/material/TextField";
 
 function Profile() {
   //console.log("profile.js");
   const tokenReducer = useSelector((state) => state.tokenReducer.token);
+
+  const userStore = useSelector((state) => state.userReducer);
+
   //console.log(tokenReducer);
-  useEffect(() => {
-    if (tokenReducer === null) dispatch(handleLogin());
-  });
-  const userStore = useSelector(
-    (state) => state.userReducer.userInformation.data
-  );
+  // useEffect(() => {
+  //   if (tokenReducer === null) dispatch(handleLogin());
+  // });
+
   const dispatch = useDispatch();
-  const [flagToken, setFlagToken] = useState(null);
+  const [flag, setFlag] = useState(false);
 
   const secretKey = process.env.ACCESS_TOKEN_SECRET;
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-  console.log(startDate);
+
   const [id, setId] = useState("");
   const [userInfo, setUserInfo] = useState();
 
   useEffect(() => {
-    handleLogin();
-  });
-  console.log(tokenReducer);
-  useEffect(() => {
-    const ddd = async () => {
-      setLoading(true);
-      dispatch(userInformation(tokenReducer));
-      setLoading(false);
-    };
-
-    ddd();
+    // 프로필 조회 api (헤더에 토큰넣어서 )
+    console.log(tokenReducer);
+    dispatch(userInformation(tokenReducer));
   }, []);
+
   useEffect(() => {
-    const testYoon = async () => {
-      setUserInfo(userStore.result[0]);
-      setStartDate(userInfo.createAt);
-    };
-    testYoon();
-  }, [userStore]);
-  return <>{loading ? <Loading /> : <ProfileBody data={userInfo} />}</>;
-}
+    if (userStore.userInformation.data) {
+      //console.log(userStore.userInformation.data);
+      setUserInfo(userStore.userInformation.data.result[0]);
+      //console.log(userInfo.birthday);
+    }
+  }, [userStore.userInformation.data]);
 
-export default Profile;
+  // useEffect(() => {
+  //   if (userStore && !userStore.isSuccess) {
+  //     console.log(userStore);
+  //     console.log(userStore.isSuccess);
+  //     logout();
+  //     alert("토큰이 만료되어 로그아웃되었습니다.");
+  //   }
+  // }, [tokenReducer]);
 
-const ProfileBody = (props) => {
-  const [userInfo, setUserInfo] = useState();
+  // useEffect(() => {});
+
   const setValue = (type) => {
     switch (type) {
       case "email":
@@ -75,9 +76,6 @@ const ProfileBody = (props) => {
         return "none";
     }
   };
-  useEffect(() => {
-    setUserInfo(props.data);
-  }, [props]);
   return (
     <>
       <div id="signup_content">
@@ -117,7 +115,15 @@ const ProfileBody = (props) => {
                 </div>
                 <h3>
                   <label for="pw">비밀번호</label>{" "}
-                  <Button variant="outline-dark">변경</Button>
+                  <Button
+                    onClick={() => {
+                      flag ? setFlag(false) : setFlag(true);
+                    }}
+                    variant="outline-dark"
+                  >
+                    변경
+                  </Button>
+                  <PasswordModal flag={flag} />
                 </h3>
 
                 {/* <div class="pwchk">
@@ -194,7 +200,10 @@ const ProfileBody = (props) => {
                   <label for="birth">생년월일</label>
                 </h3>
                 <div class="box_id">
-                  <BirthPick setStartDate={setValue("birth")} />
+                  <BirthPick
+                    setStartDate={startDate}
+                    birth={userInfo.birthday}
+                  />
                 </div>
                 <div class="pwchk">
                   <div class="box_pwchk">
@@ -215,11 +224,41 @@ const ProfileBody = (props) => {
             <div class="btn_submt">
               <Button variant="success" onClick={() => {}}>
                 수정
-              </Button>{" "}
+              </Button>
             </div>
           </Card>
         )}
       </div>
     </>
+  );
+}
+
+export default Profile;
+const PasswordModal = (props) => {
+  const [modalStyle, setModalStyle] = useState("none");
+  useEffect(() => {
+    props.flag ? setModalStyle("block") : setModalStyle("none");
+  }, [props]);
+  return (
+    <div className="modalBody">
+      <div
+        style={{
+          display: modalStyle,
+        }}
+      >
+        <TextField
+          label="Password"
+          type="password"
+          variant="outlined"
+          helperText="비밀번호를 입력해주세요."
+        />
+        <TextField
+          label="Password Confirm"
+          type="password"
+          variant="outlined"
+          helperText="비밀번호를 다시 입력해주세요."
+        />
+      </div>
+    </div>
   );
 };

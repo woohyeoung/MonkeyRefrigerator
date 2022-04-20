@@ -67,6 +67,7 @@ module.exports = {
     try {
       const token = req.tokenInfo;
       const userInfo = await UserDao.selectUserInfo(token.email);
+      console.log(userInfo);
       if (userInfo === undefined) {
         return res.json(
           response.successFalse(1002, "전체 게시물 목록이 없습니다.")

@@ -26,5 +26,6 @@ export const selectUserInformation = async (token) => {
     })
     .then((res) => res.data)
     .catch();
+  console.log(result);
   return result;
 };

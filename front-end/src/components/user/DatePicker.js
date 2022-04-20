@@ -4,7 +4,18 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 function BirthPick(props) {
-  const [startDate, setStartDate] = useState(new Date());
+  console.log(props.birth);
+  console.log(props.setStartDate);
+  var temp = new Date(
+    parseInt(props.birth.substr(0, 4)),
+    parseInt(props.birth.substr(5, 2)) - 1,
+    parseInt(props.birth.substr(8, 2))
+  );
+  const [startDate, setStartDate] = useState(new Date(temp));
+  // if (props.birth) {
+
+  console.log(temp);
+
   const range = (start, end) => {
     return new Array(end - start).fill().map((d, i) => i + start);
   };
@@ -24,7 +35,7 @@ function BirthPick(props) {
     "December",
   ];
   const sendTextValue = (date) => {
-    props.setStartDate(date);
+    setStartDate(date);
   };
   return (
     <DatePicker
@@ -79,7 +90,7 @@ function BirthPick(props) {
       )}
       selected={startDate}
       onChange={(date) => {
-        console.log(date);
+        // console.log(date);
         setStartDate(date);
         sendTextValue(date);
       }}
