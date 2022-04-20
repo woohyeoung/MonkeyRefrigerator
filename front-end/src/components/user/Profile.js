@@ -187,13 +187,45 @@ function Profile() {
                 </h3>
                 <div class="box_id">
                   <select class="signupList" name="jobList">
-                    <option value="0">--선택--</option>
-                    <option value="1">학생</option>
-                    <option value="2">군인</option>
-                    <option value="3">주부</option>
-                    <option value="4">직장인</option>
-                    <option value="5">아빠</option>
-                    <option value="6">기타</option>
+                    <option value="0" selected="true">
+                      --선택--
+                    </option>
+                    <option
+                      value="1"
+                      selected={userInfo.jobId === 1 ? "true" : "false"}
+                    >
+                      학생
+                    </option>
+                    <option
+                      value="2"
+                      selected={userInfo.jobId === 2 ? "true" : "false"}
+                    >
+                      군인
+                    </option>
+                    <option
+                      value="3"
+                      selected={userInfo.jobId === 3 ? "true" : "false"}
+                    >
+                      주부
+                    </option>
+                    <option
+                      value="4"
+                      selected={userInfo.jobId === 4 ? "true" : "false"}
+                    >
+                      직장인
+                    </option>
+                    <option
+                      value="5"
+                      selected={userInfo.jobId === 5 ? "true" : "false"}
+                    >
+                      아빠
+                    </option>
+                    <option
+                      value="6"
+                      selected={userInfo.jobId === 6 ? "true" : "false"}
+                    >
+                      기타
+                    </option>
                   </select>
                 </div>
                 <h3>
