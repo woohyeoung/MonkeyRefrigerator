@@ -25,19 +25,29 @@ import { mdiSilverwareForkKnife } from '@mdi/js';
 import { TimePicker } from 'antd';
 import moment from 'moment';
 import ImageUploader from 'react-images-upload';
-import Grid from '@mui/material/Grid';
 import { Modal } from 'react-bootstrap';
-import { height, width } from '@mui/system';
+import { searchMaterialList } from '../../store/actions/BoardAction';
 
 function BoardCreate() {
 	const boardStore = useSelector((state) => state.boardReducer);
 	const dispatch = useDispatch();
 
+	const [loading, setLoading] = useState(false);
+
+	const [title, setTitle] = useState('');
+
+	const [subTitle, setSubTitle] = useState('');
+
+	const [step, setStep] = useState('');
+	const [steps, setSteps] = useState([]);
+	const [content, setContent] = useState('');
+
 	const [selectCategory, setSelectCategory] = React.useState('');
+	// 카테고리 목록
 	const [categories, setCategories] = useState([]);
 	const [category, setCategory] = useState({
 		id: 0,
-		CategoryName: '',
+		name: '',
 	});
 
 	const [selectDifficulty, setSelectDifficulty] = React.useState('');
@@ -48,12 +58,11 @@ function BoardCreate() {
 	const [selectCookTime, setSelectCookTime] = useState(null);
 	const format = 'HH:mm';
 
-	const [title, setTitle] = useState('');
-	const [subTitle, setSubTitle] = useState('');
+	const [keyword, setKeyword] = useState('');
+	const [searchList, setSearchList] = useState('');
 
-	const [step, setStep] = useState('');
-	const [steps, setSteps] = useState([]);
-	const [content, setContent] = useState('');
+	const [materialList, setMaterialList] = useState([]);
+	const [show, setShow] = useState(false);
 
 	const [sub, setSub] = useState('');
 	const [subs, setSubs] = useState([]);
@@ -62,14 +71,6 @@ function BoardCreate() {
 	const [tag, setTag] = useState('');
 	const [tags, setTags] = useState([]);
 	const [tagName, setTagName] = useState('');
-
-	const [keyword, setKeyword] = useState('');
-	const [material, setMaterial] = useState({
-		id: 0,
-		key: '',
-	});
-	const [materialList, setMaterialList] = useState([]);
-	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
@@ -80,6 +81,9 @@ function BoardCreate() {
 	};
 
 	const [boardForm, setBoardForm] = useState({
+		category: {
+			id: 0,
+		},
 		title: '',
 		subTitle: '',
 		content: '',
@@ -89,46 +93,66 @@ function BoardCreate() {
 		tagName: '',
 	});
 
+	//카테고리 목록
 	useEffect(() => {
 		dispatch(categoryList());
 	}, []);
 
+	//카테고리 목록이 바뀔때 마다
 	useEffect(() => {
 		if (boardStore.categoryList.data) {
 			setCategories([...boardStore.categoryList.data.data.result]);
-			// console.log(categories);
 		}
 	}, [boardStore.categoryList.data]);
 
-	const handelChage = () => {};
+	// 재료 검색 바뀔때 마다
+	useEffect(() => {
+		if (boardStore.searchMaterialList.data) {
+			setSearchList(boardStore.searchMaterialList.data.data.result);
+		}
+	}, [boardStore.searchMaterialList.data]);
 
+	//제목
 	const handleChangeTitle = (event) => {
-		console.log('title 값 변경중');
 		setTitle(event.target.value);
-		console.log(title);
 	};
 
+	//부제목
 	const handleChangeSubTitle = (event) => {
-		console.log('sub title 값 변경중');
 		setSubTitle(event.target.value);
 	};
+	// 내용
 	const handleChangeStep = (event) => {
-		console.log('Step 값 변경중');
 		setStep(event.target.value);
 	};
-
+	// 내용 하나 추가
 	const addStep = () => {
-		setSteps([...steps, step]);
+		if (step === '') {
+			window.alert('한글자 이상 입력하세요');
+			return;
+		} else {
+			setSteps([...steps, step]);
+		}
 	};
+	// 내용 하나 삭제
 	function deleteStep(index) {
-		setSteps([...steps.splice(index, 1, '')]);
+		steps.splice(index, 1);
+		setSteps([...steps]);
 	}
+	// 카테고리 선택
 	const handleChangeCategory = (event) => {
 		setSelectCategory(event.target.value);
+		let obj = categories.find((e) => {
+			return e.name === event.target.value;
+		});
+		setCategory({ id: obj.id, name: obj.name });
 	};
+	// 난이도 선택
 	const handleChangeDifficulty = (event) => {
 		setSelectDifficulty(event.target.value);
+		setDifficulty(event.target.value);
 	};
+	// 조리시간 선택
 	const handleChangeCookTime = (time) => {
 		let cTime = time._d.toString().split(' ')[4];
 		setSelectCookTime(time);
@@ -145,49 +169,138 @@ function BoardCreate() {
 		let str = convertTime(cTime);
 		setCookTime(str);
 	};
+	// 부재료
 	const handleChangeSub = (event) => {
-		console.log('123');
 		setSub(event.target.value);
 	};
-	const addSubMaterial = () => {
-		console.log('asd');
-		setSubs([...subs, sub]);
+	// 부재료 하나 추가
+	const addSub = () => {
+		if (sub === '') {
+			window.alert('한글자 이상 입력하세요');
+			return;
+		} else {
+			setSubs([...subs, sub]);
+		}
 	};
-
+	// 부재료 하나 삭제
 	const deleteSub = (index) => {
-		setSubs([...subs.splice(index, 1, '')]);
+		subs.splice(index, 1);
+		setSubs([...subs]);
 	};
 
+	// 태그
 	const handleChangeTag = (event) => {
-		console.log('123');
-		setTag(event.target.value);
+		setTag('#' + event.target.value);
 	};
+	// 태그 하나 추가
 	const addTag = () => {
-		console.log('asd');
-		setTags([...tags, tag]);
+		if (tag === '') {
+			window.alert('한글자 이상 입력하세요');
+			return;
+		} else {
+			setTags([...tags, tag]);
+		}
 	};
-
+	// 태그 하나 삭제
 	const deleteTag = (index) => {
-		setTags([...subs.splice(index, 1, '')]);
+		tags.splice(index, 1);
+		setTags([...tags]);
 	};
 
+	// 재료 검색
 	const handleChangeSearch = (event) => {
 		setKeyword(event.target.value);
 	};
-
+	// 재료 검색 - api
 	const searchKeyword = () => {
-		dispatch();
+		dispatch(searchMaterialList(keyword));
 	};
+	// 제출
+	const onSubmit = async () => {
+		let flag = await validated();
+		console.log(flag);
+		if (!flag) {
+			return;
+		}
+		console.log(title);
+		console.log(subTitle);
+		console.log(steps);
+	};
+	// 등록폼 검사
+	const validated = () => {
+		if (title === '') {
+			window.alert('제목을 입력하세요');
+			titleInput.current.focus();
+			return false;
+		}
+		if (subTitle === '') {
+			window.alert('부제목을 입력하세요');
+			subtitleInput.current.focus();
+			return false;
+		}
+		if (steps.length === 0) {
+			window.alert('step을 한개 이상 입력하세요');
+			stepInput.current.focus();
+			return false;
+		}
+
+		if (category.id === 0) {
+			window.alert('카테고리를 선택해 주세요');
+			return false;
+		}
+
+		if (difficulty === '') {
+			window.alert('난이도를 선택해 주세요');
+			return false;
+		}
+
+		if (selectCookTime === null || cookTime === '') {
+			window.alert('조리시간을 선택해주세요');
+			return false;
+		}
+
+		if (pictures.length === 0) {
+			window.alert('1장 이상의 사진을 업로드 해주세요');
+			return false;
+		}
+
+		if (!window.confirm('등록 하시겠습니까?', true)) {
+			return false;
+		}
+		return true;
+	};
+
+	const titleInput = useRef();
+	const subtitleInput = useRef();
+	const stepInput = useRef();
+	const categoryInput = useRef();
+	const difficultyInput = useRef();
+	const cookTimeInput = useRef();
 
 	return (
 		<>
 			<div className="abc">
+				{/* modal */}
 				<Modal show={show} onHide={handleClose}>
 					<Modal.Header closeButton>
 						<Modal.Title>재료 검색</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
 						<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+							{materialList[0] ? (
+								<div style={{ display: 'flex' }}>
+									담긴 재료 :
+									{materialList.map((item) => {
+										return (
+											<div style={{ margin: '0 3px 0 3px' }}>
+												{item.keyName}
+											</div>
+										);
+									})}
+								</div>
+							) : (
+								<></>
+							)}
 							<div style={{ display: 'flex', width: '100%' }}>
 								<Form.Control
 									onChange={handleChangeSearch}
@@ -204,13 +317,41 @@ function BoardCreate() {
 								</Button>
 							</div>
 						</Form.Group>
+						{searchList[0] ? (
+							<div>
+								<span style={{ fontSize: '30px', margin: '0 10px 0 0' }}>
+									{searchList[0].id}번 :{searchList[0].keyName}
+								</span>
+
+								<Button
+									onClick={() => {
+										let id = materialList.findIndex((e) => {
+											return e.id === searchList[0].id;
+										});
+										if (id === -1) {
+											setMaterialList([
+												...materialList,
+												{
+													id: searchList[0].id,
+													keyName: searchList[0].keyName,
+												},
+											]);
+										} else {
+											window.alert('이미 들어있는 재료입니다.');
+											return;
+										}
+									}}
+								>
+									선택
+								</Button>
+							</div>
+						) : (
+							<></>
+						)}
 					</Modal.Body>
 					<Modal.Footer>
 						<Button variant="secondary" onClick={handleClose}>
 							닫기
-						</Button>
-						<Button variant="primary" onClick={handleClose}>
-							저장
 						</Button>
 					</Modal.Footer>
 				</Modal>
@@ -254,11 +395,14 @@ function BoardCreate() {
 
 						{/* title */}
 						<Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-							<Form.Label>title</Form.Label>
+							<Form.Label>
+								title <span style={{ color: 'red' }}>(필수)</span>
+							</Form.Label>
 							<Form.Control
 								onChange={handleChangeTitle}
 								type="text"
 								placeholder="ex) 촉촉하고 부드러운 초코크랙쿠키 만들기"
+								ref={titleInput}
 							/>
 						</Form.Group>
 						<hr></hr>
@@ -268,12 +412,15 @@ function BoardCreate() {
 							className="mb-3"
 							controlId="exampleForm.ControlTextarea1"
 						>
-							<Form.Label>subtitle</Form.Label>
+							<Form.Label>
+								subtitle <span style={{ color: 'red' }}>(필수)</span>
+							</Form.Label>
 							<Form.Control
 								onChange={handleChangeSubTitle}
 								as="textarea"
 								rows={3}
 								placeholder="ex) 만드는방법도 정말 간단하고 촉촉하고 부드러운 초코크랙쿠키를 만들어보았어요~!! 버터가 없다면 식용유로 대체해서 만들어도 좋은 초코크랙쿠키랍니다♡♡♡ "
+								ref={subtitleInput}
 							/>
 						</Form.Group>
 						<hr></hr>
@@ -286,12 +433,16 @@ function BoardCreate() {
 							<div
 								style={{ display: 'flex', flexDirection: 'row', width: '100%' }}
 							>
-								<Form.Label style={{ marginRight: '10px' }}>step</Form.Label>
+								<Form.Label style={{ marginRight: '10px' }}>
+									step <span style={{ color: 'red' }}>(필수)</span>
+								</Form.Label>
 
 								<Form.Control
 									type="text"
 									placeholder="ex) 닭살은 한입크기로 썬다."
 									onChange={handleChangeStep}
+									ref={stepInput}
+									style={{ width: '70%' }}
 								/>
 								{/* step Button */}
 								<div>
@@ -312,6 +463,7 @@ function BoardCreate() {
 							</div>
 						</Form.Group>
 
+						{/* step 보이는곳 */}
 						{steps.map((item, index) => {
 							return (
 								<div
@@ -327,7 +479,7 @@ function BoardCreate() {
 											color: 'black',
 											marginBottom: '10px',
 											display: 'flex',
-											width: '90%',
+											width: '80%',
 										}}
 									>
 										<div
@@ -347,7 +499,7 @@ function BoardCreate() {
 											verticalAlign: 'middle',
 											height: '80%',
 										}}
-										onClick={(index) => {
+										onClick={() => {
 											deleteStep(index);
 										}}
 									>
@@ -358,10 +510,13 @@ function BoardCreate() {
 						})}
 						<hr></hr>
 
-						<div style={{ display: 'flex', justifyContent: 'center' }}>
+						{/* category, difficulty, cookTime */}
+						<div style={{ display: 'flex' }}>
+							{/* category */}
 							<div>
-								{/* category */}
-								<Form.Label>category</Form.Label>
+								<Form.Label>
+									category <span style={{ color: 'red' }}>(필수)</span>
+								</Form.Label>
 								<Box sx={{ minWidth: 120, width: 120 }}>
 									<FormControl fullWidth>
 										<InputLabel id="demo-simple-select-label-c">
@@ -373,6 +528,7 @@ function BoardCreate() {
 											value={selectCategory}
 											label="Category"
 											onChange={handleChangeCategory}
+											ref={categoryInput}
 										>
 											{categories.map((item, index) => {
 												return (
@@ -385,9 +541,11 @@ function BoardCreate() {
 									</FormControl>
 								</Box>
 							</div>
+							{/* difficulty */}
 							<div style={{ marginLeft: '10px' }}>
-								{/* difficulty */}
-								<Form.Label>difficulty</Form.Label>
+								<Form.Label>
+									difficulty <span style={{ color: 'red' }}>(필수)</span>
+								</Form.Label>
 								<Box sx={{ minWidth: 120, width: 120 }}>
 									<FormControl fullWidth>
 										<InputLabel id="demo-simple-select-label-d">
@@ -399,6 +557,7 @@ function BoardCreate() {
 											value={selectDifficulty}
 											label="difficulty"
 											onChange={handleChangeDifficulty}
+											ref={difficultyInput}
 										>
 											{difficultyArr.map((item, index) => {
 												return (
@@ -413,13 +572,16 @@ function BoardCreate() {
 							</div>
 							{/* cookTime */}
 							<div style={{ marginLeft: '10px' }}>
-								<Form.Label>cookTime</Form.Label>
+								<Form.Label>
+									cookTime <span style={{ color: 'red' }}>(필수)</span>
+								</Form.Label>
 								<Box sx={{ minWidth: 120, width: 120 }}>
 									<TimePicker
 										value={selectCookTime}
 										onChange={handleChangeCookTime}
 										defaultValue={moment('00:00', format)}
 										format={format}
+										ref={cookTimeInput}
 									/>
 								</Box>
 							</div>
@@ -427,8 +589,22 @@ function BoardCreate() {
 						<hr></hr>
 
 						{/* material */}
-						<Form.Label>material</Form.Label>
-						<div>
+						<Form.Label>
+							material
+							<span style={{ color: 'red' }}> (필수)</span>
+							<Button
+								variant="outline-danger"
+								size="sm"
+								onClick={() => {
+									setMaterialList([]);
+								}}
+								style={{ fontSize: '1px', margin: '0 0 0 10px' }}
+							>
+								모두 지우기
+							</Button>
+						</Form.Label>
+
+						<div style={{ display: 'flex' }}>
 							<Button
 								style={{
 									marginLeft: '10px',
@@ -440,8 +616,31 @@ function BoardCreate() {
 							>
 								재료찾기
 							</Button>
+							<div style={{ display: 'flex', margin: '0 0 0 10px' }}>
+								{materialList[0] ? (
+									<div style={{ display: 'flex', height: '70%' }}>
+										담긴 재료 :
+										{materialList.map((item) => {
+											return (
+												<div
+													style={{
+														margin: '0 3px 0 3px',
+														border: '1px solid #3d3d3d',
+														borderRadius: '10px',
+														backgroundColor: 'lightyellow',
+													}}
+												>
+													{item.keyName}
+												</div>
+											);
+										})}
+									</div>
+								) : (
+									<></>
+								)}
+							</div>
 						</div>
-						{}
+
 						<hr></hr>
 
 						{/* sub material */}
@@ -449,13 +648,13 @@ function BoardCreate() {
 						<div
 							style={{ display: 'flex', flexDirection: 'row', width: '100%' }}
 						>
+							<Form.Label style={{ marginRight: '10px' }}>
+								sub material (선택)
+							</Form.Label>
+
 							<div
 								style={{ display: 'flex', flexDirection: 'row', width: '50%' }}
 							>
-								<Form.Label style={{ marginRight: '10px' }}>
-									sub material
-								</Form.Label>
-
 								<Form.Control
 									type="text"
 									placeholder="ex) 푸아그라"
@@ -472,7 +671,7 @@ function BoardCreate() {
 										verticalAlign: 'middle',
 									}}
 									onClick={() => {
-										addSubMaterial();
+										addSub();
 									}}
 								>
 									+
@@ -481,46 +680,48 @@ function BoardCreate() {
 						</div>
 
 						{subs.map((item, index) => {
-							<div
-								style={{
-									display: 'flex',
-									width: '100%',
-								}}
-								key={index}
-							>
-								<Card
+							return (
+								<div
 									style={{
-										background: '#FDFD96',
-										color: 'black',
-										marginBottom: '10px',
 										display: 'flex',
-										width: '90%',
+										width: '50%',
 									}}
+									key={index}
 								>
-									<div
+									<Card
 										style={{
-											padding: '5px',
+											background: '#FFDDDC',
+											color: 'black',
+											marginBottom: '10px',
+											display: 'flex',
+											width: '90%',
 										}}
 									>
-										{item}
-									</div>
-								</Card>
-								<Button
-									variant="outline-primary"
-									style={{
-										marginLeft: '10px',
-										justifyContent: 'center',
-										alignItems: 'center',
-										verticalAlign: 'middle',
-										height: '80%',
-									}}
-									onClick={(index) => {
-										deleteSub(index);
-									}}
-								>
-									-
-								</Button>
-							</div>;
+										<div
+											style={{
+												padding: '5px',
+											}}
+										>
+											{item}
+										</div>
+									</Card>
+									<Button
+										variant="outline-primary"
+										style={{
+											marginLeft: '10px',
+											justifyContent: 'center',
+											alignItems: 'center',
+											verticalAlign: 'middle',
+											height: '80%',
+										}}
+										onClick={() => {
+											deleteSub(index);
+										}}
+									>
+										-
+									</Button>
+								</div>
+							);
 						})}
 
 						<hr></hr>
@@ -529,11 +730,12 @@ function BoardCreate() {
 						<div
 							style={{ display: 'flex', flexDirection: 'row', width: '100%' }}
 						>
+							<Form.Label style={{ marginRight: '10px' }}>
+								tagName (선택)
+							</Form.Label>
 							<div
 								style={{ display: 'flex', flexDirection: 'row', width: '30%' }}
 							>
-								<Form.Label style={{ marginRight: '10px' }}>tagName</Form.Label>
-
 								<Form.Control type="text" onChange={handleChangeTag} />
 							</div>
 							{/* sub material Button */}
@@ -555,46 +757,48 @@ function BoardCreate() {
 						</div>
 
 						{tags.map((item, index) => {
-							<div
-								style={{
-									display: 'flex',
-									width: '100%',
-								}}
-								key={index}
-							>
-								<Card
+							return (
+								<div
 									style={{
-										background: '#FDFD96',
-										color: 'black',
-										marginBottom: '10px',
 										display: 'flex',
-										width: '90%',
+										width: '30%',
 									}}
+									key={index}
 								>
-									<div
+									<Card
 										style={{
-											padding: '5px',
+											background: '#DBFFCF',
+											color: 'black',
+											marginBottom: '10px',
+											display: 'flex',
+											width: '90%',
 										}}
 									>
-										{item}
-									</div>
-								</Card>
-								<Button
-									variant="outline-primary"
-									style={{
-										marginLeft: '10px',
-										justifyContent: 'center',
-										alignItems: 'center',
-										verticalAlign: 'middle',
-										height: '80%',
-									}}
-									onClick={(index) => {
-										deleteTag(index);
-									}}
-								>
-									-
-								</Button>
-							</div>;
+										<div
+											style={{
+												padding: '5px',
+											}}
+										>
+											{item}
+										</div>
+									</Card>
+									<Button
+										variant="outline-primary"
+										style={{
+											marginLeft: '10px',
+											justifyContent: 'center',
+											alignItems: 'center',
+											verticalAlign: 'middle',
+											height: '80%',
+										}}
+										onClick={() => {
+											deleteTag(index);
+										}}
+									>
+										-
+									</Button>
+								</div>
+							);
 						})}
 
 						<hr></hr>
@@ -613,9 +817,8 @@ function BoardCreate() {
 						<hr></hr>
 						{/* submit */}
 						<div>
-							<Button variant="outline-primary">submit</Button>
-							<Button variant="outline-danger" style={{ marginLeft: '10px' }}>
-								reset
+							<Button variant="outline-primary" onClick={onSubmit}>
+								등록
 							</Button>
 						</div>
 					</Form>

@@ -33,3 +33,13 @@ export const findBoardCategory = () => {
   const result = axios.get(baseUrl + "board/category");
   return result;
 };
+//material API -- 재료 검색 조회
+export const findMaterial = (keyword) => {
+	const result = axios.get(baseUrl + 'board/material/search', {
+		params: {
+			keyword: keyword,
+		},
+	});
+
+	return result;
+};
