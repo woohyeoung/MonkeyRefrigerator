@@ -122,12 +122,12 @@ function BoardList() {
 
 	return (
 		<>
-			{/* 날짜순 조회 */}
+			{/* 최신순 조회 */}
 			{selected === 1 ? (
 				<>
 					{loading ? (
 						<div>
-							<Loading />
+							<Loading text={'최신순 조회중...'} />
 						</div>
 					) : (
 						<>
@@ -189,7 +189,7 @@ function BoardList() {
 				<>
 					{loading ? (
 						<div>
-							<Loading />
+							<Loading text={'조회순 조회중...'} />
 						</div>
 					) : (
 						<>
@@ -253,12 +253,12 @@ function BoardList() {
 			) : (
 				<></>
 			)}
-			{/* 추천순(좋아요순 조회) */}
+			{/* 추천순(장바구니수순 조회) */}
 			{selected === 3 ? (
 				<>
 					{loading ? (
 						<div>
-							<Loading />
+							<Loading text={'추천순 조회중...'} />
 						</div>
 					) : (
 						<>

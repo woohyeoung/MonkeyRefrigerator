@@ -7,4 +7,7 @@
 }
 .abc {
 	font-family: BMDOHYEON;
+	border: 1px solid #d3d3d3;
+	width: auto;
+	overflow: auto;
 }
