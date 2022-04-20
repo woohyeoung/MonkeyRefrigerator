@@ -7,7 +7,11 @@ import React, {
 	useMemo,
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { boardSaveOne, categoryList } from '../../store/actions/BoardAction';
+import {
+	boardSaveOne,
+	categoryList,
+	searchMaterialList,
+} from '../../store/actions/BoardAction';
 import { Form, Button } from 'react-bootstrap';
 import Card from '@mui/material/Card';
 import Icon from '@mdi/react';
@@ -26,8 +30,7 @@ import { TimePicker } from 'antd';
 import moment from 'moment';
 import ImageUploader from 'react-images-upload';
 import { Modal } from 'react-bootstrap';
-import { searchMaterialList } from '../../store/actions/BoardAction';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 function BoardCreate() {
 	const boardStore = useSelector((state) => state.boardReducer);
@@ -211,6 +214,13 @@ function BoardCreate() {
 		dispatch(searchMaterialList(keyword));
 	};
 
+	//엔터시 재료 검색
+	const onKeyPress = (e) => {
+		if (e.key == 'Enter') {
+			searchKeyword();
+		}
+	};
+
 	// 등록폼 검사
 	async function validated() {
 		if (title === '') {
@@ -270,13 +280,16 @@ function BoardCreate() {
 
 	// 제출
 	const onSubmit = async () => {
+		//검사
 		let flag = await validated();
+		//검사 false
 		if (!flag) {
 			return;
 		}
 		async function onPress() {
 			let formData = new FormData();
 			formData.enctype = 'multipart/form-data';
+			//다중 image pictures 배열 (file)
 			for (let i = 0; i < pictures.length; i++) {
 				formData.append('image', pictures[0][i]);
 			}
@@ -295,14 +308,16 @@ function BoardCreate() {
 			formData.append('category', category.id);
 
 			formData.append('difficulty', difficulty);
+			//재료 배열
 			formData.append('cookTime', cookTime);
 			for (let i = 0; i < materialList.length; i++) {
 				formData.append('material', materialList[i].id);
 			}
+			//재료별 수량 배열
 			for (let i = 0; i < materialCount.length; i++) {
 				formData.append('materialCount', materialCount[i]);
 			}
-
+			// 부 재료 데이터 가공
 			const subsConver = (subs) => {
 				let str = '';
 				for (let i = 0; i < subs.length; i++) {
@@ -315,7 +330,7 @@ function BoardCreate() {
 				return str;
 			};
 			formData.append('subs', subsConver(subs));
-
+			// 태그 데이터 가공
 			const tagsConver = (tags) => {
 				let str = '';
 				for (let i = 0; i < tags.length; i++) {
@@ -335,6 +350,10 @@ function BoardCreate() {
 				return str;
 			};
 			formData.append('tags', tagsConver(tags));
+			if (!tokenStore.token || tokenStore.token === null) {
+				window.alert('error! login please');
+				redirectHome();
+			}
 
 			const boardForm = {
 				token: tokenStore.token,
@@ -369,12 +388,14 @@ function BoardCreate() {
 
 		await onPress();
 
-		function redirect() {
-			history.push('/board');
-		}
 		redirect();
 	};
-
+	function redirectHome() {
+		history.push('/');
+	}
+	function redirect() {
+		history.push('/board');
+	}
 	const titleInput = useRef();
 	const subtitleInput = useRef();
 	const stepInput = useRef();
@@ -386,100 +407,11 @@ function BoardCreate() {
 		<>
 			{loading ? (
 				<div>
-					<Loading />
+					<Loading text={'저장중...'} />
 				</div>
 			) : (
 				<>
 					<div className="abc">
-						{/* modal */}
-						<Modal show={show} onHide={handleClose}>
-							<Modal.Header closeButton>
-								<Modal.Title>재료 검색</Modal.Title>
-							</Modal.Header>
-							<Modal.Body>
-								<Form.Group
-									className="mb-3"
-									controlId="exampleForm.ControlInput1"
-								>
-									{materialList[0] ? (
-										<div style={{ display: 'flex' }}>
-											담긴 재료 :
-											{materialList.map((item) => {
-												return (
-													<div style={{ margin: '0 3px 0 3px' }}>
-														{item.keyName}
-													</div>
-												);
-											})}
-										</div>
-									) : (
-										<></>
-									)}
-									<div style={{ display: 'flex', width: '100%' }}>
-										<Form.Control
-											onChange={handleChangeSearch}
-											type="text"
-											placeholder="ex) 양파"
-											style={{ width: '80%' }}
-										/>
-										<Button
-											size="sm"
-											variant="outline-primary"
-											onClick={searchKeyword}
-										>
-											검색
-										</Button>
-									</div>
-								</Form.Group>
-								{searchList[0] ? (
-									<div>
-										<span style={{ fontSize: '30px', margin: '0 10px 0 0' }}>
-											{searchList[0].id}번 :{searchList[0].keyName}
-										</span>
-
-										<Button
-											onClick={() => {
-												let id = materialList.findIndex((e) => {
-													return e.id === searchList[0].id;
-												});
-												if (id === -1) {
-													setMaterialList([
-														...materialList,
-														{
-															id: searchList[0].id,
-															keyName: searchList[0].keyName,
-														},
-													]);
-												} else {
-													window.alert('이미 들어있는 재료입니다.');
-													return;
-												}
-
-												do {
-													let result = window.prompt(
-														'수량 입력 : ex) 1T, 1개,반개 등등 '
-													);
-													setMaterialCount([...materialCount, result]);
-													if (result) {
-														break;
-													}
-												} while (true);
-											}}
-										>
-											선택
-										</Button>
-									</div>
-								) : (
-									<></>
-								)}
-							</Modal.Body>
-							<Modal.Footer>
-								<Button variant="secondary" onClick={handleClose}>
-									닫기
-								</Button>
-							</Modal.Footer>
-						</Modal>
-
 						<Card
 							style={{
 								display: 'flex',
@@ -487,6 +419,95 @@ function BoardCreate() {
 								alignItems: 'center',
 							}}
 						>
+							{/* modal */}
+							<Modal show={show} onHide={handleClose}>
+								<Modal.Header closeButton>
+									<Modal.Title>재료 검색</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+									<Form.Group
+										className="mb-3"
+										controlId="exampleForm.ControlInput1"
+									>
+										{materialList[0] ? (
+											<div style={{ display: 'flex' }}>
+												담긴 재료 :
+												{materialList.map((item) => {
+													return (
+														<div style={{ margin: '0 3px 0 3px' }}>
+															{item.keyName}
+														</div>
+													);
+												})}
+											</div>
+										) : (
+											<></>
+										)}
+										<div style={{ display: 'flex', width: '100%' }}>
+											<Form.Control
+												onChange={handleChangeSearch}
+												onKeyPress={onKeyPress}
+												type="text"
+												placeholder="ex) 양파"
+												style={{ width: '80%' }}
+											/>
+											<Button
+												size="sm"
+												variant="outline-primary"
+												onClick={searchKeyword}
+											>
+												검색
+											</Button>
+										</div>
+									</Form.Group>
+									{searchList[0] ? (
+										<div>
+											<span style={{ fontSize: '30px', margin: '0 10px 0 0' }}>
+												{searchList[0].id}번 :{searchList[0].keyName}
+											</span>
+
+											<Button
+												onClick={() => {
+													let id = materialList.findIndex((e) => {
+														return e.id === searchList[0].id;
+													});
+													if (id === -1) {
+														setMaterialList([
+															...materialList,
+															{
+																id: searchList[0].id,
+																keyName: searchList[0].keyName,
+															},
+														]);
+													} else {
+														window.alert('이미 들어있는 재료입니다.');
+														return;
+													}
+
+													do {
+														let result = window.prompt(
+															'수량 입력 : ex) 1T, 1개,반개, 3/4 등등 '
+														);
+														setMaterialCount([...materialCount, result]);
+														if (result && result !== '') {
+															break;
+														}
+													} while (true);
+												}}
+											>
+												선택
+											</Button>
+										</div>
+									) : (
+										<></>
+									)}
+								</Modal.Body>
+								<Modal.Footer>
+									<Button variant="secondary" onClick={handleClose}>
+										닫기
+									</Button>
+								</Modal.Footer>
+							</Modal>
 							<Form style={{ width: '600px', marginBottom: '10px' }}>
 								{/* 레시피 등록 */}
 								<div
@@ -966,6 +987,13 @@ function BoardCreate() {
 									imgExtension={['.jpg', '.gif', '.png', '.gif']}
 									maxFileSize={5242880}
 									withPreview={true}
+									buttonStyles={{
+										backgroundColor: '#a2f2d9',
+									}}
+									labelStyles={{}}
+									fileContainerStyle={{
+										border: '1px solid #D3D3D3',
+									}}
 								/>
 
 								<hr></hr>

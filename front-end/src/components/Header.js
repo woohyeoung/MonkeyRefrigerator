@@ -77,6 +77,7 @@ function Header() {
 
 						<div
 							className="h-menu"
+							style={{ cursor: 'pointer' }}
 							onClick={(e) => {
 								setMenu(!menu);
 								if (style.display === 'none') {

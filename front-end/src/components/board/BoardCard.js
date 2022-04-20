@@ -91,8 +91,8 @@ export default function BoardCard(props) {
 			<CardActions disableSpacing>
 				<Icon path={mdiCartVariant} title="menu" size={1} color="black" />
 				<div style={{ fontFamily: 'BMDOHYEON', margin: '0 5px 0 0' }}>{99}</div>
-				<Icon path={mdiHeart} title="menu" size={1} color="red" />
-				<div style={{ fontFamily: 'BMDOHYEON', margin: '0 5px 0 0' }}>{99}</div>
+				{/* <Icon path={mdiHeart} title="menu" size={1} color="red" />
+				<div style={{ fontFamily: 'BMDOHYEON', margin: '0 5px 0 0' }}>{99}</div> */}
 				{/* <Icon path={mdiComment} title="menu" size={1} color="#ffeb3b" />
 				<div style={{ fontFamily: 'BMDOHYEON', margin: '0 5px 0 0' }}>{99}</div> */}
 
