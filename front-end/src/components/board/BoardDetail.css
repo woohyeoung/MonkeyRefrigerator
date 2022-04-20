@@ -7,6 +7,7 @@
 }
 
 .detailContainer {
+  font-family: "BMDOHYEON";
   width: 60%;
   margin: auto;
   background-color: rgb(226, 211, 204, 0.4);
@@ -22,7 +23,8 @@
 
 #detailNick {
   text-align: center;
-  margin-bottom: 5%;
+  margin-bottom: 10%;
+  margin-top: 5%;
 }
 
 #detailContent ul {
@@ -65,6 +67,7 @@
 
 .detailMaterial {
   font-size: 30px;
+  border-bottom: 1px solid #b3b1b1;
 }
 
 .detailMaterial span {
@@ -95,4 +98,19 @@
 
 .view_step {
   padding: 35px 0 10px;
+}
+
+.view_step #stepDes {
+  font-size: 15px;
+  display: block;
+  padding: 40px 10px 10px 10px;
+
+  text-align: left;
+}
+
+.detailTag {
+  padding: 35px 0 10px;
+  font-size: 12px;
+
+  font-family: "Noto Sans KR", sans-serif;
 }

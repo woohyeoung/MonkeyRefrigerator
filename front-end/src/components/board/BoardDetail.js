@@ -10,6 +10,9 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styled from "styled-components";
+import MoodIcon from "@mui/icons-material/Mood";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import { green } from "@mui/material/colors";
 
 // carousel
 const Container = styled.div`
@@ -75,16 +78,14 @@ function BoardDetail() {
     }
   }, [boardStore]);
 
-  console.log(board);
-
-  // useEffect(() => {
-  //   if (board) {
-  //     const spliceStep = async () => {
-  //       await setSteps(step(board[0][0].content));
-  //     };
-  //     spliceStep();
-  //   }
-  // }, [board]);
+  useEffect(() => {
+    if (board) {
+      const spliceStep = async () => {
+        await setSteps(step(board[0][0].content));
+      };
+      spliceStep();
+    }
+  }, [board]);
 
   function step(str) {
     let strAry = [];
@@ -92,15 +93,15 @@ function BoardDetail() {
     if (str) {
       strAry = str.split("\n");
       for (let index = 0; index < strAry.length; index++) {
-        if (typeof strAry[index][0] === "number") {
+        if (strAry[index][0] !== "s") {
           strAry2.push(strAry[index]);
         }
       }
+      return strAry2;
     }
-    return strAry2;
   }
-  // console.log(step(board[0][0].content));
 
+  console.log(board);
   return (
     <>
       <div>
@@ -126,7 +127,7 @@ function BoardDetail() {
 
             <hr className="horizontal" />
 
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", marginTop: "10%" }}>
               <img
                 style={{
                   borderRadius: "50%",
@@ -178,29 +179,53 @@ function BoardDetail() {
                     <b>[주재료]</b>
                     {board[2].map((item, i) => {
                       return (
-                        <div key={item[i]}>
+                        <div>
                           <li>{item.keyName}</li>
                         </div>
                       );
                     })}
                   </ul>
                 </div>
-                <div className="view_step">
-                  <b style={{ fontWeight: "500", fontSize: "30px" }}>
-                    조리순서
+              </div>
+              <div className="view_step">
+                <b style={{ fontWeight: "500", fontSize: "30px" }}>조리순서</b>
+                <span
+                  style={{
+                    color: "#ccc",
+                    fontSize: "18px",
+                    fontStyle: "italic",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  Steps
+                </span>
+                <br></br>
+                <div id="stepDes">
+                  {steps.map((item, i) => {
+                    return (
+                      <>
+                        <div>
+                          <div style={{ padding: "0 0 30px 0" }}>
+                            <MoodIcon style={{ padding: "0 5px 0 0" }} />
+                            {steps[i]}
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="detailTag">
+                <div style={{ background: "#f2f2f2" }}>
+                  <LocalOfferIcon
+                    sx={{ color: green[500], marginLeft: "3%" }}
+                  />
+                  <b style={{ color: "#2a7830", marginLeft: "5%" }}>
+                    {board[0][0].tagName
+                      .replace(/\'/g, "")
+                      .replace(/\[/g, "")
+                      .replace(/\]/g, "")}
                   </b>
-                  <span
-                    style={{
-                      color: "#ccc",
-                      fontSize: "18px",
-                      fontStyle: "italic",
-                      paddingLeft: "10px",
-                    }}
-                  >
-                    Steps
-                  </span>
-
-                  {board[0][0].content}
                 </div>
               </div>
             </div>
