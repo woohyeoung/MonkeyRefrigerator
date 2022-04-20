@@ -42,9 +42,7 @@ async function getSelect(request, response) {
             `,
 			[] // num의 값 전달
 		);
-		console.log(result);
-		console.log(result.metaData);
-		console.log(result.rows);
+
 		response.send(result);
 	} catch (error) {
 		console.log(error);
