@@ -33,6 +33,7 @@ import { Refrigerator } from "./search/Refrigerator";
 import { boardList } from "../store/actions/BoardAction";
 import BoardList from "./board/BoardList";
 import BoardCreate from "./board/BoardCreate";
+import Cart from "../components/cart/Cart";
 
 export default function Main() {
   const dispatch = useDispatch();
@@ -61,7 +62,6 @@ export default function Main() {
             path="/signup"
             exact
           />
-          <PrivateRoute component={Profile} path="/profile" exact />
           <PublicRoute
             restricted={false}
             component={BoardList}
@@ -69,10 +69,10 @@ export default function Main() {
             exact
           />
           <PublicRoute component={BoardCreate} path="/create" exact />
+          <PrivateRoute component={Profile} path="/profile" exact />
           <PrivateRoute component={Refrigerator} path="/refrigerator" exact />
-          <Route path="/board/:id">
-            <BoardDetail />
-          </Route>
+          <PrivateRoute component={BoardDetail} path="/board/:id" exact />
+          <PrivateRoute component={Cart} path="/cart" exact />
         </Switch>
       </div>
     </>
