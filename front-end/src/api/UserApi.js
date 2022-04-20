@@ -26,5 +26,20 @@ export const selectUserInformation = async (token) => {
     })
     .then((res) => res.data)
     .catch();
+  // console.log(result);
   return result;
+};
+
+//user password change API - 사용자 비밀번호 변경
+export const updatePassword = async (data) => {
+  //console.log(data);
+  // const result = axios
+  //   .post(baseUrl + "pwChange", {
+  //     body: {
+  //       accessToken: token,
+  //     },
+  //   })
+  //   .then((res) => res.data)
+  //   .catch();
+  return;
 };

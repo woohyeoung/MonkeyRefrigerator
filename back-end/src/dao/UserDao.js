@@ -2,32 +2,15 @@
 const response = require("../utils/response");
 const { pool } = require("../config/database");
 const crypto = require("crypto");
-const base64crypto = (password) => {
-  crypto.createHash("sha512").update(password).digest("base64");
-};
-const createSalt = () =>
-  new Promise((resolve, reject) => {
-    crypto.randomBytes(64, (err, buf) => {
-      if (err) reject(err);
-      resolve(buf.toString("base64"));
-    });
-  });
-
-const createHashedPassword = (plainPassword) =>
-  new Promise(async (resolve, reject) => {
-    const salt = await createSalt();
-    crypto.pbkdf2(plainPassword, salt, 9999, 64, "sha512", (err, key) => {
-      if (err) reject(err);
-      resolve({ password: key.toString("base64"), salt });
-    });
-  });
 
 module.exports = {
   selectUserAccount: async function (email, pw) {
     try {
-      const query = `SELECT id, email FROM useraccount WHERE email='${email}' and password='${pw}';`;
+      const password = crypto.createHash("sha512").update(pw).digest("base64");
+      const query = `SELECT email FROM useraccount WHERE email=? and password=?;`;
+      const params = [email, password];
       const connection = await pool.getConnection(async (conn) => conn);
-      const [info] = await connection.query(query);
+      const [info] = await connection.query(query, params);
       connection.release();
       return info;
     } catch (err) {
@@ -42,6 +25,7 @@ module.exports = {
       const query = `SELECT count(*) as cnt FROM useraccount WHERE ${type}='${id}';`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query);
+
       connection.release();
       return info;
     } catch (err) {
@@ -55,12 +39,14 @@ module.exports = {
   },
   insertSignup: async function (data) {
     try {
-      const { password2, salt } = await createHashedPassword(data.password);
-
+      const password = crypto
+        .createHash("sha512")
+        .update(data.password)
+        .digest("base64");
       const query = `insert into useraccount(email, password, nickname, name, jobId, gender, birthday) values(?, ?, ?, ?, ?, ?, ?);`;
       const params = [
         data.email,
-        salt,
+        password,
         data.name,
         data.nickname,
         data.jobId,

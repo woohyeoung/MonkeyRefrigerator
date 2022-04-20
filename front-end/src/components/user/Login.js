@@ -93,7 +93,7 @@ export const Login = () => {
                 id="password"
                 autoComplete="current-password"
                 color="main"
-                value={pw}
+                // value={pw}
                 onChange={pwHandler}
                 placeholder="비밀번호를 입력하세요."
               />
