@@ -26,6 +26,7 @@ function Profile() {
   useEffect(() => {
     handleLogin();
   });
+  console.log(tokenReducer);
   useEffect(() => {
     const ddd = async () => {
       setLoading(true);

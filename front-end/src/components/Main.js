@@ -72,7 +72,10 @@ export default function Main() {
           <PrivateRoute component={Profile} path="/profile" exact />
           <PrivateRoute component={Refrigerator} path="/refrigerator" exact />
           <PrivateRoute component={BoardDetail} path="/board/:id" exact />
-          <PrivateRoute component={Cart} path="/cart" exact />
+          <Route path="/cart">
+            <Cart />
+          </Route>
+          {/* <PrivateRoute component={Cart} path="/cart" exact /> */}
         </Switch>
       </div>
     </>
@@ -284,7 +287,6 @@ const MainPage = () => {
   const offset = (page - 1) * 5;
   const boardReducer = useSelector((state) => state.boardReducer);
   const [boardRank, setBoardRank] = useState([]);
-  const [imgPath, setImgPath] = useState([]);
   const logoRef = useRef(null);
 
   useEffect(() => {
