@@ -18,6 +18,8 @@ import { logout } from "../Header";
 import Cookies from "js-cookie";
 import TextField from "@mui/material/TextField";
 import "./Profile.css";
+import { useCookies } from "react-cookie";
+
 function Profile() {
   const userStore = useSelector((state) => state.userReducer);
   const tokenReducer = useSelector((state) => state.tokenReducer);
