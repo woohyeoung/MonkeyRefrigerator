@@ -32,7 +32,7 @@ function Header() {
   const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
   useEffect(() => {
     dispatch(handleLogin());
-  });
+  }, []);
   useEffect(() => {
     if (isLogin && !tokenReducer) {
       logout();
@@ -70,17 +70,17 @@ function Header() {
               <span>Monkey Refrigerator</span>
             </div>
             <div className="h-nav-item-alw">
-              <input className="inputbox" type="text" placeholder="Search" />
-              <Icon
-                className="searchIcon"
-                path={mdiMagnify}
-                title="search"
-                size={2}
-                color="white"
-              />
-              {/* <Link to="/search">
-                <div className="sub-title">검색</div>
-              </Link> */}
+              <Link>
+                <input className="inputbox" type="text" placeholder="Search" />
+                <Icon
+                  className="searchIcon"
+                  path={mdiMagnify}
+                  title="search"
+                  size={2}
+                  color="white"
+                />
+                {/* <div className="sub-title">검색</div> */}
+              </Link>
               <Link to="/board">
                 <Icon
                   className="boardIcon"

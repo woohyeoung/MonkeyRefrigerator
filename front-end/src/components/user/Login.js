@@ -43,7 +43,7 @@ export const Login = () => {
         window.alert("아이디 또는 비밀번호가 일치하지 않습니다.");
         inputReset();
       }
-    }, 200);
+    }, 250);
   };
   const inputReset = () => {
     setEmail("");

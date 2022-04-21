@@ -97,3 +97,34 @@ export const deleteUserGetMaterialUserId = (data) => {
 	console.log(result);
 	return result;
 };
+
+export const userVoteValid = async (token) => {
+  const result = axios
+    .get(`${baseUrl}uservote`, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((res) => res.data)
+    .catch();
+  return result;
+};
+export const userVoteAdd = async (board, token) => {
+  const result = axios
+    .post(
+      `${baseUrl}voteadd`,
+      {
+        body: {
+          boardId: board,
+        },
+      },
+      {
+        headers: {
+          accessToken: token,
+        },
+      }
+    )
+    .then((res) => res.data)
+    .catch();
+  return result;
+};
