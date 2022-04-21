@@ -63,25 +63,12 @@
   right: 30px;
   top: 20px;
 }
-.row-1 .h-nav {
-  display: "flex";
-  flex-direction: row;
-}
-.row-1 .h-nav .h-nav-item {
-  border: 1px solid #d3d3d3;
-  padding: 10px;
-  background-color: lightgray;
+.row-1 .h-menu:hover {
   position: absolute;
+  border: 5px outset rgba(208, 208, 208, 0.5);
+  border-radius: 10px;
   right: 30px;
-  top: 90px;
-  z-index: 7;
-}
-.row-1 .h-nav .h-nav-item .sub-title {
-  display: "flex";
-  justify-content: center;
-  align-items: center;
-  font-family: "BMDOHYEON";
-  color: "white";
+  top: 20px;
 }
 .row-1 .h-menu:hover {
   position: absolute;
