@@ -28,6 +28,11 @@ export const USERMATERIAL_GET = 'USERMATERIAL_GET';
 export const USERMATERIAL_GET_SUCCESS = 'USERMATERIAL_GET_SUCCESS';
 export const USERMATERIAL_GET_ERROR = 'USERMATERIAL_GET_ERROR';
 
+//회원이 가지고 있는 재료 삭제 DELETE
+export const USERMATERIAL_DELETE = 'USERMATERIAL_DELETE';
+export const USERMATERIAL_DELETE_SUCCESS = 'USERMATERIAL_DELETE_SUCCESS';
+export const USERMATERIAL_DELETE_ERROR = 'USERMATERIAL_DELETE_ERROR';
+
 //사용자 프로필 비밀번호 변경
 export const PASSWORD_UPDATE = 'PASSWORD_UPDATE';
 
@@ -88,11 +93,11 @@ export const userInformation = createPromiseThunk(
 	UserApi.selectUserInformation
 );
 
-export const saveUserMaterialOne = createPromiseThunk(
+export const userMaterialOne = createPromiseThunk(
 	USERMATERIAL_POST,
 	UserApi.saveUserMaterialOne
 );
-export const findUserMaterialUserId = createPromiseThunk(
+export const userMaterialUserId = createPromiseThunk(
 	USERMATERIAL_GET,
 	UserApi.findUserMaterialUserId
 );
@@ -100,4 +105,9 @@ export const findUserMaterialUserId = createPromiseThunk(
 export const pwChange = createPromiseThunk(
 	PASSWORD_UPDATE,
 	UserApi.updatePassword
+);
+
+export const deleteUserGetMaterial = createPromiseThunk(
+	USERMATERIAL_DELETE,
+	UserApi.deleteUserGetMaterialUserId
 );

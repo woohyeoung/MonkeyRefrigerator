@@ -39,7 +39,7 @@ export const saveUserMaterialOne = (data) => {
 		},
 	};
 	const result = axios
-		.post(baseUrl + '/user/material', data_, {
+		.post(baseUrl + 'user/material', data_, {
 			headers: {
 				accessToken: data.token,
 			},
@@ -53,7 +53,7 @@ export const saveUserMaterialOne = (data) => {
 
 export const findUserMaterialUserId = (token) => {
 	const result = axios
-		.get(baseUrl + '/user/material', {
+		.get(baseUrl + 'user/material', {
 			headers: {
 				accessToken: token,
 			},
@@ -77,4 +77,23 @@ export const updatePassword = async (data) => {
 	//   .then((res) => res.data)
 	//   .catch();
 	return;
+};
+
+export const deleteUserGetMaterialUserId = (data) => {
+	console.log(data.token);
+	const result = axios
+		.delete(
+			baseUrl + 'user/material',
+			{ data },
+			{
+				headers: {
+					accessToken: data.token,
+				},
+			}
+		)
+		.catch((err) => {
+			console.log(err);
+		});
+	console.log(result);
+	return result;
 };

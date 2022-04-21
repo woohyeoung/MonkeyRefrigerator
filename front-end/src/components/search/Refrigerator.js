@@ -11,6 +11,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Alert from '@mui/material/Alert';
+import { mdiTag } from '@mdi/js';
+import Icon from '@mdi/react';
 
 //User Component
 import headerIcon from '../../assets/monkey_3.png';
@@ -21,19 +23,44 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import { searchMaterialList } from '../../store/actions/BoardAction';
 import {
-	findUserMaterialUserId,
-	saveUserMaterialOne,
+	userMaterialOne,
+	userMaterialUserId,
+	deleteUserGetMaterial,
 } from '../../store/actions/UserAction';
 
 import { useHistory } from 'react-router-dom';
+import Loading from '../shared/CustomLoading';
 
 export const Refrigerator = () => {
 	const boardStore = useSelector((state) => state.boardReducer);
 	const tokenStore = useSelector((state) => state.tokenReducer);
+	const userStore = useSelector((state) => state.userReducer);
+
 	const dispatch = useDispatch();
 
 	const [style, setStyle] = useState('hidden');
+	//모달 flag
 	const [flag, setFlag] = useState(false);
+	//회원이 가지고 있는 재료
+	const [materialList, setMaterialList] = useState([]);
+
+	const [token, setToken] = useState();
+	//첫 렌더링, token이 있어야 회원이 가지고있는 함수 호출
+	useEffect(() => {
+		async function fetchMaterialList() {
+			await dispatch(userMaterialUserId(tokenStore.token));
+		}
+		if (tokenStore.token) {
+			fetchMaterialList();
+			setToken(tokenStore.token);
+		}
+	}, []);
+	//회원이 가지고 있는 재료 목록 store가 바뀌면
+	useEffect(() => {
+		if (userStore.userMaterialList.data) {
+			setMaterialList([...userStore.userMaterialList.data.data.result]);
+		}
+	}, [userStore.userMaterialList.data]);
 
 	const modalRef = useRef(null);
 	const onClickHandler = (type) => {
@@ -48,8 +75,7 @@ export const Refrigerator = () => {
 				return;
 		}
 	};
-
-	useEffect(() => {
+	const display = () => {
 		if (flag) {
 			setTimeout(() => {
 				setStyle('visible');
@@ -61,7 +87,12 @@ export const Refrigerator = () => {
 			}, 250);
 			gsap.fromTo(modalRef.current, { x: 250, y: -200 }, { x: 0, y: -200 });
 		}
-	});
+	};
+	useEffect(() => {
+		React.memo(display());
+	}, [flag]);
+
+	const door = flag ? { transform: 'rotateY(-160deg)' } : null;
 	return (
 		<div className="compartmentRefri">
 			<div className="refriHeader">
@@ -73,12 +104,58 @@ export const Refrigerator = () => {
 				<tbody>
 					<tr className="topSpace">
 						<td>
-							<div
-								onClick={() => {
-									flag ? setFlag(false) : setFlag(true);
-								}}
-							>
-								<RefriDoor msg={flag} />
+							<div>
+								<div className="refriDoor">
+									<div
+										className="refriOuter"
+										onClick={() => {
+											flag ? setFlag(false) : setFlag(true);
+										}}
+										style={door}
+									></div>
+									<div className="refriInner" style={{ cursor: 'Default' }}>
+										{materialList.length > 0 ? (
+											<>
+												{materialList.map((item, index) => {
+													return (
+														<>
+															<div
+																style={{
+																	display: 'flex',
+																	border: '1px solid #d3d3d3',
+																	width: 'auto',
+																}}
+															>
+																<div style={{}}>
+																	<Icon
+																		path={mdiTag}
+																		title="profile"
+																		size={1}
+																		color="white"
+																	/>
+																	{item.keyName}
+																</div>
+																<button
+																	onClick={() => {
+																		let data = {
+																			token: token,
+																			materialId: item.id,
+																		};
+																		dispatch(deleteUserGetMaterial(data));
+																	}}
+																>
+																	x
+																</button>
+															</div>
+														</>
+													);
+												})}
+											</>
+										) : (
+											<></>
+										)}
+									</div>
+								</div>
 							</div>
 
 							<div
@@ -86,7 +163,7 @@ export const Refrigerator = () => {
 								style={{ overflow: style, transition: '0.4s' }}
 								ref={modalRef}
 							>
-								<SearchModal flag={flag} />
+								<SearchModal flag={flag} materialList={materialList} />
 							</div>
 						</td>
 					</tr>
@@ -117,15 +194,7 @@ export const Refrigerator = () => {
 		</div>
 	);
 };
-const RefriDoor = (props) => {
-	const door = props.msg ? { transform: 'rotateY(-160deg)' } : null;
-	return (
-		<div className="refriDoor">
-			<div className="refriOuter" style={door}></div>
-			<div className="refriInner"></div>
-		</div>
-	);
-};
+
 const SearchModal = (props) => {
 	const boardStore = useSelector((state) => state.boardReducer);
 	const tokenStore = useSelector((state) => state.tokenReducer);
@@ -136,30 +205,39 @@ const SearchModal = (props) => {
 	let history = useHistory();
 
 	const [keyword, setKeyword] = useState('');
-	const [materialList, setMaterialList] = useState([]);
-	const [material, setMaterial] = useState({});
+	const [materialList, setMaterialList] = useState([...props.materialList]);
 	const [searchList, setSearchList] = useState([]);
+	const [_selectMaterial, _setSelectMaterial] = useState({});
+	const [push, setPush] = useState(false);
+	const [token, setToken] = useState();
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		dispatch(findUserMaterialUserId(tokenStore.token));
-	}, []);
-	console.log(userStore.userMaterialList.data);
-	useEffect(() => {
-		if (userStore.userMaterialList.data) {
-			setMaterialList([...userStore.userMaterialList.data.data.result]);
+		if (userStore.token) {
+			setToken(userStore.token);
 		}
-	}, [userStore.userMaterialList.data]);
+	}, []);
 
 	// 재료 검색 - api
 	const searchKeyword = () => {
+		if (keyword === '') {
+			window.alert('한글자 이상의 키워드를 입력해주세요.');
+			return;
+		}
 		dispatch(searchMaterialList(keyword));
 	};
+
 	// 재료 검색 바뀔때 마다
 	useEffect(() => {
 		if (boardStore.searchMaterialList.data) {
 			setSearchList(boardStore.searchMaterialList.data.data.result);
 		}
 	}, [boardStore.searchMaterialList.data]);
+	useEffect(() => {
+		if (userStore.userMaterialList.data) {
+			setMaterialList([...userStore.userMaterialList.data.data.result]);
+		}
+	}, [push]);
 
 	const [style, setStyle] = useState(0);
 	const searchKind = [
@@ -194,7 +272,9 @@ const SearchModal = (props) => {
 	const dataGridRef = useRef();
 
 	//재료 선택
-	const selectMaterial = () => {
+	const selectMaterial = (e) => {
+		console.log(e);
+		_setSelectMaterial({ id: e.row.id, keyName: e.row.keyName });
 		handleOpen();
 	};
 
@@ -211,91 +291,135 @@ const SearchModal = (props) => {
 	};
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
+	const handleClose = () => {
+		setOpen(false);
+		_setSelectMaterial({});
+	};
 	function redirectHome() {
 		history.push('/');
 	}
-	const pickMaterial = async () => {
-		let idx = materialList.findIndex((item) => {
-			return item.id === searchList[0].id;
-		});
-		if (idx == -1) {
-			setMaterialList([...materialList, searchList[0]]);
 
-			if (!tokenStore.token || tokenStore.token === null) {
-				window.alert('error! login please');
-				redirectHome();
-			}
+	const pickMaterial = async () => {
+		if (materialList.length === 5) {
+			window.alert('5개 이상은 넣을 수 업습니다.');
+			return;
+		}
+
+		console.log(materialList);
+		console.log(_selectMaterial);
+		const idx = materialList.findIndex((item) => {
+			return item.materialId === _selectMaterial.id;
+		});
+
+		if (idx === -1) {
+			// if (!tokenStore.token || tokenStore.token === null) {
+			// 	window.alert('error! login please');
+			// 	redirectHome();
+			// }
 			const data = {
 				token: tokenStore.token,
 				material: {
-					id: searchList[0].id,
-					keyName: searchList[0].keyName,
+					id: _selectMaterial.id,
 				},
 			};
-			await dispatch(saveUserMaterialOne(data));
+			async function a() {
+				dispatch(userMaterialOne(data));
+			}
+
+			async function b() {
+				dispatch(userMaterialUserId(tokenStore.token));
+			}
+
+			setLoading(true);
+			setTimeout(() => {
+				a();
+				b();
+				setPush(!push);
+				setLoading(false);
+			}, 1500);
+
 			window.alert('상품이 등록되었습니다.');
 			handleClose();
 		} else {
-			<Alert severity="error">This is an error alert — check it out!</Alert>;
+			// <Alert severity="error">This is an error alert — check it out!</Alert>;
+
+			window.alert('이미 담겨져 있는 재료입니다');
 			handleClose();
 			return;
 		}
 	};
-	console.log(materialList);
 	return (
-		<div className="modalContainer">
-			<div>
-				<Modal
-					open={open}
-					onClose={handleClose}
-					aria-labelledby="modal-modal-title"
-					aria-describedby="modal-modal-description"
-				>
-					<Box sx={Modalstyle}>
-						<Typography id="modal-modal-title" variant="h6" component="h2">
-							재료 [{searchList[0] ? <>{searchList[0].keyName}</> : <></>}]
-							을(를) 넣으시겠습니까?
-						</Typography>
-						<Typography id="modal-modal-description" sx={{ mt: 2 }}>
-							<Button onClick={pickMaterial}>확인</Button>
-							<Button onClick={handleClose}>취소</Button>
-						</Typography>
-					</Box>
-				</Modal>
-			</div>
-			<TextField
-				label="재료 검색"
-				type="search"
-				variant="outlined"
-				helperText="재료명을 입력하세요."
-				ref={searchInput}
-				value={keyword}
-				onChange={handleChangeSearch}
-				onKeyPress={onKeyPress}
-				InputProps={{
-					endAdornment: (
-						<InputAdornment position="end">
-							<div style={{ cursor: 'pointer' }} onClick={searchKeyword}>
-								<SearchIcon />
-							</div>
-						</InputAdornment>
-					),
-				}}
-			/>
-			<div style={{ height: style, width: '100%', transition: '0.5s' }}>
-				<DataGrid
-					onRowClick={selectMaterial}
-					rows={searchList}
-					columns={searchKind}
-					ref={dataGridRef}
-					// pageSize={5}
-					// rowsPerPageOptions={[5]}
-					hideFooterPagination={true}
-					hideFooter={true}
-				/>
-			</div>
-		</div>
+		<>
+			{loading ? (
+				<>
+					<Loading text={'재료 저장중입니다...'} />
+				</>
+			) : (
+				<>
+					<div className="modalContainer">
+						<div>
+							<Modal
+								open={open}
+								onClose={handleClose}
+								aria-labelledby="modal-modal-title"
+								aria-describedby="modal-modal-description"
+							>
+								<Box sx={Modalstyle}>
+									<Typography
+										id="modal-modal-title"
+										variant="h6"
+										component="h2"
+									>
+										재료 [
+										{_setSelectMaterial ? (
+											<>{_selectMaterial.keyName}</>
+										) : (
+											<></>
+										)}
+										] 을(를) 넣으시겠습니까?
+									</Typography>
+									<Typography id="modal-modal-description" sx={{ mt: 2 }}>
+										<Button onClick={pickMaterial}>확인</Button>
+										<Button onClick={handleClose}>취소</Button>
+									</Typography>
+								</Box>
+							</Modal>
+						</div>
+						<TextField
+							label="재료 검색"
+							type="search"
+							variant="outlined"
+							helperText="재료명을 입력하세요."
+							ref={searchInput}
+							value={keyword}
+							onChange={handleChangeSearch}
+							onKeyPress={onKeyPress}
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">
+										<div style={{ cursor: 'pointer' }} onClick={searchKeyword}>
+											<SearchIcon />
+										</div>
+									</InputAdornment>
+								),
+							}}
+						/>
+						<div style={{ height: style, width: '100%', transition: '0.5s' }}>
+							<DataGrid
+								onRowClick={selectMaterial}
+								rows={searchList}
+								columns={searchKind}
+								ref={dataGridRef}
+								// pageSize={5}
+								// rowsPerPageOptions={[5]}
+								hideFooterPagination={true}
+								hideFooter={true}
+							/>
+						</div>
+					</div>
+				</>
+			)}
+		</>
 	);
 };
 
