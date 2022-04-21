@@ -18,6 +18,7 @@ export const insertSignupForm = (data) => {
 
 //user information API - 프로필 조회
 export const selectUserInformation = async (token) => {
+  console.log(token);
   const result = axios
     .get(baseUrl + "profile", {
       headers: {
@@ -32,14 +33,15 @@ export const selectUserInformation = async (token) => {
 
 //user password change API - 사용자 비밀번호 변경
 export const updatePassword = async (data) => {
-  //console.log(data);
-  // const result = axios
-  //   .post(baseUrl + "pwChange", {
-  //     body: {
-  //       accessToken: token,
-  //     },
-  //   })
-  //   .then((res) => res.data)
-  //   .catch();
-  return;
+  console.log(data);
+  const result = axios
+    .post(baseUrl + "pwChange", {
+      body: {
+        userId: data.userId,
+        password: data.password,
+      },
+    })
+    .then((res) => res.data)
+    .catch();
+  return result;
 };

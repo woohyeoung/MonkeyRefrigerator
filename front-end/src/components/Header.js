@@ -35,15 +35,18 @@ function Header() {
   useEffect(() => {
     dispatch(handleLogin());
   });
-  useEffect(() => {
-    if (isLogin && !tokenReducer) {
-      logout();
-      alert("토큰이 만료되어 로그아웃 되었습니다.");
-    }
-  }, [tokenReducer]);
+
+  // useEffect(() => {
+  //   if (isLogin && !tokenReducer) {
+  //     logout();
+  //     alert("토큰이 만료되어 로그아웃 되었습니다.");
+  //   }
+  // }, [tokenReducer]);
+
   useEffect(() => {
     tokenReducer ? setIsLogin(true) : setIsLogin(false);
   }, [tokenReducer]);
+
   return (
     <>
       <header>
