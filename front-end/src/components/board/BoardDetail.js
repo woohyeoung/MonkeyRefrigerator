@@ -132,9 +132,8 @@ function BoardDetail() {
 									borderRadius: '50%',
 									width: '110px',
 									height: '110px',
-									position: 'static',
 								}}
-								src={board[0][0].profileImg}
+								src={board[1].profileImg}
 								alt="userprofile"
 							/>
 						</div>

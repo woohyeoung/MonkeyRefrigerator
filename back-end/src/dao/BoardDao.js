@@ -257,4 +257,25 @@ module.exports = {
 			);
 		}
 	},
+	selectBoardImg: async function (boardId) {
+		try {
+			const query = `select path as boardImgPath
+                           from boardimage
+                           where boardId = ?
+                           order by id limit 1;`;
+			const params = [boardId];
+			const connection = await pool.getConnection(async (conn) => conn);
+			const [rows] = await connection.query(query, params);
+
+			connection.release();
+			return rows;
+		} catch (err) {
+			return res.json(
+				response.successFalse(
+					3005,
+					'데이터베이스 연결에 실패하였습니다. BoardDao error - selectMaterialKey'
+				)
+			);
+		}
+	},
 };
