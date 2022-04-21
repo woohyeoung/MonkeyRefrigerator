@@ -25,10 +25,10 @@ export const Login = () => {
   const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
   const dispatch = useDispatch();
   const emailHandler = (e) => {
-    setEmail(e.currentTarget.value);
+    setEmail(e.target.value);
   };
   const pwHandler = (e) => {
-    setPw(e.currentTarget.value);
+    setPw(e.target.value);
   };
   const onClickLogin = async (e) => {
     e.preventDefault();
@@ -43,7 +43,7 @@ export const Login = () => {
         window.alert("아이디 또는 비밀번호가 일치하지 않습니다.");
         inputReset();
       }
-    }, 200);
+    }, 250);
   };
   const inputReset = () => {
     setEmail("");

@@ -7,7 +7,7 @@ module.exports = {
   selectUserAccount: async function (email, pw) {
     try {
       const password = crypto.createHash("sha512").update(pw).digest("base64");
-      const query = `SELECT email FROM useraccount WHERE email=? and password=?;`;
+      const query = `SELECT id,email FROM useraccount WHERE email=? and password=?;`;
       const params = [email, password];
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query, params);
@@ -31,7 +31,7 @@ module.exports = {
     } catch (err) {
       return res.json(
         response.successFalse(
-          3001,
+          3002,
           "데이터베이스 연결에 실패하였습니다. UserDao error - selectIdDoubleChk"
         )
       );
@@ -65,22 +65,42 @@ module.exports = {
       connection.release();
     } catch (err) {
       response.successFalse(
-        3001,
+        3003,
         "데이터베이스 연결에 실패하였습니다. UserDao error - insertSignup"
       );
     }
   },
   selectUserInfo: async function (id) {
     try {
-      const query = `SELECT * FROM useraccount WHERE email='${id}';`;
+      const query = `SELECT * FROM useraccount WHERE id='${id}';`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query);
       connection.release();
       return info;
     } catch (err) {
       response.successFalse(
-        3001,
+        3004,
         "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo"
+      );
+    }
+  },
+  updatePassword: async function (data) {
+    try {
+      const password = crypto
+        .createHash("sha512")
+        .update(data.pw)
+        .digest("base64");
+
+      const query = `UPDATE useraccount SET password = '${password}' WHERE id ='${data.userId}';`;
+
+      const connection = await pool.getConnection(async (conn) => conn);
+      const info = await connection.query(query);
+      connection.release();
+      return info;
+    } catch (err) {
+      response.successFalse(
+        3005,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - updatePassword"
       );
     }
   },

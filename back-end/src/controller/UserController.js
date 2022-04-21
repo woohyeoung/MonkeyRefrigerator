@@ -66,8 +66,9 @@ module.exports = {
   getUserInformation: async function (req, res) {
     try {
       const token = req.tokenInfo;
-      const userInfo = await UserDao.selectUserInfo(token.email);
-      console.log(userInfo);
+
+      const userInfo = await UserDao.selectUserInfo(token.userId);
+
       if (userInfo === undefined)
         return res.json(
           response.successFalse(1002, "전체 게시물 목록이 없습니다.")
@@ -91,10 +92,18 @@ module.exports = {
   },
   changePassword: async function (req, res) {
     try {
-      console.log("controeller");
-      const userId = req.body.userId;
-      console.log(uesrId);
-      //const userInfo = await UserDao.selectUserInfo(token.email);
+      const userId = req.tokenInfo.userId;
+      const pw = req.body.body.password;
+      const data = { userId: userId, pw: pw };
+      const result = await UserDao.updatePassword(data);
+
+      return res.json(
+        response.successTrue(
+          2100,
+          "결과 값 변경에 성공했습니다.",
+          result[0].changedRows
+        )
+      );
     } catch (err) {
       return res.json(
         response.successFalse(

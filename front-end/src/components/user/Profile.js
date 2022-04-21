@@ -20,6 +20,10 @@ import TextField from "@mui/material/TextField";
 import "./Profile.css";
 import { useCookies } from "react-cookie";
 
+//icon
+import checkicon from "../../assets/icon/outline_check_circle_black_24dp.png";
+import cancelicon from "../../assets/icon/outline_highlight_off_black_24dp.png";
+
 function Profile() {
   const userStore = useSelector((state) => state.userReducer);
   const tokenReducer = useSelector((state) => state.tokenReducer);
@@ -31,8 +35,6 @@ function Profile() {
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [userInfo, setUserInfo] = useState([]);
-  console.log(tokenReducer);
-  console.log(tokenStore);
 
   useEffect(() => {
     setLoading(true);
@@ -46,7 +48,6 @@ function Profile() {
     }, 3000);
   }, []);
 
-  // useEffect(() => {}, [tokenReducer.token]);
   console.log(userStore);
   useEffect(() => {
     if (userStore.userInformation.data) {
@@ -67,10 +68,24 @@ function Profile() {
 
 export default Profile;
 
-const ProfileBody = (props) => {
+const ProfileBody = React.memo(function (props) {
   const [userInfo, setUserInfo] = useState(props.data);
-  const [startDate, setStartDate] = useState(new Date());
   const [modalOpen, setModalOpen] = useState(false);
+  const [token, setToken] = useState(props.token);
+
+  const [nicknameCheck, setNicknameCheck] = useState(-1); //닉네임 중복 체크
+  // const [id, setId] = useState(props.data.email);
+  const [nickname, setNickname] = useState("");
+  // const [gender, setGender] = useState(userInfo.gender);
+  // const [job, setJob] = useState(userInfo.jobId);
+  // const [startDate, setStartDate] = useState(userInfo.birthday);
+
+  const idInput = useRef();
+  const nicknameInput = useRef();
+
+  const onChangeNickname = (e) => {
+    setNickname(e.target.value);
+  };
 
   const handleModal = (type) => {
     switch (type) {
@@ -98,13 +113,59 @@ const ProfileBody = (props) => {
         return "none";
     }
   };
+
+  const onClickIdChk = (type) => {
+    let typedata;
+    if (type == "nickname") {
+      if (nickname == null || nickname == "") {
+        alert("닉네임을를 입력해주세요.");
+        nicknameInput.current.focus();
+        return;
+      }
+      typedata = nickname;
+    }
+    // 중복 검사를 하기위한 axios api
+    async function check(typedata) {
+      const idDoubleChk = (typedata) => {
+        const result = axios
+          .get(`${baseUrl}idChk`, {
+            params: { id: typedata, type: type },
+          })
+          .then((count) => {
+            if (type == "nickname") {
+              if (count.data.result[0].cnt == 0) {
+                setNicknameCheck(0);
+              } else if (count.data.result[0].cnt > 0) {
+                setNicknameCheck(1);
+              }
+            }
+            return count;
+          });
+
+        return result;
+      };
+      let result = await idDoubleChk(typedata);
+      return result;
+    }
+    check(typedata);
+  };
+  function iconRerender(type) {
+    if (type == "nickname") {
+      if (nicknameCheck == 0) {
+        return <img src={checkicon} />;
+      } else if (nicknameCheck == 1) {
+        return <img src={cancelicon} />;
+      }
+    }
+  }
+
   return (
     <>
       <div>
         <PasswordModal
           open={modalOpen}
           close={() => handleModal("CLOSE")}
-          // userId={userInfo.id}
+          token={token}
         />
       </div>
       <div id="signup_content">
@@ -115,7 +176,7 @@ const ProfileBody = (props) => {
         ) : (
           <Card>
             <CardContent>
-              <h2>{userInfo.name ? userInfo.name : "이름없음"}</h2>
+              <h2>{userInfo.name ? userInfo.name : "이름 없어"}</h2>
               <div className="profile_imgdiv">
                 <img
                   class="profile_img"
@@ -137,7 +198,7 @@ const ProfileBody = (props) => {
                         class="int"
                         value={setValue("email")}
                         maxlength="20"
-                        readOnly
+                        disabled
                       />
                     </span>
                   </div>
@@ -160,14 +221,22 @@ const ProfileBody = (props) => {
                     <span class="box int_pw">
                       <input
                         type="text"
-                        id="nickName"
-                        name="nickName"
                         class="int"
                         maxlength="20"
-                        value={setValue("nickname")}
-                        readOnly
+                        placeholder={setValue("nickname")}
                       />
                     </span>
+                  </div>
+                  <div class="doublechk">
+                    <Button
+                      variant="warning"
+                      onClick={() => {
+                        onClickIdChk("nickname");
+                      }}
+                    >
+                      중복체크
+                    </Button>
+                    {iconRerender("nickname")}
                   </div>
                 </div>
                 <h3>
@@ -255,12 +324,12 @@ const ProfileBody = (props) => {
       </div>
     </>
   );
-};
+});
 
 const PasswordModal = (props) => {
   const dispatch = useDispatch();
 
-  const { open, close, header, userId } = props;
+  const { open, close, header, userId, token } = props;
 
   const [modalStyle, setModalStyle] = useState("none");
   const [pw, setPw] = useState("");
@@ -281,7 +350,7 @@ const PasswordModal = (props) => {
   useEffect(() => {
     setPwRegexCheck(isPw(pw));
   }, [pw]);
-  console.log(props);
+
   const pwSubmit = () => {
     if (!pw) {
       alert("비밀번호를 입력해주세요.");
@@ -297,8 +366,8 @@ const PasswordModal = (props) => {
     }
 
     let formData = {
-      userId: userId,
       password: pw,
+      token: token,
     };
 
     dispatch(pwChange(formData));

@@ -8,5 +8,5 @@ module.exports = function (app) {
   app.route("/idChk").get(user.idDoubleChk);
   app.route("/signupInsert").post(user.signupInsert);
   app.route("/profile").get(jwtMiddleware, user.getUserInformation);
-  app.route("/pwChange").post(user.changePassword);
+  app.route("/pwChange").post(jwtMiddleware, user.changePassword);
 };
