@@ -25,10 +25,10 @@ export const Login = () => {
   const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
   const dispatch = useDispatch();
   const emailHandler = (e) => {
-    setEmail(e.target.value);
+    setEmail(e.currentTarget.value);
   };
   const pwHandler = (e) => {
-    setPw(e.target.value);
+    setPw(e.currentTarget.value);
   };
   const onClickLogin = async (e) => {
     e.preventDefault();

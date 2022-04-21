@@ -10,11 +10,11 @@ import {
 	Spinner,
 } from 'react-spinner-animated';
 
-const Loading = ({ type, color }) => (
+const Loading = ({ type, color, text }) => (
 	<>
 		<Spinner
 			className="border"
-			text={'로딩중... '}
+			text={text}
 			bgColor={'white'}
 			center={true}
 			width={'200px'}

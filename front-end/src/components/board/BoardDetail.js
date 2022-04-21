@@ -101,7 +101,7 @@ function BoardDetail() {
     }
   }
 
-  console.log(board);
+  console.log(board[0][0]);
   return (
     <>
       <div>
@@ -133,9 +133,8 @@ function BoardDetail() {
                   borderRadius: "50%",
                   width: "110px",
                   height: "110px",
-                  position: "static",
                 }}
-                src={board[0][0].profileImg}
+                src={board[1].profileImg}
                 alt="userprofile"
               />
             </div>
@@ -175,16 +174,24 @@ function BoardDetail() {
                   <span>ingredients</span>
                 </div>
                 <div id="readyMaterial">
-                  <ul>
-                    <b>[주재료]</b>
-                    {board[2].map((item, i) => {
-                      return (
-                        <div>
-                          <li>{item.keyName}</li>
-                        </div>
-                      );
-                    })}
-                  </ul>
+                  <b>[주재료]</b>
+                  <div style={{ display: "flex" }}>
+                    <div style={{ width: "50%" }}>
+                      <ul className="hs">
+                        {board[2].map((item, i) => {
+                          return <li>{item.keyName}</li>;
+                        })}
+                      </ul>
+                    </div>
+                    <div style={{ width: "50%" }}>
+                      <ul className="hs">
+                        <li>zz</li>
+                        <li>zz</li>
+                        <li>zz</li>
+                        <li>zz</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="view_step">
@@ -221,10 +228,14 @@ function BoardDetail() {
                     sx={{ color: green[500], marginLeft: "3%" }}
                   />
                   <b style={{ color: "#2a7830", marginLeft: "5%" }}>
-                    {board[0][0].tagName
-                      .replace(/\'/g, "")
-                      .replace(/\[/g, "")
-                      .replace(/\]/g, "")}
+                    {board[0][0].tagName ? (
+                      !board[0][0].tagName
+                        .replace(/\'/g, "")
+                        .replace(/\[/g, "")
+                        .replace(/\]/g, "")
+                    ) : (
+                      <></>
+                    )}
                   </b>
                 </div>
               </div>

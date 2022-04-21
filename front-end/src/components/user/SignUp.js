@@ -411,7 +411,7 @@ function SignUp() {
                 <label for="birth">생년월일</label>
               </h3>
               <div class="box_id">
-                <BirthPick setStartDate={setStartDate} type="signup" />
+                <BirthPick setStartDate={setStartDate} />
               </div>
             </CardContent>
             <div class="btn_submt">

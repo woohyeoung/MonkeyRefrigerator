@@ -18,18 +18,10 @@ import { logout } from "../Header";
 import Cookies from "js-cookie";
 import TextField from "@mui/material/TextField";
 import "./Profile.css";
-import { useCookies } from "react-cookie";
-
-//icon
-import checkicon from "../../assets/icon/outline_check_circle_black_24dp.png";
-import cancelicon from "../../assets/icon/outline_highlight_off_black_24dp.png";
-
 function Profile() {
   const userStore = useSelector((state) => state.userReducer);
   const tokenReducer = useSelector((state) => state.tokenReducer);
   const tokenStore = Cookies.get("accessToken");
-  const [token, setToken] = useState("");
-
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
@@ -38,55 +30,32 @@ function Profile() {
 
   useEffect(() => {
     setLoading(true);
-    if (tokenStore) {
-      dispatch(userInformation(tokenStore));
-      setToken(tokenStore);
-    }
-
+    console.log(tokenReducer.token, " 토큰");
+    if (tokenReducer.token) dispatch(userInformation(tokenReducer.token));
+    else dispatch(userInformation(tokenStore));
     setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 1500);
   }, []);
 
-  console.log(userStore);
   useEffect(() => {
     if (userStore.userInformation.data) {
       setUserInfo([...userStore.userInformation.data.result]);
     }
   }, [userStore.userInformation.data]);
 
-  return (
-    <>
-      {loading ? (
-        <Loading />
-      ) : (
-        <ProfileBody data={userInfo[0]} token={tokenStore} />
-      )}
-    </>
-  );
+  console.log(userStore);
+  console.log(userInfo);
+  return <>{loading ? <Loading /> : <ProfileBody data={userInfo[0]} />}</>;
 }
 
 export default Profile;
 
-const ProfileBody = React.memo(function (props) {
+const ProfileBody = (props) => {
+  console.log(props.data);
   const [userInfo, setUserInfo] = useState(props.data);
+  const [startDate, setStartDate] = useState(new Date());
   const [modalOpen, setModalOpen] = useState(false);
-  const [token, setToken] = useState(props.token);
-
-  const [nicknameCheck, setNicknameCheck] = useState(-1); //닉네임 중복 체크
-  // const [id, setId] = useState(props.data.email);
-  const [nickname, setNickname] = useState("");
-  // const [gender, setGender] = useState(userInfo.gender);
-  // const [job, setJob] = useState(userInfo.jobId);
-  // const [startDate, setStartDate] = useState(userInfo.birthday);
-
-  const idInput = useRef();
-  const nicknameInput = useRef();
-
-  const onChangeNickname = (e) => {
-    setNickname(e.target.value);
-  };
-
   const handleModal = (type) => {
     switch (type) {
       case "OPEN":
@@ -98,9 +67,11 @@ const ProfileBody = React.memo(function (props) {
         return;
     }
   };
-  console.log(userInfo);
+
   const setValue = (type) => {
     switch (type) {
+      case "id":
+        return userInfo.id;
       case "email":
         return userInfo.email;
       case "password":
@@ -113,59 +84,18 @@ const ProfileBody = React.memo(function (props) {
         return "none";
     }
   };
-
-  const onClickIdChk = (type) => {
-    let typedata;
-    if (type == "nickname") {
-      if (nickname == null || nickname == "") {
-        alert("닉네임을를 입력해주세요.");
-        nicknameInput.current.focus();
-        return;
-      }
-      typedata = nickname;
-    }
-    // 중복 검사를 하기위한 axios api
-    async function check(typedata) {
-      const idDoubleChk = (typedata) => {
-        const result = axios
-          .get(`${baseUrl}idChk`, {
-            params: { id: typedata, type: type },
-          })
-          .then((count) => {
-            if (type == "nickname") {
-              if (count.data.result[0].cnt == 0) {
-                setNicknameCheck(0);
-              } else if (count.data.result[0].cnt > 0) {
-                setNicknameCheck(1);
-              }
-            }
-            return count;
-          });
-
-        return result;
-      };
-      let result = await idDoubleChk(typedata);
-      return result;
-    }
-    check(typedata);
-  };
-  function iconRerender(type) {
-    if (type == "nickname") {
-      if (nicknameCheck == 0) {
-        return <img src={checkicon} />;
-      } else if (nicknameCheck == 1) {
-        return <img src={cancelicon} />;
-      }
-    }
-  }
-
+  // useEffect(() => {
+  //   if (props.data) {
+  //     setUserInfo(props.data);
+  //   }
+  // }, [props]);
   return (
     <>
       <div>
         <PasswordModal
           open={modalOpen}
           close={() => handleModal("CLOSE")}
-          token={token}
+          // userId={setValue("id")}
         />
       </div>
       <div id="signup_content">
@@ -176,7 +106,7 @@ const ProfileBody = React.memo(function (props) {
         ) : (
           <Card>
             <CardContent>
-              <h2>{userInfo.name ? userInfo.name : "이름 없어"}</h2>
+              <h2>{userInfo.name ? userInfo.name : "이름없음"}</h2>
               <div className="profile_imgdiv">
                 <img
                   class="profile_img"
@@ -198,7 +128,7 @@ const ProfileBody = React.memo(function (props) {
                         class="int"
                         value={setValue("email")}
                         maxlength="20"
-                        disabled
+                        readOnly
                       />
                     </span>
                   </div>
@@ -221,22 +151,14 @@ const ProfileBody = React.memo(function (props) {
                     <span class="box int_pw">
                       <input
                         type="text"
+                        id="nickName"
+                        name="nickName"
                         class="int"
                         maxlength="20"
-                        placeholder={setValue("nickname")}
+                        value={setValue("nickname")}
+                        readOnly
                       />
                     </span>
-                  </div>
-                  <div class="doublechk">
-                    <Button
-                      variant="warning"
-                      onClick={() => {
-                        onClickIdChk("nickname");
-                      }}
-                    >
-                      중복체크
-                    </Button>
-                    {iconRerender("nickname")}
                   </div>
                 </div>
                 <h3>
@@ -310,7 +232,10 @@ const ProfileBody = React.memo(function (props) {
                   <label for="birth">생년월일</label>
                 </h3>
                 <div class="box_id">
-                  <BirthPick birth={userInfo.birthday} type="profile" />
+                  <BirthPick
+                    setStartDate={startDate}
+                    birth={userInfo.birthday}
+                  />
                 </div>
               </div>
             </CardContent>
@@ -324,23 +249,20 @@ const ProfileBody = React.memo(function (props) {
       </div>
     </>
   );
-});
+};
 
 const PasswordModal = (props) => {
   const dispatch = useDispatch();
-
-  const { open, close, header, userId, token } = props;
-
+  const { open, close, header } = props;
   const [modalStyle, setModalStyle] = useState("none");
   const [pw, setPw] = useState("");
   const [pwCheck, setPwCheck] = useState("");
   const [pwRegexCheck, setPwRegexCheck] = useState(false); //비밀번호 정규식 체크
   const [passwordError, setPasswordError] = useState(false);
-
+  console.log(props.userId);
   const onChangePassword = (e) => {
     setPw(e.target.value);
   };
-
   const onChangePasswordChk = (e) => {
     setPasswordError(e.target.value !== pw);
     setPwCheck(e.target.value);
@@ -364,15 +286,12 @@ const PasswordModal = (props) => {
       alert("비밀번호가 형식에 맞지 않습니다.");
       return;
     }
-
     let formData = {
+      userId: props.userId,
       password: pw,
-      token: token,
     };
-
     dispatch(pwChange(formData));
   };
-
   //비밀번호 정규식 확인(8자 이상, 문자, 숫자, 특수문자 포함)
   const isPw = (password) => {
     const pwRegex =
@@ -383,7 +302,6 @@ const PasswordModal = (props) => {
   useEffect(() => {
     open ? setModalStyle("block") : setModalStyle("none");
   }, [open]);
-
   return (
     <div className={open ? "openModal modal" : "modal"}>
       {open ? (

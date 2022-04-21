@@ -2,15 +2,15 @@
 /* @import '~antd/dist/antd.css'; */
 
 .mainContainer {
-	padding-top: 90px;
-	padding-bottom: 90px;
-	background: #fcf6f5ff;
+  padding-top: 90px;
+  padding-bottom: 90px;
+  background: #fcf6f5ff;
 }
 .mainHeadLine {
-  margin-top: 5%;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 450px;
 }
 .mainVote {
   margin-left: 100px;
@@ -19,6 +19,7 @@
   border: 1px solid #000;
 }
 .mainBodyCon {
+  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,11 +59,10 @@
 }
 .voteModal > section {
   width: 90%;
-  max-width: 600px;
+  max-width: 1000px;
   margin: 0 auto;
   border-radius: 0.3rem;
   background-color: #fff;
-  /* 팝업이 열릴때 스르륵 열리는 효과 */
   animation: modal-show 0.3s;
   overflow: hidden;
 }
@@ -102,7 +102,6 @@
 .voteModal.openModal {
   display: flex;
   align-items: center;
-  /* 팝업이 열릴때 스르륵 열리는 효과 */
   animation: modal-bg-show 0.3s;
 }
 @keyframes modal-show {
@@ -127,4 +126,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.voteCheck {
+  margin-right: 10px;
+  float: right;
+  color: red;
 }

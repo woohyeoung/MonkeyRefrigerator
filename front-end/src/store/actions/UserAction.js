@@ -18,6 +18,21 @@ export const USERINFORMATION_GET = "USERINFORMATION_GET";
 export const USERINFORMATION_GET_SUCCESS = "USERINFORMATION_GET_SUCCESS";
 export const USERINFORMATION_GET_ERROR = "USERINFORMATION_GET_ERROR";
 
+//회원 재료 추가 POST
+export const USERMATERIAL_POST = "USERMATERIAL_POST";
+export const USERMATERIAL_POST_SUCCESS = "USERMATERIAL_POST_SUCCESS";
+export const USERMATERIAL_POST_ERROR = "USERMATERIAL_POST_ERROR";
+
+//회원이 가지고 있는 재료 GET
+export const USERMATERIAL_GET = "USERMATERIAL_GET";
+export const USERMATERIAL_GET_SUCCESS = "USERMATERIAL_GET_SUCCESS";
+export const USERMATERIAL_GET_ERROR = "USERMATERIAL_GET_ERROR";
+
+//회원이 가지고 있는 재료 삭제 DELETE
+export const USERMATERIAL_DELETE = "USERMATERIAL_DELETE";
+export const USERMATERIAL_DELETE_SUCCESS = "USERMATERIAL_DELETE_SUCCESS";
+export const USERMATERIAL_DELETE_ERROR = "USERMATERIAL_DELETE_ERROR";
+
 //사용자 프로필 비밀번호 변경
 export const PASSWORD_UPDATE = "PASSWORD_UPDATE";
 
@@ -30,6 +45,7 @@ export const loginVali = (email, pw) => {
         setCookie("accessToken", token, {
           path: "/",
           maxAge: 3600,
+          // expires:,
           withCredentials: true,
         });
       }
@@ -77,7 +93,46 @@ export const userInformation = createPromiseThunk(
   UserApi.selectUserInformation
 );
 
+export const userMaterialOne = createPromiseThunk(
+  USERMATERIAL_POST,
+  UserApi.saveUserMaterialOne
+);
+export const userMaterialUserId = createPromiseThunk(
+  USERMATERIAL_GET,
+  UserApi.findUserMaterialUserId
+);
+
 export const pwChange = createPromiseThunk(
   PASSWORD_UPDATE,
   UserApi.updatePassword
 );
+
+export const deleteUserGetMaterial = createPromiseThunk(
+  USERMATERIAL_DELETE,
+  UserApi.deleteUserGetMaterialUserId
+);
+export const didVoteChk = () => {
+  return async (dispatch) => {
+    try {
+      let token = getCookie("accessToken");
+      const voteValid = await UserApi.userVoteValid(token);
+      if (voteValid) dispatch({ type: DID_VOTE_CHECK, result: voteValid });
+      else dispatch({ type: DID_VOTE_CHECK, result: voteValid });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const voteBtnClick = (board) => {
+  return async (dispatch) => {
+    try {
+      let token = getCookie("accessToken");
+      const voteClear = await UserApi.userVoteAdd(board, token);
+      console.log(voteClear);
+      dispatch({ type: DID_VOTE_CHECK, result: voteClear.isSuccess });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const DID_VOTE_CHECK = "DID_VOTE_CHECK";

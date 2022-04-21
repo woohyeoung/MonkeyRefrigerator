@@ -10,7 +10,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import gsap from "gsap";
-import dungdunglogo from "../assets/monkey_2.png";
+import dungdunglogo from "../assets/monkey_4.png";
 import Skeleton from "@mui/material/Skeleton";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -19,11 +19,12 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import CheckIcon from "@mui/icons-material/Check";
 import "./Main.css";
 //User
 import { Login } from "./user/Login";
 import SignUp from "./user/SignUp";
-import { handleLogin } from "../store/actions/UserAction";
+import { didVoteChk, handleLogin } from "../store/actions/UserAction";
 import PublicRoute from "./user/PublicRoute";
 import PrivateRoute from "./user/PrivateRoute";
 import Header from "./Header";
@@ -31,16 +32,17 @@ import BoardDetail from "./board/BoardDetail";
 import Profile from "./user/Profile";
 import { Refrigerator } from "./search/Refrigerator";
 import { boardList } from "../store/actions/BoardAction";
+import { voteBtnClick } from "../store/actions/UserAction";
 import BoardList from "./board/BoardList";
 import BoardCreate from "./board/BoardCreate";
 import Cart from "../components/cart/Cart";
+import { Cookies } from "react-cookie";
 
 export default function Main() {
   const dispatch = useDispatch();
   const tokenReducer = useSelector((state) => state.tokenReducer.token);
   useEffect(() => {
     if (tokenReducer === null) dispatch(handleLogin());
-    console.log("main.js");
   });
 
   return (
@@ -88,8 +90,32 @@ const MainLogo = (
     <img src={dungdunglogo} alt="dungdung" />
   </div>
 );
-
+const DidVote = () => {
+  return (
+    <React.Fragment>
+      <CheckIcon className="voteCheck" />
+      <CardContent>
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          이주의 레시피
+        </Typography>
+        <Typography variant="h5" component="div">
+          이번주의 레시피를 투표해주세요!
+        </Typography>
+        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          Pick Me!
+        </Typography>
+        <Typography variant="body2">
+          투표해 주신 분들 중 10분을 추첨해서 상품을 드립니다!
+        </Typography>
+        <Typography className="voteCheck" variant="body2">
+          이미 투표를 완료하셨습니다.
+        </Typography>
+      </CardContent>
+    </React.Fragment>
+  );
+};
 const MainVoteCard = (props) => {
+  const cookies = new Cookies();
   const [modalOpen, setModalOpen] = useState(false);
   const handleModal = (type) => {
     switch (type) {
@@ -119,7 +145,14 @@ const MainVoteCard = (props) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={() => handleModal("OPEN")}>
+        <Button
+          size="small"
+          onClick={() =>
+            cookies.get("accessToken")
+              ? handleModal("OPEN")
+              : alert("로그인 후에 이용해주세요.")
+          }
+        >
           Learn More
         </Button>
       </CardActions>
@@ -157,26 +190,39 @@ const VoteModal = (props) => {
     </div>
   );
 };
+
 const VotePage = (props) => {
+  const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(1);
-  const offset = (page - 1) * 5;
+  const offset = (page - 1) * 3;
+  const voteHandler = (e) => {
+    dispatch(voteBtnClick(e.target.value));
+    alert("투표가 완료되었습니다.");
+    dispatch(didVoteChk());
+    window.location.reload();
+  };
   useEffect(() => {
     setRows([...props.data]);
   }, []);
   return (
     <div className="votePage">
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ width: "100%" }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>번호</TableCell>
-              <TableCell align="right">제목</TableCell>
-              <TableCell align="right">작성자</TableCell>
+              <TableCell sx={{ width: 100 }}>번호</TableCell>
+              <TableCell align="center" sx={{ width: 200 }}>
+                사진
+              </TableCell>
+              <TableCell align="center">제목</TableCell>
+              <TableCell sx={{ width: 100 }} align="center">
+                투표
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(offset, offset + 5).map((row) => (
+            {rows.slice(offset, offset + 3).map((row) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -184,8 +230,19 @@ const VotePage = (props) => {
                 <TableCell component="th" scope="row">
                   {row.id}
                 </TableCell>
-                <TableCell align="right">{row.title}</TableCell>
-                <TableCell align="right">{row.nickname}</TableCell>
+                <TableCell align="center">
+                  <img
+                    style={{ width: "180px", height: "100px" }}
+                    src={row.boardImgPath}
+                    alt="사진"
+                  />
+                </TableCell>
+                <TableCell align="left">{row.title}</TableCell>
+                <TableCell align="center">
+                  <button value={row.id} onClick={voteHandler}>
+                    투표
+                  </button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -240,7 +297,7 @@ const RankCard = (props) => {
             {props.title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {props.content}
+            {props.subtitle}
           </Typography>
         </CardContent>
       </Card>
@@ -289,13 +346,16 @@ const MainPage = () => {
   const boardReducer = useSelector((state) => state.boardReducer);
   const [boardRank, setBoardRank] = useState([]);
   const logoRef = useRef(null);
+  const [isVote, setIsVote] = useState(false); //투표를 했으면 did보여줘 true로 바꿔서
+  const [voteLoading, setVoteLoading] = useState(false); //vote를 불러와 기록을 확인하고 didvotechk로 보내
+  const voteReducer = useSelector((state) => state.userReducer.result);
 
   useEffect(() => {
     gsap.fromTo(
       logoRef.current,
-      { y: 0, opacity: 1 },
+      { y: 50, opacity: 1 },
       {
-        y: -100,
+        y: -50,
         opacity: 0.6,
         repeat: -1,
         yoyo: true,
@@ -304,6 +364,18 @@ const MainPage = () => {
     );
   });
   useEffect(() => {
+    const setVote = async () => {
+      setVoteLoading(true);
+      await dispatch(didVoteChk());
+      setVoteLoading(false);
+    };
+    setVote();
+  }, []);
+  useEffect(() => {
+    console.log(voteReducer);
+    if (voteReducer) setIsVote(voteReducer);
+  }, [voteReducer]);
+  useEffect(() => {
     const setBoard = async () => {
       setLoading(true);
       await dispatch(boardList());
@@ -311,7 +383,6 @@ const MainPage = () => {
     };
     setBoard();
   }, []);
-
   useEffect(() => {
     if (boardReducer.boardList.data)
       setBoardRank([...boardReducer.boardList.data.data.result]);
@@ -323,16 +394,28 @@ const MainPage = () => {
           {MainLogo}
         </div>
         <div className="mainVote">
-          <Card
-            variant="outlined"
-            onClick={() => {
-              modalOn ? setModalOn(false) : setModalOn(true);
-            }}
-          >
-            <MainVoteCard data={boardRank} />
-          </Card>
+          {voteLoading ? (
+            <>
+              <SkeletonLoading />
+            </>
+          ) : isVote ? (
+            <Card variant="outlined">
+              <DidVote />
+            </Card>
+          ) : (
+            <>
+              <Card
+                variant="outlined"
+                onClick={() => {
+                  modalOn ? setModalOn(false) : setModalOn(true);
+                }}
+              >
+                <MainVoteCard data={boardRank} />
+              </Card>
 
-          <VoteModal flag={modalOn} />
+              <VoteModal flag={modalOn} />
+            </>
+          )}
         </div>
       </div>
       {loading ? (

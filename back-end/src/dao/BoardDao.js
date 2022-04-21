@@ -6,18 +6,18 @@ const { pool } = require("../config/database");
 module.exports = {
   selectBoardListFirst: async function () {
     try {
-      const query = `select distinct b.id,
+      const query = `select b.id,
                                   b.title,
                                   b.subtitle,
                                   b.createAt,
                                   u.nickname,
                                   u.profileImg,
-                                  c.name  category,
-                                  bi.path as boardImgPath
+                                  c.name category
+
                            from board b
                                     join useraccount u on b.userId = u.id
                                     join category c on b.categoryId = c.id
-                                    left join boardImage bi on b.id = bi.boardId
+
                            order by b.createAt desc, b.id limit 12;`;
 
       const connection = await pool.getConnection(async (conn) => conn);
@@ -36,18 +36,17 @@ module.exports = {
   },
   selectBoardList: async function (id, createAt) {
     try {
-      const query = `select distinct b.id,
+      const query = `select b.id,
                                   b.title,
                                   b.subtitle,
                                   b.createAt,
                                   u.nickname,
                                   u.profileImg,
-                                  c.name  category,
-                                  bi.path boardImgPath
+                                  c.name category
+
                            from board b
                                     join useraccount u on b.userId = u.id
                                     join category c on b.categoryId = c.id
-                                    left join boardImage bi on b.id = bi.boardId
                            where b.createAt <= ?
                              and b.id > ?
                            order by b.createAt desc, b.id limit 12;`;
@@ -232,6 +231,49 @@ module.exports = {
         response.successFalse(
           4001,
           "데이터베이스 연결에 실패하였습니다. BoardDao error - insertBoardGetMaterial"
+        )
+      );
+    }
+  },
+
+  selectBoardImg: async function (boardId) {
+    try {
+      const query = `select path as boardImgPath
+                           from boardimage
+                           where boardId = ?
+                           order by id limit 1;`;
+      const params = [boardId];
+      const connection = await pool.getConnection(async (conn) => conn);
+      const [rows] = await connection.query(query, params);
+
+      connection.release();
+      return rows;
+    } catch (err) {
+      return res.json(
+        response.successFalse(
+          3005,
+          "데이터베이스 연결에 실패하였습니다. BoardDao error - selectMaterialKey"
+        )
+      );
+    }
+  },
+  selectBoardImg: async function (boardId) {
+    try {
+      const query = `select path as boardImgPath
+                           from boardimage
+                           where boardId = ?
+                           order by id limit 1;`;
+      const params = [boardId];
+      const connection = await pool.getConnection(async (conn) => conn);
+      const [rows] = await connection.query(query, params);
+
+      connection.release();
+      return rows;
+    } catch (err) {
+      return res.json(
+        response.successFalse(
+          3005,
+          "데이터베이스 연결에 실패하였습니다. BoardDao error - selectMaterialKey"
         )
       );
     }

@@ -5,7 +5,10 @@ const jwt = require("jsonwebtoken");
 const response = require("../utils/response");
 
 module.exports = jwtMiddleware = async (req, res, next) => {
-  const accessToken = req.get("accessToken") || req.headers["accessToken"];
+  const accessToken =
+    req.get("accessToken") ||
+    req.headers.accessToken ||
+    req.headers["accessToken"];
   if (accessToken == undefined || !accessToken) {
     return res.json(response.successFalse(403, "유효하지 않은 토큰입니다."));
   } else {

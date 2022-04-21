@@ -1,3 +1,4 @@
+@import '~antd/dist/antd.css';
 @font-face {
 	font-family: 'BMDOHYEON';
 	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff')
@@ -7,4 +8,5 @@
 }
 .abc {
 	font-family: BMDOHYEON;
+	border: 1px solid #d3d3d3;
 }
