@@ -104,4 +104,106 @@ module.exports = {
       );
     }
   },
+
+  selectUserGetMaterialCount: async function (userId) {
+    try {
+      const query = `select count(id) count
+                           from usergetmaterial
+                           where userId = ?;
+            `;
+      const connection = await pool.getConnection(async (conn) => conn);
+      const params = [userId];
+      const [info] = await connection.query(query, params);
+      connection.release();
+      return info[0].count;
+    } catch (err) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo"
+      );
+    }
+  },
+
+  insertUserGetMaterial: async function (data) {
+    try {
+      const query = `insert into usergetmaterial(userId, materialId) value (?,?);`;
+      const connection = await pool.getConnection(async (conn) => conn);
+      const params = [data.userId, data.material.id];
+      const [info] = await connection.query(query, params);
+      connection.release();
+      return info;
+    } catch (err) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo"
+      );
+    }
+  },
+  selectUserGetMaterialUserId: async function (userId) {
+    try {
+      const query = `select ugm.id id, materialId, keyName
+                           from usergetmaterial ugm
+                                    join material_r mr on mr.id = ugm.materialId
+                           where userId = ?;`;
+      const connection = await pool.getConnection(async (conn) => conn);
+      const params = [userId];
+      const [row] = await connection.query(query, params);
+      connection.release();
+      return row;
+    } catch (err) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo"
+      );
+    }
+  },
+  deleteUserGetMaterial: async function (data) {
+    try {
+      const query = `delete
+                           from usergetmaterial
+                           where userId = ?
+                             and materialId = ?;`;
+      const connection = await pool.getConnection(async (conn) => conn);
+      const params = [data.userId, data.materialId];
+      const [info] = await connection.query(query, params);
+      connection.release();
+      return info;
+    } catch (err) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo"
+      );
+    }
+  },
+  selectUserVote: async function (id) {
+    try {
+      const query = `select userId from boardvoteuser 
+		  where userId='${id}'and 
+		  createAt <= (select adddate(curdate(), -weekday(curdate()) + 6) as sunday from dual) and 
+		  createAt >= (select adddate(curdate(), -weekday(curdate()) + 0) as monday from dual);`;
+      const connection = await pool.getConnection(async (conn) => conn);
+      const [vote] = await connection.query(query);
+      connection.release();
+      return vote;
+    } catch (err) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserVote"
+      );
+    }
+  },
+  insertUserVote: async function (board, user) {
+    try {
+      const query = `insert into boardvoteuser (boardId, userId) values(${board},${user});`;
+      const connection = await pool.getConnection(async (conn) => conn);
+      const solution = await connection.query(query);
+      connection.release();
+      return solution;
+    } catch (err) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - insertUserVote"
+      );
+    }
+  },
 };
