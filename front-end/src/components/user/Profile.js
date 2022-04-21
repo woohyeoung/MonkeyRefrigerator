@@ -29,7 +29,6 @@ function Profile(props) {
   const tokenReducer = useSelector((state) => state.tokenReducer);
   const tokenStore = Cookies.get("accessToken");
   const [token, setToken] = useState("");
-  console.log(props.token);
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
