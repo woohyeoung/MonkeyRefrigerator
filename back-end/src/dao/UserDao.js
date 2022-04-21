@@ -84,7 +84,6 @@ module.exports = {
       );
     }
   },
-
   updatePassword: async function (data) {
     try {
       const password = crypto
