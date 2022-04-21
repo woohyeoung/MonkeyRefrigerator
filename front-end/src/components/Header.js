@@ -11,10 +11,10 @@ import {
 	mdiClipboardPlus,
 	mdiMenu,
 	mdiLogout,
+	mdiCart,
 } from '@mdi/js';
 
 import Icon from '@mdi/react';
-import logoImg from '../assets/monkey_2.png';
 //router
 import { Link } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
@@ -31,22 +31,19 @@ function Header() {
 	const menu1 = useRef();
 	const menu2 = useRef();
 	const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
-	const tokenStore = useSelector((state) => state.tokenReducer.token);
 
 	useEffect(() => {
 		dispatch(handleLogin());
 	});
-	// useEffect(() => {
-	//   const cookies = new Cookies();
-	//   if (tokenStore === null && cookies.get("accessToken")) {
-	//     logout();
-	//     alert("토큰이 만료되어 로그아웃되었습니다.");
-	//   }
-	// });
+	useEffect(() => {
+		if (isLogin && !tokenReducer) {
+			logout();
+			alert('토큰이 만료되어 로그아웃 되었습니다.');
+		}
+	}, [tokenReducer]);
 	useEffect(() => {
 		tokenReducer ? setIsLogin(true) : setIsLogin(false);
-	});
-	const onClickLogo = () => {};
+	}, [tokenReducer]);
 	return (
 		<>
 			<header>
@@ -74,10 +71,32 @@ function Header() {
 						<div className="h-title">
 							<span>Monkey Refrigerator</span>
 						</div>
-
+						<div className="h-nav-item-alw">
+							<Link to="/search">
+								<Icon
+									className="searchIcon"
+									path={mdiMagnify}
+									title="search"
+									size={2}
+									color="white"
+								/>
+								{/* <div className="sub-title">검색</div> */}
+							</Link>
+							<div>
+								<Link to="/board">
+									<Icon
+										path={mdiClipboardText}
+										title="board"
+										size={2}
+										color="white"
+									/>
+									{/* <div className="sub-title">레시피</div> */}
+								</Link>
+								<hr />
+							</div>
+						</div>
 						<div
 							className="h-menu"
-							style={{ cursor: 'pointer' }}
 							onClick={(e) => {
 								setMenu(!menu);
 								if (style.display === 'none') {
@@ -94,16 +113,6 @@ function Header() {
 							{isLogin && menu ? (
 								<div>
 									<div className="h-nav-item" style={style} ref={menu1}>
-										<Link to="/search">
-											<Icon
-												path={mdiMagnify}
-												title="search"
-												size={2}
-												color="white"
-											/>
-											<div className="sub-title">검색</div>
-										</Link>
-
 										<hr />
 
 										<Link to="/create">
@@ -131,17 +140,36 @@ function Header() {
 										<hr />
 
 										<Link to="/profile">
-											<Icon path={mdiAccount} title="profile" size={2} />
+											<Icon
+												path={mdiAccount}
+												title="profile"
+												size={2}
+												color="white"
+											/>
 											<div className="sub-title">프로필</div>
 										</Link>
 										<hr />
-										<Icon
-											path={mdiLogout}
-											title="logout"
-											size={2}
-											onClick={logout}
-										/>
-										<div className="logout">로그아웃</div>
+
+										<Link to="/cart">
+											<Icon
+												path={mdiCart}
+												title="cart"
+												size={2}
+												color="white"
+											/>
+											<div className="sub-title">장바구니</div>
+										</Link>
+										<hr />
+										<Link>
+											<Icon
+												path={mdiLogout}
+												title="logout"
+												size={2}
+												onClick={logout}
+												color="white"
+											/>
+											<div className="sub-title">로그아웃</div>
+										</Link>
 									</div>
 								</div>
 							) : (
@@ -150,18 +178,6 @@ function Header() {
 							{!isLogin && menu ? (
 								<div>
 									<div className="h-nav-item" style={style} ref={menu2}>
-										<div>
-											<Link to="/board">
-												<Icon
-													path={mdiClipboardText}
-													title="board"
-													size={2}
-													color="white"
-												/>
-												<div className="sub-title">레시피</div>
-											</Link>
-											<hr />
-										</div>
 										<div>
 											<Link to="/signup">
 												<Icon

@@ -1,0 +1,11 @@
+.carthhead {
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+  align-items: center;
+}
+.cartbbody {
+  margin: 10px auto;
+  width: 70%;
+  min-width: 1200px;
+}

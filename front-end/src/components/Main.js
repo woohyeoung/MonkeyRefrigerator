@@ -33,12 +33,14 @@ import { Refrigerator } from './search/Refrigerator';
 import { boardList } from '../store/actions/BoardAction';
 import BoardList from './board/BoardList';
 import BoardCreate from './board/BoardCreate';
+import Cart from '../components/cart/Cart';
 
 export default function Main() {
 	const dispatch = useDispatch();
 	const tokenReducer = useSelector((state) => state.tokenReducer.token);
 	useEffect(() => {
 		if (tokenReducer === null) dispatch(handleLogin());
+		console.log('main.js');
 	});
 
 	return (
@@ -61,7 +63,6 @@ export default function Main() {
 						path="/signup"
 						exact
 					/>
-					<PrivateRoute component={Profile} path="/profile" exact />
 					<PublicRoute
 						restricted={false}
 						component={BoardList}
@@ -69,10 +70,13 @@ export default function Main() {
 						exact
 					/>
 					<PublicRoute component={BoardCreate} path="/create" exact />
+					<PrivateRoute component={Profile} path="/profile" exact />
 					<PrivateRoute component={Refrigerator} path="/refrigerator" exact />
-					<Route path="/board/:id">
-						<BoardDetail />
+					<PrivateRoute component={BoardDetail} path="/board/:id" exact />
+					<Route path="/cart">
+						<Cart />
 					</Route>
+					{/* <PrivateRoute component={Cart} path="/cart" exact /> */}
 				</Switch>
 			</div>
 		</>
@@ -284,7 +288,6 @@ const MainPage = () => {
 	const offset = (page - 1) * 5;
 	const boardReducer = useSelector((state) => state.boardReducer);
 	const [boardRank, setBoardRank] = useState([]);
-	const [imgPath, setImgPath] = useState([]);
 	const logoRef = useRef(null);
 
 	useEffect(() => {

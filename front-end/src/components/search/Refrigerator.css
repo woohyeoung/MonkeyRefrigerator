@@ -91,3 +91,7 @@
 	width: 300px;
 	position: absolute;
 }
+@media screen and (max-width: 768px) {
+	.searchModal {
+	}
+}
