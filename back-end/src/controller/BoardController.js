@@ -4,14 +4,21 @@ const jwt = require('jsonwebtoken');
 
 const boardDao = require('../dao/BoardDao');
 const s3 = require('../utils/awsS3');
+const { selectBoardImg } = require('../dao/BoardDao');
 
 module.exports = {
 	findBoardAll: async function (req, res) {
 		try {
 			const boardList = await boardDao.selectBoardListFirst();
+
+			for (let i = 0; i < boardList.length; i++) {
+				let boardImg = await selectBoardImg(boardList[i].id);
+				boardList[i].boardImgPath = boardImg[0].boardImgPath;
+			}
+			// console.log(boardList)
 			const boardCount = await boardDao.selectBoardCount();
 			boardList[0].boardCount = boardCount[0].boardCount;
-			if (boardList === undefined) {
+			if (boardList.length === 0) {
 				return res.json(
 					response.successFalse(1001, '전체 게시물 목록이 없습니다.')
 				);
@@ -40,8 +47,12 @@ module.exports = {
 			let newCreateAt = new Date(createAt);
 
 			const boardList = await boardDao.selectBoardList(id, newCreateAt);
+			for (let i = 0; i < boardList.length; i++) {
+				let boardImg = await selectBoardImg(boardList[i].id);
+				boardList[i].boardImgPath = boardImg[0].boardImgPath;
+			}
 
-			if (boardList === undefined) {
+			if (boardList.length === 0) {
 				return res.json(
 					response.successFalse(
 						1002,
@@ -69,7 +80,7 @@ module.exports = {
 	findBoardCategory: async function (req, res) {
 		try {
 			const categoryList = await boardDao.selectBoardCategory();
-			if (categoryList === undefined) {
+			if (categoryList.length === 0) {
 				return res.json(
 					response.successFalse(1003, '카테고리 목록이 없습니다.')
 				);
@@ -96,7 +107,7 @@ module.exports = {
 		try {
 			let keyword = req.query.keyword;
 			const materailList = await boardDao.selectMaterialKey(keyword);
-			if (materailList === undefined) {
+			if (materailList.length === 0) {
 				return res.json(response.successFalse(1004, '해당 재료가 없습니다.'));
 			}
 
@@ -119,6 +130,8 @@ module.exports = {
 
 	saveBoardOne: async function (req, res) {
 		try {
+			console.log(req.files);
+
 			let userId = req.tokenInfo.userId;
 			let board = {
 				user: {
@@ -206,6 +219,33 @@ module.exports = {
 		}
 	},
 
+	findBoardDetail: async function (req, res) {
+		try {
+			let id = req.query.id;
+			const boardDetail = await boardDao.selectBoardDetail(id);
+
+			if (boardDetail === undefined) {
+				return res.json(
+					response.successFalse(1002, '전체 게시물 목록이 없습니다.')
+				);
+			}
+
+			return res.json(
+				response.successTrue(
+					2001,
+					'전체 게시물 첫번째 목록 조회에 성공하였습니다.',
+					boardDetail
+				)
+			);
+		} catch (err) {
+			return res.json(
+				response.successFalse(
+					1001,
+					'서버와 통신에 실패하였습니다. BoardController/BoardDao error - findBoardAll'
+				)
+			);
+		}
+	},
 	findBoardDetail: async function (req, res) {
 		try {
 			let id = req.query.id;

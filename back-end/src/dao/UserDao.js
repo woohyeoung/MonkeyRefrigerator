@@ -25,6 +25,20 @@ module.exports = {
 			const query = `SELECT count(*) as cnt FROM useraccount WHERE ${type}='${id}';`;
 			const connection = await pool.getConnection(async (conn) => conn);
 			const [info] = await connection.query(query);
+			connection.release();
+			return info;
+		} catch (err) {
+			return res.json(
+				response.successFalse(
+					3001,
+					'데이터베이스 연결에 실패하였습니다. UserDao error - selectIdDoubleChk'
+				)
+			);
+		}
+	},
+	insertSignup: async function (data) {
+		try {
+			const { password2, salt } = await createHashedPassword(data.password);
 
 			connection.release();
 			return info;
@@ -110,7 +124,7 @@ module.exports = {
 		try {
 			const query = `insert into usergetmaterial(userId, materialId) value (?,?);`;
 			const connection = await pool.getConnection(async (conn) => conn);
-			const params = [data.user.id, data.material.id];
+			const params = [data.userId, data.material.id];
 			const [info] = await connection.query(query, params);
 			connection.release();
 			return info;
@@ -132,6 +146,24 @@ module.exports = {
 			const [row] = await connection.query(query, params);
 			connection.release();
 			return row;
+		} catch (err) {
+			response.successFalse(
+				3001,
+				'데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo'
+			);
+		}
+	},
+	deleteUserGetMaterial: async function (data) {
+		try {
+			const query = `delete
+                           from usergetmaterial
+                           where userId = ?
+                             and materialId = ?;`;
+			const connection = await pool.getConnection(async (conn) => conn);
+			const params = [data.userId, data.materialId];
+			const [info] = await connection.query(query, params);
+			connection.release();
+			return info;
 		} catch (err) {
 			response.successFalse(
 				3001,

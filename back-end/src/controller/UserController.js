@@ -92,15 +92,24 @@ module.exports = {
 
 	saveUserMaterialOne: async function (req, res) {
 		const data = req.body;
-		data.user.id = req.tokenInfo.userId;
+		console.log(data);
+		data.userId = req.tokenInfo.userId;
+		console.log(data.userId);
 		try {
-			let cnt = await UserDao.selectUserGetMaterialCount(data.user.id);
+			let cnt = await UserDao.selectUserGetMaterialCount(data.userId);
 			if (cnt > 5) {
 				return res.json(
 					response.successFalse(7101, '5개이상 담을 수 없습니다.')
 				);
 			}
 			let insertInfo = await UserDao.insertUserGetMaterial(data);
+			return res.json(
+				response.successTrue(
+					1001,
+					'해당 회원이 가지고 있는  재료 1개를 추가하였습니다.',
+					insertInfo
+				)
+			);
 		} catch (err) {
 			return res.json(
 				response.successFalse(
@@ -132,6 +141,29 @@ module.exports = {
 				response.successFalse(
 					1001,
 					'서버와 통신에 실패하였습니다. UserController/UserDao error - findUserMaterialUserId'
+				)
+			);
+		}
+	},
+
+	deleteUserMaterialOne: async function (req, res) {
+		const data = req.body;
+		console.log(data);
+		data.userId = req.tokenInfo.userId;
+		try {
+			let deleteInfo = await UserDao.deleteUserGetMaterial(data);
+			return res.json(
+				response.successTrue(
+					1001,
+					'해당 회원이 가지고 있는  재료 1개를 추가하였습니다.',
+					deleteInfo
+				)
+			);
+		} catch (err) {
+			return res.json(
+				response.successFalse(
+					1001,
+					'서버와 통신에 실패하였습니다. UserController/UserDao error - saveUserMaterialOne'
 				)
 			);
 		}
