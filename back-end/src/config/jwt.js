@@ -9,6 +9,7 @@ module.exports = jwtMiddleware = async (req, res, next) => {
     req.get("accessToken") ||
     req.headers.accessToken ||
     req.headers["accessToken"];
+
   if (accessToken == undefined || !accessToken) {
     return res.json(response.successFalse(403, "유효하지 않은 토큰입니다."));
   } else {
@@ -19,7 +20,9 @@ module.exports = jwtMiddleware = async (req, res, next) => {
           else resolve(decoded);
         });
       });
+      console.log(tokenInfo);
       req.tokenInfo = tokenInfo;
+      console.log(req);
       console.log("토큰 유효성 검사 완료");
       next();
     } catch (err) {

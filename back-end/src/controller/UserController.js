@@ -65,6 +65,7 @@ module.exports = {
   },
   getUserInformation: async function (req, res) {
     try {
+      console.log("hihihihihih");
       const token = req.tokenInfo;
 
       const userInfo = await UserDao.selectUserInfo(token.userId);
