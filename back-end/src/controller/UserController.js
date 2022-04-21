@@ -174,12 +174,13 @@ module.exports = {
     try {
       let tokenId = req.tokenInfo.userId;
       const userVote = await UserDao.selectUserVote(tokenId);
-      if (userVote)
+      console.log(userVote);
+      if (userVote.length > 0)
         return res.json(
-          response.successFalse(1001, "이미 투표를 완료하였습니다.")
+          response.successTrue(1001, "이미 투표를 완료하였습니다.", userVote)
         );
       return res.json(
-        response.successTrue(2001, "아직 투표를 완료하지 않았습니다.", userVote)
+        response.successFalse(2001, "아직 투표를 완료하지 않았습니다.")
       );
     } catch {
       return res.json(
