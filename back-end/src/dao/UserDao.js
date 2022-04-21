@@ -1,24 +1,24 @@
 //UserDao.js
-const response = require("../utils/response");
-const {pool} = require("../config/database");
-const crypto = require("crypto");
+const response = require('../utils/response');
+const {pool} = require('../config/database');
+const crypto = require('crypto');
 const base64crypto = (password) => {
-    crypto.createHash("sha512").update(password).digest("base64");
+    crypto.createHash('sha512').update(password).digest('base64');
 };
 const createSalt = () =>
     new Promise((resolve, reject) => {
         crypto.randomBytes(64, (err, buf) => {
             if (err) reject(err);
-            resolve(buf.toString("base64"));
+            resolve(buf.toString('base64'));
         });
     });
 
 const createHashedPassword = (plainPassword) =>
     new Promise(async (resolve, reject) => {
         const salt = await createSalt();
-        crypto.pbkdf2(plainPassword, salt, 9999, 64, "sha512", (err, key) => {
+        crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
             if (err) reject(err);
-            resolve({password: key.toString("base64"), salt});
+            resolve({password: key.toString('base64'), salt});
         });
     });
 
@@ -36,7 +36,7 @@ module.exports = {
         } catch (err) {
             return response.successFalse(
                 3001,
-                "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserAccount"
+                '데이터베이스 연결에 실패하였습니다. UserDao error - selectUserAccount'
             );
         }
     },
@@ -53,7 +53,7 @@ module.exports = {
             return res.json(
                 response.successFalse(
                     3001,
-                    "데이터베이스 연결에 실패하였습니다. UserDao error - selectIdDoubleChk"
+                    '데이터베이스 연결에 실패하였습니다. UserDao error - selectIdDoubleChk'
                 )
             );
         }
@@ -86,7 +86,7 @@ module.exports = {
         } catch (err) {
             response.successFalse(
                 3001,
-                "데이터베이스 연결에 실패하였습니다. UserDao error - insertSignup"
+                '데이터베이스 연결에 실패하였습니다. UserDao error - insertSignup'
             );
         }
     },
@@ -102,11 +102,10 @@ module.exports = {
         } catch (err) {
             response.successFalse(
                 3001,
-                "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo"
+                '데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo'
             );
         }
     },
-
 
     selectUserGetMaterialCount: async function (userId) {
         try {
@@ -122,7 +121,7 @@ module.exports = {
         } catch (err) {
             response.successFalse(
                 3001,
-                "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo"
+                '데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo'
             );
         }
     },
@@ -131,14 +130,14 @@ module.exports = {
         try {
             const query = `insert into usergetmaterial(userId, materialId) value (?,?);`;
             const connection = await pool.getConnection(async (conn) => conn);
-            const params = [data.user.id, data.material.id];
+            const params = [data.userId, data.material.id];
             const [info] = await connection.query(query, params);
             connection.release();
-            return info
+            return info;
         } catch (err) {
             response.successFalse(
                 3001,
-                "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo"
+                '데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo'
             );
         }
     },
@@ -156,7 +155,25 @@ module.exports = {
         } catch (err) {
             response.successFalse(
                 3001,
-                "데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo"
+                '데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo'
+            );
+        }
+    },
+    deleteUserGetMaterial: async function (data) {
+        try {
+            const query = `delete
+                           from usergetmaterial
+                           where userId = ?
+                             and materialId = ?;`;
+            const connection = await pool.getConnection(async (conn) => conn);
+            const params = [data.userId, data.materialId];
+            const [info] = await connection.query(query, params);
+            connection.release();
+            return info;
+        } catch (err) {
+            response.successFalse(
+                3001,
+                '데이터베이스 연결에 실패하였습니다. UserDao error - selectUserInfo'
             );
         }
     },

@@ -4,14 +4,21 @@ const jwt = require('jsonwebtoken');
 
 const boardDao = require('../dao/BoardDao');
 const s3 = require('../utils/awsS3');
+const {selectBoardImg} = require("../dao/BoardDao");
 
 module.exports = {
     findBoardAll: async function (req, res) {
         try {
             const boardList = await boardDao.selectBoardListFirst();
+
+            for (let i = 0; i < boardList.length; i++) {
+                let boardImg = await selectBoardImg(boardList[i].id)
+                boardList[i].boardImgPath = boardImg[0].boardImgPath;
+            }
+            // console.log(boardList)
             const boardCount = await boardDao.selectBoardCount();
             boardList[0].boardCount = boardCount[0].boardCount;
-            if (boardList.length ===0) {
+            if (boardList.length === 0) {
                 return res.json(
                     response.successFalse(1001, '전체 게시물 목록이 없습니다.')
                 );
@@ -40,8 +47,12 @@ module.exports = {
             let newCreateAt = new Date(createAt);
 
             const boardList = await boardDao.selectBoardList(id, newCreateAt);
+            for (let i = 0; i < boardList.length; i++) {
+                 let boardImg = await selectBoardImg(boardList[i].id)
+                boardList[i].boardImgPath = boardImg[0].boardImgPath;
+            }
 
-            if (boardList.length ===0) {
+            if (boardList.length === 0) {
                 return res.json(
                     response.successFalse(
                         1002,
@@ -69,7 +80,7 @@ module.exports = {
     findBoardCategory: async function (req, res) {
         try {
             const categoryList = await boardDao.selectBoardCategory();
-            if (categoryList.length ===0) {
+            if (categoryList.length === 0) {
                 return res.json(
                     response.successFalse(1003, '카테고리 목록이 없습니다.')
                 );

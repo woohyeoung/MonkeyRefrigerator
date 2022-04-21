@@ -9,7 +9,8 @@ module.exports = function (app) {
     app.route("/signupInsert").post(user.signupInsert);
     app.route("/profile").get(jwtMiddleware, user.getUserInformation);
 
-    app.route("/user/material").post(jwtMiddleware,user.saveUserMaterialOne)
-    app.route("/user/material").get(jwtMiddleware,user.findUserMaterialUserId)
+    app.route("/user/material").post(jwtMiddleware, user.saveUserMaterialOne)
+    app.route("/user/material").get(jwtMiddleware, user.findUserMaterialUserId)
+    app.route("/user/material").delete(jwtMiddleware, user.deleteUserMaterialOne)
 
 };
