@@ -9,12 +9,9 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { mdiCartVariant, mdiHeart, mdiComment } from '@mdi/js';
 import Icon from '@mdi/react';
 
@@ -91,8 +88,8 @@ export default function BoardCard(props) {
 			<CardActions disableSpacing>
 				<Icon path={mdiCartVariant} title="menu" size={1} color="black" />
 				<div style={{ fontFamily: 'BMDOHYEON', margin: '0 5px 0 0' }}>{99}</div>
-				<Icon path={mdiHeart} title="menu" size={1} color="red" />
-				<div style={{ fontFamily: 'BMDOHYEON', margin: '0 5px 0 0' }}>{99}</div>
+				{/* <Icon path={mdiHeart} title="menu" size={1} color="red" />
+				<div style={{ fontFamily: 'BMDOHYEON', margin: '0 5px 0 0' }}>{99}</div> */}
 				{/* <Icon path={mdiComment} title="menu" size={1} color="#ffeb3b" />
 				<div style={{ fontFamily: 'BMDOHYEON', margin: '0 5px 0 0' }}>{99}</div> */}
 

@@ -4,18 +4,24 @@ import { baseUrl } from './BaseUrl';
 
 //board API -- 조회순 첫번째 목록
 export const findBoardAll = () => {
-	const result = axios.get(baseUrl + 'board');
+	const result = axios.get(baseUrl + 'board').catch((err) => {
+		console.log(err);
+	});
 	return result;
 };
 
 //board API -- 조회순 첫번째 이후 목록
 export const findBoardAllAfter = (page) => {
-	const result = axios.get(baseUrl + 'board/page', {
-		params: {
-			id: page.id,
-			createAt: page.createAt,
-		},
-	});
+	const result = axios
+		.get(baseUrl + 'board/page', {
+			params: {
+				id: page.id,
+				createAt: page.createAt,
+			},
+		})
+		.catch((err) => {
+			console.log(err);
+		});
 	return result;
 };
 
@@ -30,23 +36,27 @@ export const findBoardDetail = async (boards) => {
 
 //board category API -- 카테고리 목록 조회
 export const findBoardCategory = () => {
-	const result = axios.get(baseUrl + 'board/category');
+	const result = axios.get(baseUrl + 'board/category').catch((err) => {
+		console.log(err);
+	});
 	return result;
 };
 //material API -- 재료 검색 조회
 export const findMaterial = (keyword) => {
-	const result = axios.get(baseUrl + 'board/material/search', {
-		params: {
-			keyword: keyword,
-		},
-	});
+	const result = axios
+		.get(baseUrl + 'board/material/search', {
+			params: {
+				keyword: keyword,
+			},
+		})
+		.catch((err) => {
+			console.log(err);
+		});
 
 	return result;
 };
 
 export const saveBoardOne = (data) => {
-	console.log(data);
-	console.log(data.token);
 	const result = axios.post(baseUrl + 'board/create', data.formData, {
 		headers: {
 			'Content-Type': 'multipart/form-data',
@@ -55,6 +65,6 @@ export const saveBoardOne = (data) => {
 			accessToken: data.token,
 		},
 	});
-	console.log(result);
+
 	return result;
 };
