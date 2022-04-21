@@ -100,8 +100,6 @@ function BoardDetail() {
       return strAry2;
     }
   }
-
-  console.log(board[0][0]);
   return (
     <>
       <div>
