@@ -203,4 +203,19 @@ module.exports = {
       );
     }
   },
+  changePassword: async function (req, res) {
+    try {
+      console.log("controeller");
+      const userId = req.body.userId;
+      console.log(uesrId);
+      //const userInfo = await UserDao.selectUserInfo(token.email);
+    } catch (err) {
+      return res.json(
+        response.successFalse(
+          1001,
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - changePassword"
+        )
+      );
+    }
+  },
 };

@@ -14,4 +14,5 @@ module.exports = function (app) {
   app.route("/user/material").delete(jwtMiddleware, user.deleteUserMaterialOne);
   app.route("/uservote").get(jwtMiddleware, user.voteValid);
   app.route("/voteadd").post(jwtMiddleware, user.voteUser);
+  app.route("/pwChange").post(user.changePassword);
 };

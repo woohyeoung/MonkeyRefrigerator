@@ -45,7 +45,7 @@ export const loginVali = (email, pw) => {
         setCookie("accessToken", token, {
           path: "/",
           maxAge: 3600,
-          // expires:,
+          expires: 1800,
           withCredentials: true,
         });
       }
