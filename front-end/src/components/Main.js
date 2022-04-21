@@ -75,10 +75,10 @@ export default function Main() {
           <PrivateRoute component={Profile} path="/profile" exact />
           <PrivateRoute component={Refrigerator} path="/refrigerator" exact />
           <PrivateRoute component={BoardDetail} path="/board/:id" exact />
-          <Route path="/cart">
+          {/* <Route path="/cart">
             <Cart />
-          </Route>
-          {/* <PrivateRoute component={Cart} path="/cart" exact /> */}
+          </Route> */}
+          <PrivateRoute component={Cart} path="/cart" exact />
         </Switch>
       </div>
     </>
@@ -197,10 +197,13 @@ const VotePage = (props) => {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * 3;
   const voteHandler = (e) => {
-    dispatch(voteBtnClick(e.target.value));
+    const votHeesoo = async () => {
+      dispatch(voteBtnClick(e.target.value));
+      await dispatch(didVoteChk());
+    };
+    votHeesoo();
     alert("투표가 완료되었습니다.");
-    dispatch(didVoteChk());
-    window.location.reload();
+    // window.location.reload();
   };
   useEffect(() => {
     setRows([...props.data]);
@@ -346,8 +349,8 @@ const MainPage = () => {
   const boardReducer = useSelector((state) => state.boardReducer);
   const [boardRank, setBoardRank] = useState([]);
   const logoRef = useRef(null);
-  const [isVote, setIsVote] = useState(false); //투표를 했으면 did보여줘 true로 바꿔서
-  const [voteLoading, setVoteLoading] = useState(false); //vote를 불러와 기록을 확인하고 didvotechk로 보내
+  const [isVote, setIsVote] = useState(false);
+  const [voteLoading, setVoteLoading] = useState(false);
   const voteReducer = useSelector((state) => state.userReducer.result);
 
   useEffect(() => {
@@ -372,7 +375,6 @@ const MainPage = () => {
     setVote();
   }, []);
   useEffect(() => {
-    console.log(voteReducer);
     if (voteReducer) setIsVote(voteReducer);
   }, [voteReducer]);
   useEffect(() => {

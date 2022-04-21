@@ -127,7 +127,6 @@ export const voteBtnClick = (board) => {
     try {
       let token = getCookie("accessToken");
       const voteClear = await UserApi.userVoteAdd(board, token);
-      console.log(voteClear);
       dispatch({ type: DID_VOTE_CHECK, result: voteClear.isSuccess });
     } catch (error) {
       console.log(error);

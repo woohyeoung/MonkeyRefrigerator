@@ -31,18 +31,20 @@ function Header() {
   const menu2 = useRef();
   const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
   useEffect(() => {
-    dispatch(handleLogin());
-  }, []);
-  useEffect(() => {
     if (isLogin && !tokenReducer) {
-      logout();
-      alert("토큰이 만료되어 로그아웃 되었습니다.");
+      const cookie = new Cookies();
+      if (cookie.get("accessToken")) {
+        dispatch(handleLogin());
+        window.location.reload();
+      } else {
+        logout();
+        alert("토큰이 만료되어 로그아웃 되었습니다.");
+      }
     }
-  }, [tokenReducer]);
+  });
   useEffect(() => {
     tokenReducer ? setIsLogin(true) : setIsLogin(false);
   }, [tokenReducer]);
-
   return (
     <>
       <header>

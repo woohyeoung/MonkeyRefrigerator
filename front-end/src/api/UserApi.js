@@ -118,7 +118,7 @@ export const userVoteValid = async (token) => {
   const result = axios
     .get(`${baseUrl}uservote`, {
       headers: {
-        Authorization: token,
+        accessToken: token,
       },
     })
     .then((res) => res.data)
