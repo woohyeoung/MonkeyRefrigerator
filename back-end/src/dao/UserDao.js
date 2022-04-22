@@ -194,7 +194,7 @@ module.exports = {
   },
   insertUserVote: async function (board, user) {
     try {
-      const query = `insert into boardvoteuser (boardId, userId) values(${board},${user});`;
+      const query = `insert into boardvoteuser(boardId, userId) values(${board},${user});`;
       const connection = await pool.getConnection(async (conn) => conn);
       const solution = await connection.query(query);
       connection.release();
@@ -232,7 +232,7 @@ module.exports = {
   },
   selectRankBoardVote: async () => {
     try {
-      const query = `select * from board where viewCount >= (select avg(viewCount) from board)  order by  rand() desc  limit 10;`;
+      const query = `select * from board where viewCount >= (select avg(viewCount) from board)  order by  rand() desc  limit 12;`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [seletList] = await connection.query(query);
       connection.release();

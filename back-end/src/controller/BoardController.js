@@ -216,34 +216,6 @@ module.exports = {
       );
     }
   },
-
-  findBoardDetail: async function (req, res) {
-    try {
-      let id = req.query.id;
-      const boardDetail = await boardDao.selectBoardDetail(id);
-      console.log(id);
-      if (boardDetail === undefined) {
-        return res.json(
-          response.successFalse(1002, "전체 게시물 목록이 없습니다.")
-        );
-      }
-
-      return res.json(
-        response.successTrue(
-          2001,
-          "전체 게시물 첫번째 목록 조회에 성공하였습니다.",
-          boardDetail
-        )
-      );
-    } catch (err) {
-      return res.json(
-        response.successFalse(
-          1001,
-          "서버와 통신에 실패하였습니다. BoardController/BoardDao error - findBoardAll"
-        )
-      );
-    }
-  },
   findBoardDetail: async function (req, res) {
     try {
       let id = req.query.id;
