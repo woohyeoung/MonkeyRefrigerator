@@ -1,42 +1,39 @@
-//Main.js
-//Install
-import React, { useEffect, useRef, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-//Style
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import gsap from 'gsap';
-import dungdunglogo from '../assets/monkey_4.png';
-import Skeleton from '@mui/material/Skeleton';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import CheckIcon from '@mui/icons-material/Check';
-import './Main.css';
-//User
-import { Login } from './user/Login';
-import SignUp from './user/SignUp';
-import { didVoteChk, handleLogin } from '../store/actions/UserAction';
-import PublicRoute from './user/PublicRoute';
-import PrivateRoute from './user/PrivateRoute';
-import Header from './Header';
-import BoardDetail from './board/BoardDetail';
-import Profile from './user/Profile';
-import { Refrigerator } from './search/Refrigerator';
-import { boardList } from '../store/actions/BoardAction';
-import { voteBtnClick } from '../store/actions/UserAction';
-import BoardList from './board/BoardList';
-import BoardCreate from './board/BoardCreate';
-import Cart from '../components/cart/Cart';
-import { Cookies } from 'react-cookie';
+//Install-Style-User
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Switch } from "react-router-dom";
+import { Cookies } from "react-cookie";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import gsap from "gsap";
+import dungdunglogo from "../assets/monkey_4.png";
+import Skeleton from "@mui/material/Skeleton";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import CheckIcon from "@mui/icons-material/Check";
+import "./Main.css";
+import { Login } from "./user/Login";
+import SignUp from "./user/SignUp";
+import { didVoteChk, handleLogin } from "../store/actions/UserAction";
+import PublicRoute from "./user/PublicRoute";
+import PrivateRoute from "./user/PrivateRoute";
+import Header from "./Header";
+import BoardDetail from "./board/BoardDetail";
+import Profile from "./user/Profile";
+import { Refrigerator } from "./search/Refrigerator";
+import { boardList } from "../store/actions/BoardAction";
+import { voteBtnClick } from "../store/actions/UserAction";
+import BoardList from "./board/BoardList";
+import BoardCreate from "./board/BoardCreate";
+import Cart from "../components/cart/Cart";
 
 export default function Main() {
 	const dispatch = useDispatch();
@@ -50,9 +47,7 @@ export default function Main() {
       <Header />
       <div className="mainContainer">
         <Switch>
-          <PublicRoute restricted={false} exact path="/">
-            <MainPage />
-          </PublicRoute>
+          <PublicRoute restricted={false} exact path="/" component={MainPage} />
           <PublicRoute
             restricted={true}
             component={Login}
@@ -71,13 +66,10 @@ export default function Main() {
             path="/board"
             exact
           />
-          <PublicRoute component={BoardCreate} path="/create" exact />
+          <PrivateRoute component={BoardCreate} path="/create" exact />
           <PrivateRoute component={Profile} path="/profile" exact />
           <PrivateRoute component={Refrigerator} path="/refrigerator" exact />
           <PrivateRoute component={BoardDetail} path="/board/:id" exact />
-          {/* <Route path="/cart">
-            <Cart />
-          </Route> */}
           <PrivateRoute component={Cart} path="/cart" exact />
         </Switch>
       </div>
