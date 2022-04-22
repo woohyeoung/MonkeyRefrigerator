@@ -343,8 +343,8 @@ const MainPage = () => {
   const boardReducer = useSelector((state) => state.boardReducer);
   const [boardRank, setBoardRank] = useState([]);
   const logoRef = useRef(null);
-  const [isVote, setIsVote] = useState(false); //투표를 했으면 did보여줘 true로 바꿔서
-  const [voteLoading, setVoteLoading] = useState(false); //vote를 불러와 기록을 확인하고 didvotechk로 보내
+  const [isVote, setIsVote] = useState(false);
+  const [voteLoading, setVoteLoading] = useState(false);
   const voteReducer = useSelector((state) => state.userReducer.result);
 
   useEffect(() => {
@@ -369,7 +369,6 @@ const MainPage = () => {
     setVote();
   }, []);
   useEffect(() => {
-    console.log(voteReducer);
     if (voteReducer) setIsVote(voteReducer);
   }, [voteReducer]);
   useEffect(() => {
@@ -386,34 +385,29 @@ const MainPage = () => {
   }, [boardReducer.boardList.data]);
   return (
     <>
-      {boardRank.length === 0 ? (
-        <></>
-      ) : (
-        <>
-          <>
-            <div className="mainHeadLine">
-              <div className="dungdung" ref={logoRef}>
-                {MainLogo}
-              </div>
-              <div className="mainVote">
-                {voteLoading ? (
-                  <>
-                    <SkeletonLoading />
-                  </>
-                ) : isVote ? (
-                  <Card variant="outlined">
-                    <DidVote />
-                  </Card>
-                ) : (
-                  <>
-                    <Card
-                      variant="outlined"
-                      onClick={() => {
-                        modalOn ? setModalOn(false) : setModalOn(true);
-                      }}
-                    >
-                      <MainVoteCard data={boardRank} />
-                    </Card>
+      <div className="mainHeadLine">
+        <div className="dungdung" ref={logoRef}>
+          {MainLogo}
+        </div>
+        <div className="mainVote">
+          {voteLoading ? (
+            <>
+              <SkeletonLoading />
+            </>
+          ) : isVote ? (
+            <Card variant="outlined">
+              <DidVote />
+            </Card>
+          ) : (
+            <>
+              <Card
+                variant="outlined"
+                onClick={() => {
+                  modalOn ? setModalOn(false) : setModalOn(true);
+                }}
+              >
+                <MainVoteCard data={boardRank} />
+              </Card>
 
                     <VoteModal flag={modalOn} />
                   </>
