@@ -66,8 +66,7 @@ module.exports = {
     try {
       const token = req.tokenInfo;
 
-      const userInfo = await userDao.selectUserInfo(token.userId);
-
+      const userInfo = await UserDao.selectUserInfo(token.userId);
       if (userInfo === undefined) {
         return res.json(
           response.successFalse(1002, "전체 게시물 목록이 없습니다.")
@@ -206,6 +205,10 @@ module.exports = {
     try {
       let tokenId = req.tokenInfo.userId;
       const userVote = await UserDao.selectUserVote(tokenId);
+<<<<<<< HEAD
+=======
+      console.log(userVote);
+>>>>>>> e9504f62687a0057d36d4598e4efec6a07b6e0f4
       if (userVote.length > 0)
         return res.json(
           response.successTrue(1001, "이미 투표를 완료하였습니다.", userVote)
