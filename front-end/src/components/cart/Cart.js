@@ -14,6 +14,13 @@ import Skeleton from "@mui/material/Skeleton";
 import "./Cart.css";
 
 export default function Cart() {
+  const tokenStore = useSelector((state) => state.tokenReducer);
+  const dispatch = useDispatch();
+
+  // useEffect(()=>{
+  //   if()
+  // }, [])
+
   return (
     <>
       <div className="carthhead">

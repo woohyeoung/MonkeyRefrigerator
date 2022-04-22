@@ -132,7 +132,7 @@ function BoardDetail() {
                   width: "110px",
                   height: "110px",
                 }}
-                src={board[1].profileImg}
+                src={board[0][0].profileImg}
                 alt="userprofile"
               />
             </div>
@@ -227,7 +227,7 @@ function BoardDetail() {
                   />
                   <b style={{ color: "#2a7830", marginLeft: "5%" }}>
                     {board[0][0].tagName ? (
-                      !board[0][0].tagName
+                      board[0][0].tagName
                         .replace(/\'/g, "")
                         .replace(/\[/g, "")
                         .replace(/\]/g, "")
