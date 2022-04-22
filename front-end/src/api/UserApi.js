@@ -177,3 +177,10 @@ export const boardRankSend = async () => {
     .catch();
   return result;
 };
+export const getrankboard = async () => {
+  const result = axios
+    .get(`${baseUrl}getrankboard`)
+    .then((res) => res.data)
+    .catch();
+  return result;
+};

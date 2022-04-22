@@ -232,7 +232,7 @@ module.exports = {
   },
   selectRankBoardVote: async () => {
     try {
-      const query = `select * from board where viewCount >= (select avg(viewCount) from board)  order by  rand() desc  limit 1;`;
+      const query = `select * from board where viewCount >= (select avg(viewCount) from board)  order by  rand() desc  limit 10;`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [seletList] = await connection.query(query);
       connection.release();

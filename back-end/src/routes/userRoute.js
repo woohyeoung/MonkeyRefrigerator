@@ -17,4 +17,5 @@ module.exports = function (app) {
   app.route("/voteadd").post(jwtMiddleware, user.voteUser);
   app.route("/pwChange").post(jwtMiddleware, user.changePassword);
   app.route("/boardrank").get(user.getBoardRank);
+  app.route("/getrankboard").get(user.getRankVote);
 };
