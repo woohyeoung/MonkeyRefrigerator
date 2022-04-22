@@ -1,6 +1,6 @@
 //BoardDetail.js
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { boardDetail } from "../../store/actions/BoardAction";
 import "./BoardDetail.css";
@@ -13,7 +13,9 @@ import styled from "styled-components";
 import MoodIcon from "@mui/icons-material/Mood";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { green } from "@mui/material/colors";
-
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { getUserCartInfo } from "../../api/CartApi";
+import { setUserCart } from "../../store/actions/CartAction";
 // carousel
 const Container = styled.div`
   overflow: hidden;
@@ -48,6 +50,7 @@ function BoardDetail() {
   const dispatch = useDispatch();
   const [board, setBoard] = useState([]);
   const [steps, setSteps] = useState([]);
+  const tokenStore = useSelector((state) => state.tokenReducer.token);
   // carousel
 
   const settings = {
@@ -81,7 +84,9 @@ function BoardDetail() {
       const spliceStep = () => {
         setSteps(step(board[0][0].content));
       };
-      spliceStep();
+      setTimeout(() => {
+        spliceStep();
+      }, 500);
     }
   }, [board]);
 
@@ -107,6 +112,15 @@ function BoardDetail() {
           </div>
         ) : (
           <div className="detailContainer">
+            <Link>
+              <MoreVertIcon
+                className="moveToCart"
+                sx={{ width: "40px", height: "40px" }}
+                onClick={() => {
+                  moveInCart(board[0][0].id);
+                }}
+              />
+            </Link>
             <Container>
               <StyledSlider {...settings}>
                 {board[1].map((item, i) => {
@@ -120,9 +134,7 @@ function BoardDetail() {
                 })}
               </StyledSlider>
             </Container>
-
             <hr className="horizontal" />
-
             <div style={{ textAlign: "center", marginTop: "10%" }}>
               <img
                 style={{
@@ -243,3 +255,15 @@ function BoardDetail() {
   );
 }
 export default BoardDetail;
+
+const moveInCart = (id) => {
+  window.confirm("장바구니에 추가하시겠습니까?") ? (
+    window.confirm("장바구니로 이동하시겠습니까?") ? (
+      (window.location.href = `/cart/${id}`)
+    ) : (
+      <></>
+    )
+  ) : (
+    alert("취소되었습니다.")
+  );
+};

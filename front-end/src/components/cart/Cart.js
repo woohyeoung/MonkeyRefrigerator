@@ -17,6 +17,7 @@ export default function Cart(props) {
   const tokenStore = useSelector((state) => state.tokenReducer);
   // const dispatch = useDispatch();
   const [token, setToken] = useState(props.token);
+  const cartStore = useSelector((state) => state.cartReducer);
 
   useEffect(() => {
     if (tokenStore) setToken(tokenStore.token);
@@ -25,7 +26,7 @@ export default function Cart(props) {
   return (
     <>
       <div className="carthhead">
-        <h2>장바구니입니다</h2>
+        <h2>236 킹받쥬?</h2>
       </div>
       <CartBody />
     </>
@@ -33,21 +34,21 @@ export default function Cart(props) {
 }
 const CartBody = () => {
   const dispatch = useDispatch();
-  const boardReducer = useSelector((state) => state.boardReducer);
+  const cartReducer = useSelector((state) => state.cartReducer);
   const [cartData, setCartData] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     const setCart = async () => {
       setLoading(true);
-      await dispatch(boardList()); // 이걸 내가 짜서 보내자
+      await dispatch(boardList());
       setLoading(false);
     };
     setCart();
   }, []);
   useEffect(() => {
-    if (boardReducer.boardList.data)
-      setCartData([...boardReducer.boardList.data.data.result]);
-  }, [boardReducer.boardList.data]);
+    if (cartReducer.usercartget.data)
+      setCartData([...cartReducer.usercartget.data.data.result]);
+  }, [cartReducer.usercartget.data]);
   return (
     <>
       <div className="cartbbody">
@@ -59,9 +60,9 @@ const CartBody = () => {
               {cartData.map((item, i) => (
                 <ImageListItem key={i}>
                   <CartCard
-                    path={cartData[i].boardImgPath}
-                    title={cartData[i].title}
-                    subtitle={cartData[i].subtitle}
+                    path={item.boardImgPath}
+                    title={item.title}
+                    subtitle={item.subtitle}
                   />
                 </ImageListItem>
               ))}
@@ -85,7 +86,8 @@ const CartCard = (props) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Learn More</Button>
+        <Button size="small">ADD</Button>
+        <Button size="small">DEL</Button>
       </CardActions>
     </Card>
   );

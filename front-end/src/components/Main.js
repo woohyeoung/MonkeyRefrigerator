@@ -72,7 +72,7 @@ export default function Main() {
           <PrivateRoute component={Profile} path="/profile" exact />
           <PrivateRoute component={Refrigerator} path="/refrigerator" exact />
           <PrivateRoute component={BoardDetail} path="/board/:id" exact />
-          <PrivateRoute component={Cart} path="/cart/:id" exact />
+          <PrivateRoute component={Cart} path="/cart" exact />
         </Switch>
       </div>
     </>
