@@ -75,7 +75,6 @@ module.exports = {
       const query = `SELECT * FROM useraccount WHERE id='${id}';`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query);
-      console.log(info);
       connection.release();
       return info;
     } catch (err) {
