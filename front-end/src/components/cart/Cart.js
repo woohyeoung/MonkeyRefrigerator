@@ -13,7 +13,8 @@ import { boardList } from "../../store/actions/BoardAction";
 import Skeleton from "@mui/material/Skeleton";
 import "./Cart.css";
 
-export default function Cart() {
+export default function Cart(props) {
+  console.log(props.token);
   return (
     <>
       <div className="carthhead">
