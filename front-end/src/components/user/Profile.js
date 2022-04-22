@@ -24,12 +24,12 @@ import { useCookies } from "react-cookie";
 import checkicon from "../../assets/icon/outline_check_circle_black_24dp.png";
 import cancelicon from "../../assets/icon/outline_highlight_off_black_24dp.png";
 
-function Profile() {
+function Profile(props) {
   const userStore = useSelector((state) => state.userReducer);
   const tokenReducer = useSelector((state) => state.tokenReducer);
   const tokenStore = Cookies.get("accessToken");
   const [token, setToken] = useState("");
-
+  console.log(props.token);
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
@@ -47,8 +47,6 @@ function Profile() {
       setLoading(false);
     }, 3000);
   }, []);
-
-  console.log(userStore);
   useEffect(() => {
     if (userStore.userInformation.data) {
       setUserInfo([...userStore.userInformation.data.result]);

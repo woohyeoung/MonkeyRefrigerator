@@ -45,44 +45,44 @@ export default function Main() {
 		if (tokenReducer === null) dispatch(handleLogin());
 	});
 
-	return (
-		<>
-			<Header />
-			<div className="mainContainer">
-				<Switch>
-					<PublicRoute restricted={false} exact path="/">
-						<MainPage />
-					</PublicRoute>
-					<PublicRoute
-						restricted={true}
-						component={Login}
-						path="/login"
-						exact
-					/>
-					<PublicRoute
-						restricted={true}
-						component={SignUp}
-						path="/signup"
-						exact
-					/>
-					<PublicRoute
-						restricted={false}
-						component={BoardList}
-						path="/board"
-						exact
-					/>
-					<PublicRoute component={BoardCreate} path="/create" exact />
-					<PrivateRoute component={Profile} path="/profile" exact />
-					<PrivateRoute component={Refrigerator} path="/refrigerator" exact />
-					<PrivateRoute component={BoardDetail} path="/board/:id" exact />
-					<Route path="/cart">
-						<Cart />
-					</Route>
-					{/* <PrivateRoute component={Cart} path="/cart" exact /> */}
-				</Switch>
-			</div>
-		</>
-	);
+  return (
+    <>
+      <Header />
+      <div className="mainContainer">
+        <Switch>
+          <PublicRoute restricted={false} exact path="/">
+            <MainPage />
+          </PublicRoute>
+          <PublicRoute
+            restricted={true}
+            component={Login}
+            path="/login"
+            exact
+          />
+          <PublicRoute
+            restricted={true}
+            component={SignUp}
+            path="/signup"
+            exact
+          />
+          <PublicRoute
+            restricted={false}
+            component={BoardList}
+            path="/board"
+            exact
+          />
+          <PublicRoute component={BoardCreate} path="/create" exact />
+          <PrivateRoute component={Profile} path="/profile" exact />
+          <PrivateRoute component={Refrigerator} path="/refrigerator" exact />
+          <PrivateRoute component={BoardDetail} path="/board/:id" exact />
+          {/* <Route path="/cart">
+            <Cart />
+          </Route> */}
+          <PrivateRoute component={Cart} path="/cart" exact />
+        </Switch>
+      </div>
+    </>
+  );
 }
 
 const MainLogo = (
@@ -192,65 +192,68 @@ const VoteModal = (props) => {
 };
 
 const VotePage = (props) => {
-	const dispatch = useDispatch();
-	const [rows, setRows] = useState([]);
-	const [page, setPage] = useState(1);
-	const offset = (page - 1) * 3;
-	const voteHandler = (e) => {
-		dispatch(voteBtnClick(e.target.value));
-		alert('투표가 완료되었습니다.');
-		dispatch(didVoteChk());
-		window.location.reload();
-	};
-	useEffect(() => {
-		setRows([...props.data]);
-	}, []);
-	return (
-		<div className="votePage">
-			<TableContainer component={Paper}>
-				<Table sx={{ width: '100%' }} aria-label="simple table">
-					<TableHead>
-						<TableRow>
-							<TableCell sx={{ width: 100 }}>번호</TableCell>
-							<TableCell align="center" sx={{ width: 200 }}>
-								사진
-							</TableCell>
-							<TableCell align="center">제목</TableCell>
-							<TableCell sx={{ width: 100 }} align="center">
-								투표
-							</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{rows.slice(offset, offset + 3).map((row) => (
-							<TableRow
-								key={row.id}
-								sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-							>
-								<TableCell component="th" scope="row">
-									{row.id}
-								</TableCell>
-								<TableCell align="center">
-									<img
-										style={{ width: '180px', height: '100px' }}
-										src={row.boardImgPath}
-										alt="사진"
-									/>
-								</TableCell>
-								<TableCell align="left">{row.title}</TableCell>
-								<TableCell align="center">
-									<button value={row.id} onClick={voteHandler}>
-										투표
-									</button>
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			</TableContainer>
-			<Pagination total={rows.length} limit={5} page={page} setPage={setPage} />
-		</div>
-	);
+  const dispatch = useDispatch();
+  const [rows, setRows] = useState([]);
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * 3;
+  const voteHandler = (e) => {
+    const votHeesoo = async () => {
+      dispatch(voteBtnClick(e.target.value));
+      await dispatch(didVoteChk());
+    };
+    votHeesoo();
+    alert("투표가 완료되었습니다.");
+    // window.location.reload();
+  };
+  useEffect(() => {
+    setRows([...props.data]);
+  }, []);
+  return (
+    <div className="votePage">
+      <TableContainer component={Paper}>
+        <Table sx={{ width: "100%" }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ width: 100 }}>번호</TableCell>
+              <TableCell align="center" sx={{ width: 200 }}>
+                사진
+              </TableCell>
+              <TableCell align="center">제목</TableCell>
+              <TableCell sx={{ width: 100 }} align="center">
+                투표
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.slice(offset, offset + 3).map((row) => (
+              <TableRow
+                key={row.id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.id}
+                </TableCell>
+                <TableCell align="center">
+                  <img
+                    style={{ width: "180px", height: "100px" }}
+                    src={row.boardImgPath}
+                    alt="사진"
+                  />
+                </TableCell>
+                <TableCell align="left">{row.title}</TableCell>
+                <TableCell align="center">
+                  <button value={row.id} onClick={voteHandler}>
+                    투표
+                  </button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Pagination total={rows.length} limit={5} page={page} setPage={setPage} />
+    </div>
+  );
 };
 const Pagination = ({ total, limit, page, setPage }) => {
 	const numPages = Math.ceil(total / limit);
@@ -338,85 +341,79 @@ const SkeletonLoading = () => {
 	);
 };
 const MainPage = () => {
-	const dispatch = useDispatch();
-	const [modalOn, setModalOn] = useState(false);
-	const [page, setPage] = useState(1);
-	const [loading, setLoading] = useState(false);
-	const offset = (page - 1) * 5;
-	const boardReducer = useSelector((state) => state.boardReducer);
-	const [boardRank, setBoardRank] = useState([]);
-	const logoRef = useRef(null);
-	const [isVote, setIsVote] = useState(false); //투표를 했으면 did보여줘 true로 바꿔서
-	const [voteLoading, setVoteLoading] = useState(false); //vote를 불러와 기록을 확인하고 didvotechk로 보내
-	const voteReducer = useSelector((state) => state.userReducer.result);
+  const dispatch = useDispatch();
+  const [modalOn, setModalOn] = useState(false);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const offset = (page - 1) * 5;
+  const boardReducer = useSelector((state) => state.boardReducer);
+  const [boardRank, setBoardRank] = useState([]);
+  const logoRef = useRef(null);
+  const [isVote, setIsVote] = useState(false);
+  const [voteLoading, setVoteLoading] = useState(false);
+  const voteReducer = useSelector((state) => state.userReducer.result);
 
-	useEffect(() => {
-		gsap.fromTo(
-			logoRef.current,
-			{ y: 50, opacity: 1 },
-			{
-				y: -50,
-				opacity: 0.6,
-				repeat: -1,
-				yoyo: true,
-				ease: 'Power1.out',
-			}
-		);
-	});
-	useEffect(() => {
-		const setVote = async () => {
-			setVoteLoading(true);
-			await dispatch(didVoteChk());
-			setVoteLoading(false);
-		};
-		setVote();
-	}, []);
-	useEffect(() => {
-		console.log(voteReducer);
-		if (voteReducer) setIsVote(voteReducer);
-	}, [voteReducer]);
-	useEffect(() => {
-		const setBoard = async () => {
-			setLoading(true);
-			await dispatch(boardList());
-			setLoading(false);
-		};
-		setBoard();
-	}, []);
-	useEffect(() => {
-		if (boardReducer.boardList.data)
-			setBoardRank([...boardReducer.boardList.data.data.result]);
-	}, [boardReducer.boardList.data]);
-	return (
-		<>
-			{boardRank.length === 0 ? (
-				<></>
-			) : (
-				<>
-					<>
-						<div className="mainHeadLine">
-							<div className="dungdung" ref={logoRef}>
-								{MainLogo}
-							</div>
-							<div className="mainVote">
-								{voteLoading ? (
-									<>
-										<SkeletonLoading />
-									</>
-								) : isVote ? (
-									<Card variant="outlined">
-										<DidVote />
-									</Card>
-								) : (
-									<>
-										<Card
-											variant="outlined"
-											onClick={() => {
-												modalOn ? setModalOn(false) : setModalOn(true);
-											}}
-										>
-											<MainVoteCard data={boardRank} />
-										</Card>
+  useEffect(() => {
+    gsap.fromTo(
+      logoRef.current,
+      { y: 50, opacity: 1 },
+      {
+        y: -50,
+        opacity: 0.6,
+        repeat: -1,
+        yoyo: true,
+        ease: "Power1.out",
+      }
+    );
+  });
+  useEffect(() => {
+    const setVote = async () => {
+      setVoteLoading(true);
+      await dispatch(didVoteChk());
+      setVoteLoading(false);
+    };
+    setVote();
+  }, []);
+  useEffect(() => {
+    if (voteReducer) setIsVote(voteReducer);
+  }, [voteReducer]);
+  useEffect(() => {
+    const setBoard = async () => {
+      setLoading(true);
+      await dispatch(boardList());
+      setLoading(false);
+    };
+    setBoard();
+  }, []);
+  useEffect(() => {
+    if (boardReducer.boardList.data)
+      setBoardRank([...boardReducer.boardList.data.data.result]);
+  }, [boardReducer.boardList.data]);
+  return (
+    <>
+      <div className="mainHeadLine">
+        <div className="dungdung" ref={logoRef}>
+          {MainLogo}
+        </div>
+        <div className="mainVote">
+          {voteLoading ? (
+            <>
+              <SkeletonLoading />
+            </>
+          ) : isVote ? (
+            <Card variant="outlined">
+              <DidVote />
+            </Card>
+          ) : (
+            <>
+              <Card
+                variant="outlined"
+                onClick={() => {
+                  modalOn ? setModalOn(false) : setModalOn(true);
+                }}
+              >
+                <MainVoteCard data={boardRank} />
+              </Card>
 
 										<VoteModal flag={modalOn} />
 									</>
