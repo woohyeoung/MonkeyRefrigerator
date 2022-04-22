@@ -130,7 +130,6 @@ module.exports = {
 
 	saveBoardOne: async function (req, res) {
 		try {
-			console.log(req.files);
 
 			let userId = req.tokenInfo.userId;
 			let board = {
@@ -156,8 +155,6 @@ module.exports = {
 			}
 
 			const boardId = await boardDao.insertBoardId(board);
-
-			console.log(req.body.material);
 			let materials = [];
 
 			if (typeof req.body.material === 'string') {
@@ -223,7 +220,7 @@ module.exports = {
 		try {
 			let id = req.query.id;
 			const boardDetail = await boardDao.selectBoardDetail(id);
-			console.log(id);
+
 			if (boardDetail === undefined) {
 				return res.json(
 					response.successFalse(1002, '전체 게시물 목록이 없습니다.')

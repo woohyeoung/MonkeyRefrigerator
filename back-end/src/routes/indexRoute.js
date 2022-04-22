@@ -5,4 +5,6 @@ module.exports = function (app) {
   app.route("/").get(index.findIndex);
   require("./boardRoute")(app);
   require("./userRoute")(app);
+  require("./refrigeratorRoute")(app);
+
 };
