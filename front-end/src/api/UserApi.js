@@ -136,7 +136,7 @@ export const userVoteAdd = async (board, token) => {
       `${baseUrl}voteadd`,
       {
         body: {
-          boardId: board,
+          board: board,
         },
       },
       {
@@ -151,7 +151,6 @@ export const userVoteAdd = async (board, token) => {
 };
 
 export const searchRefrigeratorList = (data) => {
-  console.log(data);
   const result = axios
     .get(
       baseUrl + "refrigerator",
@@ -169,7 +168,9 @@ export const searchRefrigeratorList = (data) => {
     .catch((err) => {
       console.log(err);
     });
-  console.log(result);
+  return result;
+};
+//메인페이지 이주의 레시피 투표 게시물 조회
 export const boardRankSend = async () => {
   const result = axios
     .get(`${baseUrl}boardrank`)

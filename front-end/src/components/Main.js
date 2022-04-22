@@ -191,14 +191,13 @@ const VotePage = (props) => {
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * 5;
-  const voteHandler = (e) => {
-    const votHeesoo = async () => {
-      dispatch(voteBtnClick(e.target.value));
-      await dispatch(didVoteChk());
-    };
-    votHeesoo();
-    alert("투표가 완료되었습니다.");
-    window.location.reload();
+  const voteHandler = async (id) => {
+    dispatch(voteBtnClick(id));
+    setTimeout(() => {
+      dispatch(didVoteChk());
+      alert("투표가 완료되었습니다.");
+      window.location.reload();
+    }, 250);
   };
   useEffect(() => {
     setRows([...props.data]);
@@ -234,11 +233,13 @@ const VotePage = (props) => {
                 </TableCell>
                 <TableCell align="left">{row.title}</TableCell>
                 <TableCell align="center">
-                  <HowToVoteIcon
-                    color="white"
-                    value={row.id}
-                    onClick={voteHandler}
-                  />
+                  <button
+                    onClick={() => {
+                      voteHandler(row.id);
+                    }}
+                  >
+                    투표
+                  </button>
                 </TableCell>
               </TableRow>
             ))}
@@ -375,7 +376,6 @@ const MainPage = () => {
     const setBoard = async () => {
       setLoading(true);
       await dispatch(boardRankChk());
-      setLoading(false);
     };
     setBoard();
   }, []);
@@ -383,7 +383,8 @@ const MainPage = () => {
     if (userReducer.voteBoardRankList) {
       setTimeout(() => {
         setBoardRank([...userReducer.voteBoardRankList.data.result]);
-      }, 2000);
+        setLoading(false);
+      }, 1000);
     }
   }, [userReducer.voteBoardRankList]);
   return (

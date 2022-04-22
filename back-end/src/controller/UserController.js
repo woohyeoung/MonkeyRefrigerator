@@ -100,9 +100,7 @@ module.exports = {
           response.successFalse(7101, "저장하려는 재료가 존재하지 않습니다.")
         );
       }
-
       let exists = await userDao.selectExistMaterialId(userId, materialId);
-
       if (exists.exist === 1) {
         return res.json(
           response.successFalse(7101, "이미 존재하는 재료입니다.")
@@ -204,11 +202,7 @@ module.exports = {
   voteValid: async (req, res) => {
     try {
       let tokenId = req.tokenInfo.userId;
-      const userVote = await UserDao.selectUserVote(tokenId);
-<<<<<<< HEAD
-=======
-      console.log(userVote);
->>>>>>> e9504f62687a0057d36d4598e4efec6a07b6e0f4
+      const userVote = await userDao.selectUserVote(tokenId);
       if (userVote.length > 0)
         return res.json(
           response.successTrue(1001, "이미 투표를 완료하였습니다.", userVote)
@@ -228,14 +222,18 @@ module.exports = {
   voteUser: async (req, res) => {
     try {
       const user = req.tokenInfo.userId;
-      const board = req.body.boardId;
+      const board = req.body.body.board;
+      if (user === undefined || board === undefined)
+        return res.json(
+          response.successFalse(1001, "입력 값이 올바르지 않습니다.")
+        );
       const result = await userDao.insertUserVote(board, user);
       return res.json(response.successTrue(1001, "투표 입력 완료", result));
     } catch {
       return res.json(
         response.successFalse(
           1001,
-          "서버와 통신에 실패하였습니다. UserController/UserDao error - voteValid"
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - voteUser"
         )
       );
     }
@@ -265,7 +263,7 @@ module.exports = {
   },
   getBoardRank: async (req, res) => {
     try {
-      const [...rankList] = await UserDao.selectVoteBoardRank();
+      const [...rankList] = await userDao.selectVoteBoardRank();
       if (rankList.length < 1)
         return res.json(
           response.successFalse(2001, "게시물 목록 조회에 실패하였습니다.")
@@ -277,26 +275,27 @@ module.exports = {
       return res.json(
         response.successFalse(
           1001,
-          "서버와 통신에 실패하였습니다. UserController/UserDao error - changePassword"
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - getBoardRank"
         )
       );
     }
   },
   getRankVote: async (req, res) => {
     try {
-      const [...voteList] = await UserDao.selectRankBoardVote();
-      if (voteList.length < 1);
+      const [...voteList] = await userDao.selectRankBoardVote();
+      if (voteList.length < 1) {
+        return res.json(
+          response.successFalse(2001, "게시물 목록 조회에 실패하였습니다.")
+        );
+      }
       return res.json(
-        response.successFalse(2001, "게시물 목록 조회에 실패하였습니다.")
-      );
-      return res.json(
-        response.successTrue(2001, "게시물 목록을 조회하였습니다.", voteList)
+        response.successTrue(2001, "게시물 목록 조회에 성공하였습니다.")
       );
     } catch (error) {
       return res.json(
         response.successFalse(
           1001,
-          "서버와 통신에 실패하였습니다. UserController/UserDao error - changePassword"
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - getRankVote"
         )
       );
     }
