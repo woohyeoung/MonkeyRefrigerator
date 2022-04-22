@@ -1,7 +1,7 @@
 //Install-Style-User
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Switch } from "react-router-dom";
+import { Switch, Link } from "react-router-dom";
 import { Cookies } from "react-cookie";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -19,6 +19,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import CheckIcon from "@mui/icons-material/Check";
+import HowToVoteIcon from "@mui/icons-material/HowToVote";
 import "./Main.css";
 import { Login } from "./user/Login";
 import SignUp from "./user/SignUp";
@@ -33,7 +34,6 @@ import Header from "./Header";
 import BoardDetail from "./board/BoardDetail";
 import Profile from "./user/Profile";
 import { Refrigerator } from "./search/Refrigerator";
-import { boardList } from "../store/actions/BoardAction";
 import { voteBtnClick } from "../store/actions/UserAction";
 import BoardList from "./board/BoardList";
 import BoardCreate from "./board/BoardCreate";
@@ -45,7 +45,10 @@ export default function Main() {
   useEffect(() => {
     if (tokenReducer === null) dispatch(handleLogin());
   });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 780ced5 (rebase: 4/22, 17:03 5/5)
   return (
     <>
       <Header />
@@ -191,7 +194,7 @@ const VotePage = (props) => {
   const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(1);
-  const offset = (page - 1) * 3;
+  const offset = (page - 1) * 5;
   const voteHandler = (e) => {
     dispatch(voteBtnClick(e.target.value));
     alert("투표가 완료되었습니다.");
@@ -218,26 +221,25 @@ const VotePage = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(offset, offset + 3).map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
+            {rows.slice(offset, offset + 5).map((row, i) => (
+              <TableRow>
                 <TableCell component="th" scope="row">
-                  {row.id}
+                  {offset > 4 ? i + 6 : i + 1}
                 </TableCell>
                 <TableCell align="center">
                   <img
                     style={{ width: "180px", height: "100px" }}
                     src={row.boardImgPath}
-                    alt="사진"
+                    alt="레시피사진"
                   />
                 </TableCell>
                 <TableCell align="left">{row.title}</TableCell>
                 <TableCell align="center">
-                  <button value={row.id} onClick={voteHandler}>
-                    투표
-                  </button>
+                  <HowToVoteIcon
+                    color="white"
+                    value={row.id}
+                    onClick={voteHandler}
+                  />
                 </TableCell>
               </TableRow>
             ))}
@@ -340,7 +342,6 @@ const MainPage = () => {
   const offset = (page - 1) * 5;
   const logoRef = useRef(null);
   const [boardRank, setBoardRank] = useState([]);
-  // const boardReducer = useSelector((state) => state.boardReducer);
   const userReducer = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const [voteLoading, setVoteLoading] = useState(false);
@@ -421,16 +422,18 @@ const MainPage = () => {
       ) : (
         <>
           <div className="mainBody">
-            <div className="mainBodyTitle" style={{ marginLeft: "20%" }}>
+            <div className="mainBodyTitle">
               <h4>Best 10 Recipe</h4>
             </div>
             <div className="mainBodyCon">
               {boardRank.slice(offset, offset + 5).map((item, i) => (
-                <RankCard
-                  path={boardRank[i].boardImgPath}
-                  title={boardRank[i].title}
-                  content={boardRank[i].content}
-                />
+                <Link to={`/board/${item.boardId}`}>
+                  <RankCard
+                    path={item.boardImgPath}
+                    title={item.title}
+                    content={item.content}
+                  />
+                </Link>
               ))}
             </div>
             <div className="mainBodyCon">

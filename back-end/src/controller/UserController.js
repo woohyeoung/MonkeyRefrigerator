@@ -206,7 +206,6 @@ module.exports = {
     try {
       let tokenId = req.tokenInfo.userId;
       const userVote = await UserDao.selectUserVote(tokenId);
-      console.log(userVote);
       if (userVote.length > 0)
         return res.json(
           response.successTrue(1001, "이미 투표를 완료하였습니다.", userVote)
@@ -264,13 +263,31 @@ module.exports = {
   getBoardRank: async (req, res) => {
     try {
       const [...rankList] = await UserDao.selectVoteBoardRank();
-      console.log(rankList);
       if (rankList.length < 1)
         return res.json(
           response.successFalse(2001, "게시물 목록 조회에 실패하였습니다.")
         );
       return res.json(
         response.successTrue(2001, "게시물 목록을 조회하였습니다.", rankList)
+      );
+    } catch (error) {
+      return res.json(
+        response.successFalse(
+          1001,
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - changePassword"
+        )
+      );
+    }
+  },
+  getRankVote: async (req, res) => {
+    try {
+      const [...voteList] = await UserDao.selectRankBoardVote();
+      if (voteList.length < 1);
+      return res.json(
+        response.successFalse(2001, "게시물 목록 조회에 실패하였습니다.")
+      );
+      return res.json(
+        response.successTrue(2001, "게시물 목록을 조회하였습니다.", voteList)
       );
     } catch (error) {
       return res.json(

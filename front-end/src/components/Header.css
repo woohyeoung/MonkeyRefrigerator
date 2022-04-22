@@ -17,6 +17,11 @@
   .row-1 .h-title span {
     font-size: 15px;
   }
+  .row-1 .h-menu,
+  .h-nav-item-alw .boardIcon,
+  .h-nav-item-alw .searchIcon {
+    margin-top: 25px;
+  }
 }
 .header {
   position: fixed;
