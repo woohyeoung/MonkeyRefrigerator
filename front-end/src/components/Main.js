@@ -22,7 +22,11 @@ import CheckIcon from "@mui/icons-material/Check";
 import "./Main.css";
 import { Login } from "./user/Login";
 import SignUp from "./user/SignUp";
-import { didVoteChk, handleLogin } from "../store/actions/UserAction";
+import {
+  didVoteChk,
+  handleLogin,
+  boardRankChk,
+} from "../store/actions/UserAction";
 import PublicRoute from "./user/PublicRoute";
 import PrivateRoute from "./user/PrivateRoute";
 import Header from "./Header";
@@ -336,13 +340,14 @@ const MainPage = () => {
   const dispatch = useDispatch();
   const [modalOn, setModalOn] = useState(false);
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
   const offset = (page - 1) * 5;
-  const boardReducer = useSelector((state) => state.boardReducer);
-  const [boardRank, setBoardRank] = useState([]);
   const logoRef = useRef(null);
-  const [isVote, setIsVote] = useState(false);
+  const [boardRank, setBoardRank] = useState([]);
+  // const boardReducer = useSelector((state) => state.boardReducer);
+  const userReducer = useSelector((state) => state.userReducer);
+  const [loading, setLoading] = useState(false);
   const [voteLoading, setVoteLoading] = useState(false);
+  const [isVote, setIsVote] = useState(false);
   const voteReducer = useSelector((state) => state.userReducer.result);
 
   useEffect(() => {
@@ -372,15 +377,18 @@ const MainPage = () => {
   useEffect(() => {
     const setBoard = async () => {
       setLoading(true);
-      await dispatch(boardList());
+      await dispatch(boardRankChk());
       setLoading(false);
     };
     setBoard();
   }, []);
   useEffect(() => {
-    if (boardReducer.boardList.data)
-      setBoardRank([...boardReducer.boardList.data.data.result]);
-  }, [boardReducer.boardList.data]);
+    if (userReducer.voteBoardRankList) {
+      setTimeout(() => {
+        setBoardRank([...userReducer.voteBoardRankList.data.result]);
+      }, 2000);
+    }
+  }, [userReducer.voteBoardRankList]);
   return (
     <>
       <div className="mainHeadLine">
@@ -389,9 +397,7 @@ const MainPage = () => {
         </div>
         <div className="mainVote">
           {voteLoading ? (
-            <>
-              <SkeletonLoading />
-            </>
+            <SkeletonLoading />
           ) : isVote ? (
             <Card variant="outlined">
               <DidVote />
@@ -406,6 +412,7 @@ const MainPage = () => {
               >
                 <MainVoteCard data={boardRank} />
               </Card>
+<<<<<<< HEAD
 
 										<VoteModal flag={modalOn} />
 									</>
@@ -447,4 +454,41 @@ const MainPage = () => {
 			)}
 		</>
 	);
+=======
+              <VoteModal flag={modalOn} />
+            </>
+          )}
+        </div>
+      </div>
+      {loading ? (
+        <SkeletonLoadingSet />
+      ) : (
+        <>
+          <div className="mainBody">
+            <div className="mainBodyTitle" style={{ marginLeft: "20%" }}>
+              <h4>Best 10 Recipe</h4>
+            </div>
+            <div className="mainBodyCon">
+              {boardRank.slice(offset, offset + 5).map((item, i) => (
+                <RankCard
+                  path={boardRank[i].boardImgPath}
+                  title={boardRank[i].title}
+                  content={boardRank[i].content}
+                />
+              ))}
+            </div>
+            <div className="mainBodyCon">
+              <Pagination
+                total={boardRank.length}
+                limit={5}
+                page={page}
+                setPage={setPage}
+              />
+            </div>
+          </div>
+        </>
+      )}
+    </>
+  );
+>>>>>>> d0a198d (feat:4/22, 03:09 main ok)
 };

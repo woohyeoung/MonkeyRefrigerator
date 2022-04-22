@@ -144,3 +144,10 @@ export const searchRefrigerator = createPromiseThunk(
   REFRIGERATOR_GET,
   UserApi.searchRefrigeratorList
 );
+export const BOARD_RANK_CHECK = "BOARD_RANK_CHECK";
+export const BOARD_RANK_CHECK_SUCCESS = "BOARD_RANK_CHECK_SUCCESS";
+export const BOARD_RANK_CHECK_ERROR = "BOARD_RANK_CHECK_ERROR";
+export const boardRankChk = createPromiseThunk(
+  BOARD_RANK_CHECK,
+  UserApi.boardRankSend
+);

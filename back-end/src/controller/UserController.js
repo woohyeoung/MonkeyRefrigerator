@@ -261,4 +261,24 @@ module.exports = {
       );
     }
   },
+  getBoardRank: async (req, res) => {
+    try {
+      const [...rankList] = await UserDao.selectVoteBoardRank();
+      console.log(rankList);
+      if (rankList.length < 1)
+        return res.json(
+          response.successFalse(2001, "게시물 목록 조회에 실패하였습니다.")
+        );
+      return res.json(
+        response.successTrue(2001, "게시물 목록을 조회하였습니다.", rankList)
+      );
+    } catch (error) {
+      return res.json(
+        response.successFalse(
+          1001,
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - changePassword"
+        )
+      );
+    }
+  },
 };

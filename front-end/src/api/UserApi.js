@@ -170,5 +170,10 @@ export const searchRefrigeratorList = (data) => {
       console.log(err);
     });
   console.log(result);
+export const boardRankSend = async () => {
+  const result = axios
+    .get(`${baseUrl}boardrank`)
+    .then((res) => res.data)
+    .catch();
   return result;
 };
