@@ -13,13 +13,14 @@ import { boardList } from "../../store/actions/BoardAction";
 import Skeleton from "@mui/material/Skeleton";
 import "./Cart.css";
 
-export default function Cart() {
+export default function Cart(props) {
   const tokenStore = useSelector((state) => state.tokenReducer);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const [token, setToken] = useState(props.token);
 
-  // useEffect(()=>{
-  //   if()
-  // }, [])
+  useEffect(() => {
+    if (tokenStore) setToken(tokenStore.token);
+  }, [tokenStore]);
 
   return (
     <>
@@ -38,7 +39,7 @@ const CartBody = () => {
   useEffect(() => {
     const setCart = async () => {
       setLoading(true);
-      await dispatch(boardList());
+      await dispatch(boardList()); // 이걸 내가 짜서 보내자
       setLoading(false);
     };
     setCart();

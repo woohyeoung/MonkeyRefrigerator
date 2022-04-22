@@ -60,8 +60,6 @@ function BoardDetail() {
     centerMode: true,
   };
 
-  //
-
   useEffect(() => {
     async function fetchBoardDetail() {
       await dispatch(boardDetail(id));
@@ -71,8 +69,8 @@ function BoardDetail() {
 
   useEffect(() => {
     if (boardStore) {
-      const boardfetch = async () => {
-        await setBoard([...boardStore.data.result]);
+      const boardfetch = () => {
+        setBoard([...boardStore.data.result]);
       };
       boardfetch();
     }
@@ -80,8 +78,8 @@ function BoardDetail() {
 
   useEffect(() => {
     if (board) {
-      const spliceStep = async () => {
-        await setSteps(step(board[0][0].content));
+      const spliceStep = () => {
+        setSteps(step(board[0][0].content));
       };
       spliceStep();
     }
