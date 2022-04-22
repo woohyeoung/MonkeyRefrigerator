@@ -49,7 +49,7 @@ export const loginVali = (email, pw) => {
       if (token !== undefined) {
         setCookie("accessToken", token, {
           path: "/",
-          maxAge: 3600,
+          maxAge: 1750,
           withCredentials: true,
         });
       }

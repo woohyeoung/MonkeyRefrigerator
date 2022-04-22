@@ -1,6 +1,8 @@
-//Header.js
+//Install-Style-User
 import React, { useEffect, useState, useRef } from "react";
-import "./Header.css";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { Cookies } from "react-cookie";
 import {
   mdiMagnify,
   mdiAccount,
@@ -13,33 +15,28 @@ import {
   mdiLogout,
   mdiCart,
 } from "@mdi/js";
-
 import Icon from "@mdi/react";
-//router
-import { Link } from "react-router-dom";
-import { Cookies } from "react-cookie";
-import { useDispatch, useSelector } from "react-redux";
+import "./Header.css";
 import { handleLogin } from "../store/actions/UserAction";
 
 function Header() {
-  const [isLogin, setIsLogin] = useState(false);
-  const [imgUrl, setImgUrl] = useState("/monkey_2.png");
-  const [menu, setMenu] = useState(false);
   const dispatch = useDispatch();
-  const monkey = useRef();
+  const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
+  const cookie = new Cookies();
+  const [isLogin, setIsLogin] = useState(false);
   const menu1 = useRef();
   const menu2 = useRef();
-  const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
+  const [menu, setMenu] = useState(false);
+  const [imgUrl, setImgUrl] = useState("/monkey_2.png");
+  const monkey = useRef();
   useEffect(() => {
     if (isLogin && !tokenReducer) {
-      const cookie = new Cookies();
-      if (cookie.get("accessToken")) {
-        dispatch(handleLogin());
-        window.location.reload();
-      } else {
+      if (!cookie.get("accessToken")) {
         logout();
         alert("토큰이 만료되어 로그아웃 되었습니다.");
+        window.location.reload();
       }
+      dispatch(handleLogin());
     }
   });
   useEffect(() => {
@@ -65,10 +62,10 @@ function Header() {
                   src={imgUrl}
                   width={90}
                   height={90}
+                  alt="homeLogo"
                 ></img>
               </div>
             </Link>
-
             <div className="h-title">
               <span>Monkey Refrigerator</span>
             </div>
@@ -81,9 +78,6 @@ function Header() {
                 size={2}
                 color="white"
               />
-              {/* <Link to="/search">
-                <div className="sub-title">검색</div>
-              </Link> */}
               <Link to="/board">
                 <Icon
                   className="boardIcon"
@@ -92,7 +86,6 @@ function Header() {
                   size={2}
                   color="white"
                 />
-                {/* <div className="sub-title">레시피</div> */}
               </Link>
             </div>
             <div
@@ -103,7 +96,6 @@ function Header() {
             >
               <Icon path={mdiMenu} title="menu" size={2} color="white" />
             </div>
-
             <div className="h-nav">
               {isLogin ? (
                 <div>
@@ -119,7 +111,7 @@ function Header() {
                         size={2}
                         color="#9D2437"
                       />
-                      {/* <div className="sub-title">등록</div> */}
+                      <div className="sub-title">Create</div>
                     </Link>
                     <hr />
                     <Link to="/refrigerator">
@@ -129,7 +121,9 @@ function Header() {
                         size={2}
                         color="#9D2437"
                       />
-                      {/* <div className="sub-title">냉장고</div> */}
+                      <div className="sub-title" style={{ fontSize: "12px" }}>
+                        Refrigerator
+                      </div>
                     </Link>
                     <hr />
                     <Link to="/profile">
@@ -139,7 +133,7 @@ function Header() {
                         size={2}
                         color="#9D2437"
                       />
-                      {/* <div className="sub-title">프로필</div> */}
+                      <div className="sub-title">Profile</div>
                     </Link>
                     <hr />
                     <Link to="/cart">
@@ -149,7 +143,7 @@ function Header() {
                         size={2}
                         color="#9D2437"
                       />
-                      {/* <div className="sub-title">장바구니</div> */}
+                      <div className="sub-title">Cart</div>
                     </Link>
                     <hr />
                     <Link>
@@ -160,7 +154,7 @@ function Header() {
                         onClick={logout}
                         color="#9D2437"
                       />
-                      {/* <div className="sub-title">로그아웃</div> */}
+                      <div className="sub-title">Logout</div>
                     </Link>
                   </div>
                 </div>
@@ -181,7 +175,7 @@ function Header() {
                           size={2}
                           color={"#9D2437"}
                         />
-                        {/* <div className="sub-title">회원가입</div> */}
+                        <div className="sub-title">Sign Up</div>
                       </Link>
                     </div>
                     <hr />
@@ -193,7 +187,7 @@ function Header() {
                           size={2}
                           color={"#9D2437"}
                         />
-                        {/* <div className="sub-title">로그인</div> */}
+                        <div className="sub-title">Login</div>
                       </Link>
                     </div>
                   </div>

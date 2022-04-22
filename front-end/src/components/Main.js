@@ -1,9 +1,8 @@
-//Main.js
-//Install
+//Install-Style-User
 import React, { useEffect, useRef, useState } from "react";
-import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-//Style
+import { Switch } from "react-router-dom";
+import { Cookies } from "react-cookie";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -21,7 +20,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import CheckIcon from "@mui/icons-material/Check";
 import "./Main.css";
-//User
 import { Login } from "./user/Login";
 import SignUp from "./user/SignUp";
 import { didVoteChk, handleLogin } from "../store/actions/UserAction";
@@ -50,9 +48,7 @@ export default function Main() {
       <Header />
       <div className="mainContainer">
         <Switch>
-          <PublicRoute restricted={false} exact path="/">
-            <MainPage />
-          </PublicRoute>
+          <PublicRoute restricted={false} exact path="/" component={MainPage} />
           <PublicRoute
             restricted={true}
             component={Login}
@@ -71,7 +67,7 @@ export default function Main() {
             path="/board"
             exact
           />
-          <PublicRoute component={BoardCreate} path="/create" exact />
+          <PrivateRoute component={BoardCreate} path="/create" exact />
           <PrivateRoute component={Profile} path="/profile" exact />
           <PrivateRoute component={Refrigerator} path="/refrigerator" exact />
           <PrivateRoute component={BoardDetail} path="/board/:id" exact />
