@@ -151,3 +151,11 @@ export const boardRankChk = createPromiseThunk(
   BOARD_RANK_CHECK,
   UserApi.boardRankSend
 );
+
+export const VOTE_BOARD_RANK = "VOTE_BOARD_RANK";
+export const VOTE_BOARD_RANK_SUCCESS = "VOTE_BOARD_RANK_SUCCESS";
+export const VOTE_BOARD_RANK_ERROR = "VOTE_BOARD_RANK_ERROR";
+export const voteboardRank = createPromiseThunk(
+  VOTE_BOARD_RANK,
+  UserApi.getrankboard
+);
