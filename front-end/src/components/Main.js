@@ -19,7 +19,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import CheckIcon from "@mui/icons-material/Check";
-import HowToVoteIcon from "@mui/icons-material/HowToVote";
 import "./Main.css";
 import { Login } from "./user/Login";
 import SignUp from "./user/SignUp";
@@ -416,9 +415,7 @@ const MainPage = () => {
         </div>
       </div>
       {loading ? (
-        <div className="loadingMain">
-          <SkeletonLoadingSet />
-        </div>
+        <SkeletonLoadingSet />
       ) : (
         <>
           <div className="mainBody">
