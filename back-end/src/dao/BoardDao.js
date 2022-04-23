@@ -8,10 +8,12 @@ const mysql = require("mysql2/promise");
 module.exports = {
   selectBoardListFirst: async function () {
     try {
-      const query = `select b.id,
+      const query =
+        `select b.id,
                                   b.title,
                                   b.subtitle,
                                   b.createAt,
+                                  b.viewCount,
                                   u.nickname,
                                   u.profileImg,
                                   c.name category
@@ -20,12 +22,26 @@ module.exports = {
                                     join useraccount u on b.userId = u.id
                                     join category c on b.categoryId = c.id
 
-                           order by b.createAt desc, b.id limit 12;`;
+                           order by b.createAt desc, b.id limit 12;` +
+        `select b.id,
+                           b.title,
+                           b.subtitle,
+                           b.createAt,
+                           b.viewCount,
+                           u.nickname,
+                           u.profileImg,
+                           c.name category
+
+                    from board b
+                             join useraccount u on b.userId = u.id
+                             join category c on b.categoryId = c.id
+
+                    order by b.viewCount desc, b.id limit 12;`;
 
       const connection = await pool.getConnection(async (conn) => conn);
       const [rows] = await connection.query(query);
-
       connection.release();
+
       return rows;
     } catch (err) {
       return res.json(
@@ -41,7 +57,7 @@ module.exports = {
       const query = `select b.id,
                                   b.title,
                                   b.subtitle,
-                                  b.createAt,
+                                  b.createAt createAt,
                                   u.nickname,
                                   u.profileImg,
                                   c.name category
@@ -154,13 +170,15 @@ module.exports = {
                         b.content,
                         b.difficulty,
                         b.cookTime,
+                        b.servings,
                         b.subMaterial,
                         b.tagName,
                         b.viewCount,
+                        date_format(b.createAt, '%Y-%m-%d') as createAt,
                         date_format(b.modifiedAt, '%Y-%m-%d') as modifiedAt,
                         u.nickname,
                         u.profileImg,
-                        c.name                                   category
+                        c.name category
                  from board b
                           join useraccount u on b.userId = u.id
                           join category c on b.categoryId = c.id
@@ -169,7 +187,7 @@ module.exports = {
                  from board b
                           left join boardImage bi on b.id = bi.boardId
                  where b.id = ?;` +
-        `select m.keyName
+        `select m.keyName, bgm.count
                  from board b
                           join boardgetmaterial bgm on b.id = bgm.boardId
                           join material_r m on bgm.materialId = m.id
@@ -177,8 +195,6 @@ module.exports = {
         `update board
                  set viewCount = viewCount + 1
                  where id = ?;`;
-
-      // const query2 = `select b.id,
 
       const params = [id];
       const connection = await pool.getConnection(async (conn) => conn);
@@ -188,7 +204,6 @@ module.exports = {
         params,
         params,
       ]);
-      // const [rows2] = await connection.query(query2, params);
       connection.release();
       return rows;
     } catch (err) {
@@ -346,6 +361,38 @@ module.exports = {
         response.successFalse(
           3005,
           "데이터베이스 연결에 실패하였습니다. BoardDao error - selectMaterialKey"
+        )
+      );
+    }
+  },
+
+  selectBoardListView: async function (id, viewCount) {
+    try {
+      const query = `select b.id,
+                                  b.title,
+                                  b.subtitle,
+                                  b.createAt createAt,
+                                  b.viewCount,
+                                  u.nickname,
+                                  u.profileImg,
+                                  c.name category 
+
+                           from board b
+                                    join useraccount u on b.userId = u.id
+                                    join category c on b.categoryId = c.id
+                           where b.viewCount <= ?
+                             and b.id > ?
+                           order by b.viewCount desc, b.id limit 12;`;
+      const params = [viewCount, id];
+      const connection = await pool.getConnection(async (conn) => conn);
+      const [rows] = await connection.query(query, params);
+      connection.release();
+      return rows;
+    } catch (err) {
+      return res.json(
+        response.successFalse(
+          3001,
+          "데이터베이스 연결에 실패하였습니다. BoardDao error - selectBoardListView"
         )
       );
     }

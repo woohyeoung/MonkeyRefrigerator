@@ -14,7 +14,6 @@ import Skeleton from "@mui/material/Skeleton";
 import "./Cart.css";
 
 export default function Cart(props) {
-  console.log(props.token);
   return (
     <>
       <div className="carthhead">
@@ -32,7 +31,7 @@ const CartBody = () => {
   useEffect(() => {
     const setCart = async () => {
       setLoading(true);
-      await dispatch(boardList());
+      await dispatch(boardList()); // 이걸 내가 짜서 보내자
       setLoading(false);
     };
     setCart();

@@ -21,6 +21,9 @@ import {
   KEWORDBOARDLIST_AFTER_GET,
   KEWORDBOARDLIST_AFTER_SUCCESS,
   KEWORDBOARDLIST_AFTER_ERROR,
+  BOARDLISTVIEW_AFTER_GET,
+  BOARDLISTVIEW_AFTER_GET_SUCCESS,
+  BOARDLISTVIEW_AFTER_GET_ERROR,
 } from "../actions/BoardAction";
 import { reducerUtils, handleAsyncActions } from "../../api/AsyncUtil";
 const initialState = {
@@ -31,6 +34,7 @@ const initialState = {
   searchMaterialList: reducerUtils.initial(),
   boardListKeyword: reducerUtils.initial(),
   boardListKeywordAfter: reducerUtils.initial(),
+  boardListAfterView: reducerUtils.initial(),
 };
 
 export default function boardReducer(state = initialState, action) {
@@ -78,6 +82,14 @@ export default function boardReducer(state = initialState, action) {
         KEWORDBOARDLIST_AFTER_GET,
         "boardListKeywordAfter"
       )(state, action);
+    case BOARDLISTVIEW_AFTER_GET:
+    case BOARDLISTVIEW_AFTER_GET_SUCCESS:
+    case BOARDLISTVIEW_AFTER_GET_ERROR:
+      return handleAsyncActions(BOARDLISTVIEW_AFTER_GET, "boardListAfterView")(
+        state,
+        action
+      );
+
     default:
       return state;
   }

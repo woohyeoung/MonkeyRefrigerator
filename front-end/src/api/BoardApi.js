@@ -2,7 +2,7 @@ import axios from "axios";
 import { baseUrl } from "./BaseUrl";
 // console.log(baseUrl);
 
-//board API -- 조회순 첫번째 목록
+//board API -- 날짜순 첫번째 목록
 export const findBoardAll = () => {
   const result = axios.get(baseUrl + "board").catch((err) => {
     console.log(err);
@@ -10,7 +10,7 @@ export const findBoardAll = () => {
   return result;
 };
 
-//board API -- 조회순 첫번째 이후 목록
+//board API -- 날짜순 첫번째 이후 목록
 export const findBoardAllAfter = (page) => {
   const result = axios
     .get(baseUrl + "board/page", {
@@ -25,7 +25,22 @@ export const findBoardAllAfter = (page) => {
   return result;
 };
 
-//board API -- 조회순 첫번째 목록
+//board API -- 조회순 첫번째 이후 목록
+export const findBoardAllAfterView = (page) => {
+  const result = axios
+    .get(baseUrl + "board/view/page", {
+      params: {
+        id: page.id,
+        viewCount: page.viewCount,
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return result;
+};
+
+//board API -- 날짜순 첫번째 목록
 export const findkeyword = (keyword) => {
   const result = axios
     .get(baseUrl + "board/keyword", {
@@ -36,7 +51,6 @@ export const findkeyword = (keyword) => {
     .catch((err) => {
       console.log(err);
     });
-  console.log(result);
   return result;
 };
 
@@ -52,7 +66,6 @@ export const findkeywordAfter = (page) => {
     .catch((err) => {
       console.log(err);
     });
-  console.log(result);
   return result;
 };
 

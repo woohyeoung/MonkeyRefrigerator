@@ -391,9 +391,9 @@ const MainPage = () => {
     setBoard();
   }, []);
   useEffect(() => {
-    if (boardReducer.boardList.data)
+    if (boardReducer?.boardList?.data)
       setBoardRank([...boardReducer.boardList.data.data.result]);
-  }, [boardReducer.boardList.data]);
+  }, [boardReducer?.boardList?.data]);
   return (
     <>
       {boardRank.length === 0 ? (
