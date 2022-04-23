@@ -1,7 +1,7 @@
 //Install-Style-User
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useCallback } from "react-router-dom";
 import { Cookies } from "react-cookie";
 import {
   mdiMagnify,
@@ -19,6 +19,8 @@ import Icon from "@mdi/react";
 import "./Header.css";
 import { handleLogin } from "../store/actions/UserAction";
 import { getUserCart } from "../store/actions/CartAction";
+import { useLocation } from "react-router";
+import { keywordSave } from "../store/actions/SearchAction";
 
 function Header() {
   const dispatch = useDispatch();
@@ -33,6 +35,8 @@ function Header() {
   const [menu, setMenu] = useState(false);
   const [imgUrl, setImgUrl] = useState("/monkey_2.png");
   const monkey = useRef();
+  const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     if (isLogin && !tokenStore) {
@@ -54,6 +58,38 @@ function Header() {
     if (tokenStore?.token) dispatch(getUserCart(tokenStore.token));
     setLoading(false);
   }, [tokenStore?.token]);
+  const searchInput = useRef();
+
+  const [keyword, setKeyword] = useState("");
+
+  const onChangeKeyword = useCallback(
+    (e) => {
+      setKeyword(e.target.value);
+    },
+    [keyword]
+  );
+  //엔터시 재료 검색
+  const onKeyPress = async (e) => {
+    if (e.key == "Enter") {
+      if (e.target.value === "") {
+        window.alert("한글자 이상 입력해주세요.");
+        return;
+      }
+      if (location.pathname === "/search") {
+        e.target.value = "";
+        dispatch(keywordSave(keyword));
+      } else {
+        e.target.value = "";
+        async function pushSearch() {
+          await history.push({
+            pathname: "/search",
+          });
+        }
+        dispatch(keywordSave(keyword));
+        pushSearch();
+      }
+    }
+  };
 
   useEffect(() => {
     if (isLogin && cartStore?.usercartget?.data?.result) {

@@ -275,7 +275,7 @@ module.exports = {
     } catch (error) {
       return res.json(
         response.successFalse(
-          1001,
+          112342342134,
           "서버와 통신에 실패하였습니다. UserController/UserDao error - getBoardRank"
         )
       );
@@ -295,7 +295,7 @@ module.exports = {
     } catch (error) {
       return res.json(
         response.successFalse(
-          1001,
+          112341243,
           "서버와 통신에 실패하였습니다. UserController/UserDao error - getRankVote"
         )
       );

@@ -37,6 +37,7 @@ import { voteBtnClick } from "../store/actions/UserAction";
 import BoardList from "./board/BoardList";
 import BoardCreate from "./board/BoardCreate";
 import Cart from "../components/cart/Cart";
+import Search from "../components/search/Search";
 
 export default function Main() {
   const dispatch = useDispatch();
@@ -66,6 +67,12 @@ export default function Main() {
             restricted={false}
             component={BoardList}
             path="/board"
+            exact
+          />
+          <PublicRoute
+            restricted={false}
+            component={Search}
+            path="/search"
             exact
           />
           <PrivateRoute component={BoardCreate} path="/create" exact />

@@ -62,8 +62,9 @@ export const Refrigerator = () => {
 			dispatch(userMaterialUserId(token));
 			setLoading(false);
 		}, 1000);
-	}, []);
+	}, [dispatch]);
 
+	//토큰 변경시 토큰 받기
 	useEffect(() => {
 		if (token === undefined && tokenStore.token !== null) {
 			setToken(tokenStore.token);
@@ -72,11 +73,17 @@ export const Refrigerator = () => {
 
 	useEffect(() => {
 		setTimeout(() => {
-			if (userStore.userMaterialList) {
+			if (userStore.userMaterialList.data.data.result) {
 				setMaterialList([...userStore.userMaterialList.data.data.result]);
 			}
-		}, 250);
-	}, [userStore.userMaterialList]);
+		}, 500);
+	}, [materialList]);
+
+	// useEffect(() => {
+	// 	if (useStore.userRefrigeratorList.data.data.result) {
+	// 		setRefrigeratorList([...useStore.userRefrigeratorList.data.data.result]);
+	// 	}
+	// }, [useStore.userRefrigeratorList.data]);
 
 	const modalRef = useRef(null);
 	const onClickHandler = (type) => {
@@ -119,7 +126,6 @@ export const Refrigerator = () => {
 
 	const mainMateRef = useRef();
 	const onClickMainMate = (item) => {
-		console.log('왔당');
 		let a = window.confirm(item.keyName + '을 주재료로 선택 하시겠습니까?');
 		if (!a) {
 			return;
@@ -128,7 +134,6 @@ export const Refrigerator = () => {
 			token: token,
 			item: item,
 		};
-		setMaterialList([...userStore.userMaterialList.data.data.result]);
 		setText('레시피 검색중입니다...');
 		setLoading(true);
 		setTimeout(() => {
@@ -137,7 +142,7 @@ export const Refrigerator = () => {
 			setOpen2(true);
 		}, 1000);
 	};
-	const [open2, setOpen2] = useState(true);
+	const [open2, setOpen2] = useState(false);
 	const handleOpen2 = () => setOpen2(true);
 	const handleClose2 = () => {
 		setOpen2(false);
@@ -153,11 +158,6 @@ export const Refrigerator = () => {
 		boxShadow: 24,
 		p: 4,
 	};
-	// useEffect(() => {
-	// 	if (useStore.userRefrigeratorList.data.data.result) {
-	// 		setRefrigeratorList([...useStore.userRefrigeratorList.data.data.result]);
-	// 	}
-	// }, [useStore.userRefrigeratorList.data]);
 
 	const display = useCallback(() => {
 		if (flag) {
@@ -176,16 +176,26 @@ export const Refrigerator = () => {
 		display();
 	}, [flag]);
 
-	const deleteMaterial = (data) => {
-		setText('회원 재료 삭제중...');
-		setLoading(true);
-		setTimeout(() => {
-			setMaterialList([...userStore.userMaterialList.data.data.result]);
-			dispatch(deleteUserGetMaterial(data));
-			dispatch(userMaterialUserId(token));
+	const [deleteflag, setDeleteFlag] = useState(false);
+	const [deleteData, setDeleteData] = useState({});
+	const deleteMaterial = async (data) => {
+		if (window.confirm('정말 삭제 하시겠습니까?')) {
+			setText('회원 재료 삭제중...');
+			setLoading(true);
+			setDeleteFlag(true);
+			setDeleteData(data);
 			setLoading(false);
-		}, 500);
+		} else {
+		}
 	};
+	useEffect(() => {
+		if (deleteflag) {
+			setTimeout(() => {
+				dispatch(deleteUserGetMaterial(deleteData));
+				dispatch(userMaterialUserId(token));
+			}, 500);
+		}
+	}, [deleteflag]);
 
 	const door = flag ? { transform: 'rotateY(-160deg)' } : null;
 	return (
@@ -297,7 +307,7 @@ export const Refrigerator = () => {
 																				onClick={() => {
 																					let data = {
 																						token: token,
-																						materialId: item.id,
+																						materialId: item.materialId,
 																					};
 																					console.log(data.token);
 																					deleteMaterial(data);
@@ -393,13 +403,11 @@ const SearchModal = (props) => {
 		}, 500);
 	}, [boardStore.searchMaterialList.data]);
 
-	useEffect(() => {
-		setTimeout(() => {
-			if (userStore.userMaterialList) {
-				setMaterialList([...userStore.userMaterialList.data.data.result]);
-			}
-		}, 250);
-	}, [userStore.userMaterialList]);
+	// useEffect(() => {
+	// 	if (userStore.userMaterialList.data) {
+	// 		setMaterialList([...userStore.userMaterialList.data.data.result]);
+	// 	}
+	// }, [userStore.userMaterialList.data]);
 
 	const [style, setStyle] = useState(0);
 	const searchKind = [
@@ -464,8 +472,6 @@ const SearchModal = (props) => {
 			return;
 		}
 
-		console.log(materialList);
-		console.log(_selectMaterial);
 		const idx = materialList.findIndex((item) => {
 			return item.materialId === _selectMaterial.id;
 		});

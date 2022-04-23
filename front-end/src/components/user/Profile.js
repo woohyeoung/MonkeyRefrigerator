@@ -24,11 +24,12 @@ import { useCookies } from "react-cookie";
 import checkicon from "../../assets/icon/outline_check_circle_black_24dp.png";
 import cancelicon from "../../assets/icon/outline_highlight_off_black_24dp.png";
 
-function Profile(props) {
+function Profile() {
   const userStore = useSelector((state) => state.userReducer);
   const tokenReducer = useSelector((state) => state.tokenReducer);
   const tokenStore = Cookies.get("accessToken");
   const [token, setToken] = useState("");
+
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);

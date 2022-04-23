@@ -288,7 +288,6 @@ function BoardCreate() {
 		}
 		async function onPress() {
 			let formData = new FormData();
-			console.log(pictures);
 			formData.enctype = 'multipart/form-data';
 			//다중 image pictures 배열 (file)
 			for (let i = 0; i < pictures[0].length; i++) {
