@@ -31,6 +31,7 @@ function Search() {
   const [page, setPage] = useState({
     id: 0,
     createAt: 0,
+    keyword: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -45,7 +46,6 @@ function Search() {
     } else {
       async function fetchBoardList() {
         setKeyword(searchStore);
-        console.log(keyword);
         setLoading(true);
         await dispatch(kewordBoardList(keyword));
         setLoading(false);
@@ -59,7 +59,6 @@ function Search() {
     } else {
       async function fetchBoardList() {
         setKeyword(searchStore);
-        console.log(keyword);
         setLoading(true);
         await dispatch(kewordBoardList(keyword));
         setLoading(false);
@@ -75,20 +74,20 @@ function Search() {
   }, [boardStore?.boardListKeyword?.data]);
 
   useEffect(() => {
-    if (searchBoards.length > 0) {
+    if (searchBoards) {
       setPage({
         id: searchBoards[searchBoards.length - 1]?.id,
         createAt: searchBoards[searchBoards.length - 1]?.createAt,
         keyword: keyword,
       });
     }
-  }, [searchBoards]);
+  }, [keyword, searchBoards]);
 
   useEffect(() => {
     if (boardStore?.boardListKeywordAfter?.data) {
       setSearchBoards([
         ...searchBoards,
-        ...boardStore?.boardListKeywordAfter?.data?.data.result,
+        ...boardStore.boardListKeywordAfter.data.data.result,
       ]);
     }
   }, [boardStore?.boardListKeywordAfter?.data]);
@@ -104,7 +103,7 @@ function Search() {
     if (Math.round(scrollTop + innerHeight) >= scrollHeight) {
       // scrollTop과 innerHeight를 더한 값이 scrollHeight보다 크다면, 가장 아래에 도달했다는 의미이다.
 
-      await dispatch(kewordBoardListAfter(page));
+      dispatch(kewordBoardListAfter(page));
     }
   }, [page, searchBoards]);
 

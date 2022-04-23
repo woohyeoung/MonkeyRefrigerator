@@ -36,6 +36,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { Pagination } from "../Main.js";
+import { Link } from "react-router-dom";
 
 export const Refrigerator = () => {
   const tokenStore = useSelector((state) => state.tokenReducer);
@@ -213,64 +214,66 @@ export const Refrigerator = () => {
                     .map((board, index) => {
                       return (
                         <>
-                          <Card
-                            sx={{
-                              height: 300,
-                              width: 300,
-                              margin: "10px",
-                              textAlign: "center",
-                            }}
-                          >
-                            <Typography
-                              gutterBottom
-                              variant="h5"
-                              component="div"
-                              style={{
-                                fontSize: "10px",
-                                color: "red",
-                                fontWeight: "bold",
+                          <Link to={"/board/" + board.id}>
+                            <Card
+                              sx={{
+                                height: 300,
+                                width: 250,
+                                margin: "10px",
+                                textAlign: "center",
                               }}
                             >
-                              {board.categoryName}
-                              <span style={{ color: "black" }}>
-                                {" "}
-                                [{board.servings}]
-                              </span>
-                              <hr />
-                            </Typography>
-                            {board.boardImgPath ? (
-                              <>
-                                <img
-                                  style={{ width: "auto", height: "150px" }}
-                                  src={board.boardImgPath}
-                                  alt="img"
-                                />
-                              </>
-                            ) : (
-                              <>
-                                <img
-                                  style={{ width: "auto", height: "150px" }}
-                                  src={"/monkey_3.png"}
-                                  alt="img"
-                                />
-                              </>
-                            )}
-                            <hr />
-                            <CardContent>
                               <Typography
                                 gutterBottom
-                                variant="h4"
+                                variant="h5"
                                 component="div"
                                 style={{
-                                  fontSize: "16px",
+                                  fontSize: "10px",
+                                  color: "red",
                                   fontWeight: "bold",
-                                  fontFamily: "BMDOHYEON",
                                 }}
                               >
-                                {board.title}
+                                {board.categoryName}
+                                <span style={{ color: "black" }}>
+                                  {" "}
+                                  [{board.servings}]
+                                </span>
+                                <hr />
                               </Typography>
-                            </CardContent>
-                          </Card>
+                              {board.boardImgPath ? (
+                                <>
+                                  <img
+                                    style={{ width: "auto", height: "150px" }}
+                                    src={board.boardImgPath}
+                                    alt="img"
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  <img
+                                    style={{ width: "auto", height: "150px" }}
+                                    src={"/monkey_3.png"}
+                                    alt="img"
+                                  />
+                                </>
+                              )}
+                              <hr />
+                              <CardContent>
+                                <Typography
+                                  gutterBottom
+                                  variant="h4"
+                                  component="div"
+                                  style={{
+                                    fontSize: "16px",
+                                    fontWeight: "bold",
+                                    fontFamily: "BMDOHYEON",
+                                  }}
+                                >
+                                  {board.title}
+                                </Typography>
+                              </CardContent>
+                            </Card>
+                          </Link>
                         </>
                       );
                     })}
