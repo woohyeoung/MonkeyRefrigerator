@@ -1,5 +1,6 @@
 const response = require("../utils/response");
 const RefrigeratorDao = require("../dao/RefrigeratorDao");
+const boardDao = require("../dao/BoardDao")
 
 module.exports = {
     findRefrigerator: async function (req, res) {
@@ -13,6 +14,17 @@ module.exports = {
                 );
             }
             const List = await RefrigeratorDao.selectRefrigerator(materialId,userId)
+
+
+             for (let i = 0; i < List.length; i++) {
+                let boardImg = await boardDao.selectBoardImg(List[i].id);
+                if (boardImg.length === 0) {
+                    List[i].boardImgPath = '';
+                } else {
+                    List[i].boardImgPath = boardImg[0].boardImgPath;
+                }
+            }
+
             if (List.length === 0) {
                 return res.json(
                     response.successFalse(1001, '목록이 없습니다.')

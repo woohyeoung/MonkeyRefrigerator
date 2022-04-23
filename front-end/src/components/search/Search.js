@@ -24,20 +24,15 @@ function Search() {
 
 	const dispatch = useDispatch();
 
-	const [keyword, setKeyword] = useState();
+	const [keyword, setKeyword] = useState('');
 
-	const [boards, setBoards] = useState([]);
+	const [searchBoards, setSearchBoards] = useState([]);
 
 	const [page, setPage] = useState({
 		id: 0,
 		createAt: 0,
 	});
 	const [loading, setLoading] = useState(false);
-	const [boardCount, setBoardCount] = useState(0);
-
-	// useEffect(() => {
-	// 	setKeyword(location.state.keyword);
-	// }, []);
 
 	useEffect(() => {
 		if (searchStore) {
@@ -45,11 +40,26 @@ function Search() {
 		}
 	}, [searchStore]);
 
+	useEffect(() => {
+		if (keyword === '') {
+		} else {
+			async function fetchBoardList() {
+				setKeyword(searchStore);
+				console.log(keyword);
+				setLoading(true);
+				await dispatch(kewordBoardList(keyword));
+				setLoading(false);
+			}
+			fetchBoardList();
+		}
+	}, []);
 	//표본
 	useEffect(() => {
 		if (keyword === '') {
 		} else {
 			async function fetchBoardList() {
+				setKeyword(searchStore);
+				console.log(keyword);
 				setLoading(true);
 				await dispatch(kewordBoardList(keyword));
 				setLoading(false);
@@ -59,39 +69,31 @@ function Search() {
 	}, [keyword]);
 
 	useEffect(() => {
-		if (boardStore.boardListKeyword.data) {
-			setLoading(true);
-			async function LoadBoardList() {
-				await setBoards([...boardStore.boardListKeyword.data.data.result]);
-				setLoading(false);
-			}
-			LoadBoardList();
+		if (boardStore?.boardListKeyword?.data) {
+			setSearchBoards([...boardStore.boardListKeyword.data.data.result]);
 		}
-	}, [boardStore.boardListKeyword.data]);
+	}, [boardStore?.boardListKeyword?.data]);
 
 	useEffect(() => {
-		if (boards[0]) {
-			setBoardCount(boards[0].boardCount);
+		if (searchBoards.length > 0) {
 			setPage({
-				id: boards[boards.length - 1].id,
-				createAt: boards[boards.length - 1].createAt,
+				id: searchBoards[searchBoards.length - 1]?.id,
+				createAt: searchBoards[searchBoards.length - 1]?.createAt,
 				keyword: keyword,
 			});
 		}
-	}, [boards]);
+	}, [searchBoards]);
 
 	useEffect(() => {
-		setTimeout(() => {
-			if (boardStore.boardListKeywordAfter.data) {
-				setBoards([
-					...boards,
-					...boardStore.boardListKeywordAfter.data.data.result,
-				]);
-			}
-		}, 500);
-	}, [boardStore.boardListKeywordAfter.data]);
+		if (boardStore?.boardListKeywordAfter?.data) {
+			setSearchBoards([
+				...searchBoards,
+				...boardStore?.boardListKeywordAfter?.data?.data.result,
+			]);
+		}
+	}, [boardStore?.boardListKeywordAfter?.data]);
 
-	const handleScroll = useCallback(async () => {
+	const handleScroll2 = useCallback(async () => {
 		// 스크롤을 하면서 실행할 내용을 이곳에 추가합니다.
 		const { innerHeight } = window;
 		// 브라우저창 내용의 크기 (스크롤을 포함하지 않음)
@@ -104,17 +106,17 @@ function Search() {
 
 			await dispatch(kewordBoardListAfter(page));
 		}
-	}, [page, boards]);
+	}, [page, searchBoards]);
 
 	useEffect(() => {
-		window.addEventListener('scroll', handleScroll, true);
+		window.addEventListener('scroll', handleScroll2, true);
 		// 스크롤이 발생할때마다 handleScroll 함수를 호출하도록 추가합니다.
 
 		return () => {
-			window.removeEventListener('scroll', handleScroll, true);
+			window.removeEventListener('scroll', handleScroll2, true);
 			// 해당 컴포넌트가 언마운트 될때, 스크롤 이벤트를 제거합니다.
 		};
-	}, [handleScroll]);
+	}, [handleScroll2]);
 
 	return (
 		<>
@@ -137,7 +139,7 @@ function Search() {
 							justifyContent="center"
 							alignItems="center"
 						>
-							{boards.map((item, index) => {
+							{searchBoards.map((item, index) => {
 								return <BoardCard item={item} key={index} />;
 							})}
 						</Grid>

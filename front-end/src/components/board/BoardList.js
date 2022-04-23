@@ -96,7 +96,7 @@ function BoardList() {
 
 	useEffect(() => {}, [selected]);
 
-	const handleScroll = useCallback(async () => {
+	const handleScroll = useCallback(() => {
 		// 스크롤을 하면서 실행할 내용을 이곳에 추가합니다.
 		const { innerHeight } = window;
 		// 브라우저창 내용의 크기 (스크롤을 포함하지 않음)
@@ -107,7 +107,7 @@ function BoardList() {
 		if (Math.round(scrollTop + innerHeight) >= scrollHeight) {
 			// scrollTop과 innerHeight를 더한 값이 scrollHeight보다 크다면, 가장 아래에 도달했다는 의미이다.
 
-			await dispatch(boardListAfter(page));
+			dispatch(boardListAfter(page));
 		}
 	}, [page, boards]);
 	useEffect(() => {

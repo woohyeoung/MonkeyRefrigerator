@@ -6,9 +6,10 @@ module.exports = {
 
     selectRefrigerator: async function (materialId, userId) {
         try {
-            const query = `select distinct bb.id       boardId,
-                                           uc.nickname nickname,
-                                           cate.name   categoryName,
+            const query = `select distinct bb.id         id,
+                                           uc.nickname   nickname,
+                                           uc.profileImg profileImg,
+                                           cate.name     categoryName,
                                            bb.title,
                                            bb.subtitle,
                                            bb.servings
@@ -24,7 +25,7 @@ module.exports = {
                                     left join category cate on bb.categoryId = cate.id
                            where bgm2.materialId IN
                                  (select ugm.materialId from usergetmaterial ugm where ugm.userId = ?)
-                           order by bb.viewCount desc limit 10
+                           order by bb.viewCount desc limit 12
             ;`;
             const params = [materialId, userId];
 

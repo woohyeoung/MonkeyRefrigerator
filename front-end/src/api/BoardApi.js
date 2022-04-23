@@ -36,6 +36,7 @@ export const findkeyword = (keyword) => {
 		.catch((err) => {
 			console.log(err);
 		});
+	console.log(result);
 	return result;
 };
 
@@ -51,6 +52,7 @@ export const findkeywordAfter = (page) => {
 		.catch((err) => {
 			console.log(err);
 		});
+	console.log(result);
 	return result;
 };
 

@@ -61,6 +61,7 @@ export const findUserMaterialUserId = (token) => {
 		.catch((err) => {
 			console.log(err);
 		});
+	console.log(result);
 	return result;
 };
 
@@ -106,6 +107,7 @@ export const deleteUserGetMaterialUserId = (data) => {
 		.catch((err) => {
 			console.log(err);
 		});
+	console.log(result);
 	return result;
 };
 

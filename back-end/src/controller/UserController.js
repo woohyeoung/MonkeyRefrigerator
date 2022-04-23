@@ -139,10 +139,6 @@ module.exports = {
         try {
             let userMaterialList = await userDao.selectUserGetMaterialUserId(userId);
 
-            if (userMaterialList.length === 0) {
-                return res.json(response.successFalse(1004, '회원이 가지고 있는 재료 목록이 없습니다.'));
-            }
-
             return res.json(
                 response.successTrue(
                     2001,
