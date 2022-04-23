@@ -25,6 +25,35 @@ export const findBoardAllAfter = (page) => {
   return result;
 };
 
+//board API -- 조회순 첫번째 목록
+export const findkeyword = (keyword) => {
+  const result = axios
+    .get(baseUrl + "board/keyword", {
+      params: {
+        keyword: keyword,
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return result;
+};
+
+export const findkeywordAfter = (page) => {
+  const result = axios
+    .get(baseUrl + "board/keyword/page", {
+      params: {
+        id: page.id,
+        createAt: page.createAt,
+        keyword: page.keyword,
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return result;
+};
+
 export const findBoardDetail = async (boards) => {
   const result = await axios.get(baseUrl + "board/detail", {
     params: {

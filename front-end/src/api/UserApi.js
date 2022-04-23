@@ -61,13 +61,11 @@ export const findUserMaterialUserId = (token) => {
 		.catch((err) => {
 			console.log(err);
 		});
-	console.log(result);
 	return result;
 };
 
 //user password change API - 사용자 비밀번호 변경
 export const updatePassword = async (data) => {
-	//console.log(data);
 	const result = axios
 		.post(
 			baseUrl + 'pwChange',
@@ -96,26 +94,18 @@ export const updatePassword = async (data) => {
 };
 
 export const deleteUserGetMaterialUserId = (data) => {
-	console.log(data.token);
-	console.log(data);
 	const result = axios
-		.delete(
-			baseUrl + 'user/material',
-			{
-				material: {
-					id: data.materialId,
-				},
+		.delete(baseUrl + 'user/material', {
+			params: {
+				materialId: data.materialId,
 			},
-			{
-				headers: {
-					accessToken: data.token,
-				},
-			}
-		)
+			headers: {
+				accessToken: data.token,
+			},
+		})
 		.catch((err) => {
 			console.log(err);
 		});
-	console.log(result);
 	return result;
 };
 
@@ -153,22 +143,16 @@ export const userVoteAdd = async (board, token) => {
 export const searchRefrigeratorList = (data) => {
 	console.log(data);
 	const result = axios
-		.get(
-			baseUrl + 'refrigerator',
-			{
-				params: {
-					materialId: data.item.materialId,
-				},
+		.get(baseUrl + 'refrigerator', {
+			params: {
+				materialId: data.item.materialId,
 			},
-			{
-				headers: {
-					accessToken: data.token,
-				},
-			}
-		)
+			headers: {
+				accessToken: data.token,
+			},
+		})
 		.catch((err) => {
 			console.log(err);
 		});
-	console.log(result);
 	return result;
 };
