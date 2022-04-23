@@ -15,5 +15,7 @@ module.exports = function (app) {
 
   app.route("/uservote").get(jwtMiddleware, user.voteValid);
   app.route("/voteadd").post(jwtMiddleware, user.voteUser);
+
   app.route("/pwChange").post(jwtMiddleware, user.changePassword);
+  app.route("/updateinfo").post(jwtMiddleware, user.updateUserIn);
 };

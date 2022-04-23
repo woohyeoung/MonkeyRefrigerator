@@ -41,31 +41,34 @@ export const REFRIGERATOR_GET_ERROR = 'REFRIGERATOR_GET_ERROR';
 //사용자 프로필 비밀번호 변경
 export const PASSWORD_UPDATE = 'PASSWORD_UPDATE';
 
+//사용자 정보 변경
+export const USERINFO_UPDATE = "USERINFO_UPDATE";
+
 export const loginVali = (email, pw) => {
-	const data = { email: email, pw: pw };
-	return async (dispatch) => {
-		try {
-			const token = await UserApi.getToken(data);
-			if (token !== undefined) {
-				setCookie('accessToken', token, {
-					path: '/',
-					maxAge: 3600,
-					withCredentials: true,
-				});
-			}
-			dispatch({
-				type: SET_TOKEN,
-				result: true,
-				token: token,
-			});
-		} catch (e) {
-			dispatch({
-				type: SET_TOKEN,
-				result: false,
-				token: null,
-			});
-		}
-	};
+  const data = { email: email, pw: pw };
+  return async (dispatch) => {
+    try {
+      const token = await UserApi.getToken(data);
+      if (token !== undefined) {
+        setCookie("accessToken", token, {
+          path: "/",
+          maxAge: 1750,
+          withCredentials: true,
+        });
+      }
+      dispatch({
+        type: SET_TOKEN,
+        result: true,
+        token: token,
+      });
+    } catch (e) {
+      dispatch({
+        type: SET_TOKEN,
+        result: false,
+        token: null,
+      });
+    }
+  };
 };
 
 export const handleLogin = () => {
@@ -144,4 +147,8 @@ export const DID_VOTE_CHECK = 'DID_VOTE_CHECK';
 export const searchRefrigerator = createPromiseThunk(
 	REFRIGERATOR_GET,
 	UserApi.searchRefrigeratorList
+
+  export const updateUserInfo = createPromiseThunk(
+    USERINFO_UPDATE,
+    UserApi.updateUserInfo
 );
