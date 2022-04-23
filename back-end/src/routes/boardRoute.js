@@ -1,4 +1,4 @@
-const board = require("../controller/BoardController");
+const board = require('../controller/BoardController');
 module.exports = function (app) {
 	const board = require('../controller/BoardController');
 	const s3 = require('../utils/awsS3');
@@ -20,5 +20,4 @@ module.exports = function (app) {
 			s3.upload('/board').array('image', 5),
 			board.saveBoardOne
 		);
-
 };

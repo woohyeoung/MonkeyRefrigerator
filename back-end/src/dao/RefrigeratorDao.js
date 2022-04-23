@@ -1,12 +1,11 @@
-const response = require("../utils/response");
+const response = require('../utils/response');
 
-const {pool} = require("../config/database");
+const { pool } = require('../config/database');
 
 module.exports = {
-
-    selectRefrigerator: async function (materialId, userId) {
-        try {
-            const query = `select distinct bb.id         id,
+	selectRefrigerator: async function (materialId, userId) {
+		try {
+			const query = `select distinct bb.id         id,
                                            uc.nickname   nickname,
                                            uc.profileImg profileImg,
                                            cate.name     categoryName,
@@ -27,21 +26,20 @@ module.exports = {
                                  (select ugm.materialId from usergetmaterial ugm where ugm.userId = ?)
                            order by bb.viewCount desc limit 12
             ;`;
-            const params = [materialId, userId];
+			const params = [materialId, userId];
 
-            const connection = await pool.getConnection(async (conn) => conn);
-            const [rows] = await connection.query(query, params);
+			const connection = await pool.getConnection(async (conn) => conn);
+			const [rows] = await connection.query(query, params);
 
-            connection.release();
-            return rows;
-        } catch (err) {
-            return res.json(
-                response.successFalse(
-                    3001,
-                    "데이터베이스 연결에 실패하였습니다. BoardDao error - selectBoardListFirst"
-                )
-            );
-        }
-    },
-
-}
+			connection.release();
+			return rows;
+		} catch (err) {
+			return res.json(
+				response.successFalse(
+					3001,
+					'데이터베이스 연결에 실패하였습니다. BoardDao error - selectBoardListFirst'
+				)
+			);
+		}
+	},
+};
