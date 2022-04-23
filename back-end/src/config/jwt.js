@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const response = require("../utils/response");
 
 module.exports = jwtMiddleware = async (req, res, next) => {
-    console.log(req.headers)
 
     const accessToken =
         req.get("accessToken") ||

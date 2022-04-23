@@ -1,3 +1,4 @@
+const board = require("../controller/BoardController");
 module.exports = function (app) {
 	const board = require('../controller/BoardController');
 	const s3 = require('../utils/awsS3');
@@ -5,6 +6,8 @@ module.exports = function (app) {
 
 	app.route('/board').get(board.findBoardAll);
 	app.route('/board/page').get(board.findBoardAllAfter);
+	app.route('/board/keyword').get(board.findBoardAllKeyword);
+	app.route('/board/keyword/page').get(board.findBoardAllKeywordAfter);
 	app.route('/board/category').get(board.findBoardCategory);
 
 	app.route('/board/detail').get(board.findBoardDetail);
@@ -17,4 +20,5 @@ module.exports = function (app) {
 			s3.upload('/board').array('image', 5),
 			board.saveBoardOne
 		);
+
 };
