@@ -250,7 +250,7 @@ git add .
 
 git commit -m "feat:4/17, main.js ing 메인페이지 진행중(60%), before rebase"
 
-git rebase upstream/master
+git rebase upstream/master && git merge upstream/master
 
 --------------------------------------------------------------------------------------------
 <여기서 충돌나면 충돌 고쳐주세요>
