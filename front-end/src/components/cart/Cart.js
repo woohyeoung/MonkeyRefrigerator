@@ -13,6 +13,17 @@ import { delUserCart, getUserCart } from "../../store/actions/CartAction";
 import Loading from "../shared/CustomLoading";
 import DeleteIcon from "@mui/icons-material/Delete";
 export default function Cart() {
+
+  return (
+    <>
+      <div className="carthhead">
+        <h2>장바구니입니다</h2>
+      </div>
+      <CartBody />
+    </>
+  );
+}
+const CartBody = () => {
   const dispatch = useDispatch();
   const tokenStore = useSelector((state) => state.tokenReducer);
   const cartStore = useSelector((state) => state.cartReducer);

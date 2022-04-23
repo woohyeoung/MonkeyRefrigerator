@@ -113,11 +113,11 @@ module.exports = {
           response.successFalse(7101, "5개이상 담을 수 없습니다.")
         );
       }
-      let insertInfo = await userDao.insertUserGetMaterial(data);
+      let insertInfo = await userDao.insertUserGetMaterial(userId, materialId);
       return res.json(
         response.successTrue(
           1001,
-          "해당 회원이 가지고 있는  재료 1개를 추가하였습니다.",
+          "해당 회원이 가지고 있는 재료 1개를 추가하였습니다.",
           insertInfo
         )
       );
@@ -135,15 +135,6 @@ module.exports = {
     let userId = req.tokenInfo.userId;
     try {
       let userMaterialList = await userDao.selectUserGetMaterialUserId(userId);
-
-      if (userMaterialList.length === 0) {
-        return res.json(
-          response.successFalse(
-            1004,
-            "회원이 가지고 있는 재료 목록이 없습니다."
-          )
-        );
-      }
 
       return res.json(
         response.successTrue(
@@ -238,7 +229,7 @@ module.exports = {
       const userId = req.tokenInfo.userId;
       const pw = req.body.body.password;
       const data = { userId: userId, pw: pw };
-      const result = await UserDao.updatePassword(data);
+      const result = await userDao.updatePassword(data);
 
       return res.json(
         response.successTrue(

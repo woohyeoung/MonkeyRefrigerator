@@ -256,7 +256,7 @@ const VotePage = (props) => {
     </div>
   );
 };
-const Pagination = ({ total, limit, page, setPage }) => {
+export const Pagination = ({ total, limit, page, setPage }) => {
   const numPages = Math.ceil(total / limit);
   return (
     <>

@@ -1,14 +1,14 @@
 const response = require("../utils/response");
 
-const {pool} = require("../config/database");
+const { pool } = require("../config/database");
 
 module.exports = {
-
-    selectRefrigerator: async function (materialId, userId) {
-        try {
-            const query = `select distinct bb.id       boardId,
-                                           uc.nickname nickname,
-                                           cate.name   categoryName,
+  selectRefrigerator: async function (materialId, userId) {
+    try {
+      const query = `select distinct bb.id         id,
+                                           uc.nickname   nickname,
+                                           uc.profileImg profileImg,
+                                           cate.name     categoryName,
                                            bb.title,
                                            bb.subtitle,
                                            bb.servings
@@ -24,23 +24,22 @@ module.exports = {
                                     left join category cate on bb.categoryId = cate.id
                            where bgm2.materialId IN
                                  (select ugm.materialId from usergetmaterial ugm where ugm.userId = ?)
-                           order by bb.viewCount desc limit 10
+                           order by bb.viewCount desc limit 12
             ;`;
-            const params = [materialId, userId];
+      const params = [materialId, userId];
 
-            const connection = await pool.getConnection(async (conn) => conn);
-            const [rows] = await connection.query(query, params);
+      const connection = await pool.getConnection(async (conn) => conn);
+      const [rows] = await connection.query(query, params);
 
-            connection.release();
-            return rows;
-        } catch (err) {
-            return res.json(
-                response.successFalse(
-                    3001,
-                    "데이터베이스 연결에 실패하였습니다. BoardDao error - selectBoardListFirst"
-                )
-            );
-        }
-    },
-
-}
+      connection.release();
+      return rows;
+    } catch (err) {
+      return res.json(
+        response.successFalse(
+          3001,
+          "데이터베이스 연결에 실패하였습니다. BoardDao error - selectBoardListFirst"
+        )
+      );
+    }
+  },
+};
