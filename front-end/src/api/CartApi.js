@@ -1,8 +1,6 @@
 import axios from "axios";
 import { baseUrl } from "./BaseUrl";
 
-console.log(baseUrl);
-
 //장바구니 추가, 삭제
 export const functionName1 = async (data, token) => {
   const result = await axios

@@ -31,13 +31,23 @@ export const BOARD_POST = "BOARD_POST";
 export const BOARD_POST_SUCCESS = "BOARD_POST_SUCCESS";
 export const BOARD_POST_ERROR = "BOARD_POST_ERROR";
 
-export const KEWORDBOARDLIST_GET = 'KEWORDBOARDLIST_GET';
-export const KEWORDBOARDLIST_GET_SUCCESS = 'KEWORDBOARDLIST_GET_SUCCESS';
-export const KEWORDBOARDLIST_GET_ERROR = 'KEWORDBOARDLIST_GET_ERROR';
+export const KEWORDBOARDLIST_GET = "KEWORDBOARDLIST_GET";
+export const KEWORDBOARDLIST_GET_SUCCESS = "KEWORDBOARDLIST_GET_SUCCESS";
+export const KEWORDBOARDLIST_GET_ERROR = "KEWORDBOARDLIST_GET_ERROR";
 
-export const KEWORDBOARDLIST_AFTER_GET = 'KEWORDBOARDLIST_AFTER_GET';
-export const KEWORDBOARDLIST_AFTER_SUCCESS = 'KEWORDBOARDLIST_AFTER_SUCCESS';
-export const KEWORDBOARDLIST_AFTER_ERROR = 'KEWORDBOARDLIST_AFTER_ERROR';
+export const KEWORDBOARDLIST_AFTER_GET = "KEWORDBOARDLIST_AFTER_GET";
+export const KEWORDBOARDLIST_AFTER_SUCCESS = "KEWORDBOARDLIST_AFTER_SUCCESS";
+export const KEWORDBOARDLIST_AFTER_ERROR = "KEWORDBOARDLIST_AFTER_ERROR";
+
+// //게시물 전체 목록 조회순 첫번째 목록 조회
+// export const BOARDLISTVIEW_GET = "BOARDLISTVIEW_GET";
+// export const BOARDLISTVIEW_GET_SUCCESS = "BOARDLISTVIEW_GET_SUCCESS";
+// export const BOARDLISTVIEW_GET_ERROR = "BOARDLISTVIEW_GET_ERROR";
+//게시물 전체 목록 조회순 첫번째 이후 목록 조회
+export const BOARDLISTVIEW_AFTER_GET = "BOARDLISTVIEW_AFTER_GET";
+export const BOARDLISTVIEW_AFTER_GET_SUCCESS =
+  "BOARDLISTVIEW_AFTER_GET_SUCCESS";
+export const BOARDLISTVIEW_AFTER_GET_ERROR = "BOARDLISTVIEW_AFTER_GET_ERROR";
 
 export const boardList = createPromiseThunk(
   BOARDLIST_GET,
@@ -47,6 +57,7 @@ export const boardListAfter = createPromiseThunk(
   BOARDLIST_AFTER_GET,
   BoardApi.findBoardAllAfter
 );
+
 export const categoryList = createPromiseThunk(
   CATEGORYLIST_GET,
   BoardApi.findBoardCategory
@@ -65,11 +76,20 @@ export const boardSaveOne = createPromiseThunk(
   BoardApi.saveBoardOne
 );
 export const kewordBoardList = createPromiseThunk(
-	KEWORDBOARDLIST_GET,
-	BoardApi.findkeyword
+  KEWORDBOARDLIST_GET,
+  BoardApi.findkeyword
 );
 
 export const kewordBoardListAfter = createPromiseThunk(
-	KEWORDBOARDLIST_AFTER_GET,
-	BoardApi.findkeywordAfter
+  KEWORDBOARDLIST_AFTER_GET,
+  BoardApi.findkeywordAfter
+);
+
+// export const boardListView = createPromiseThunk(
+//   BOARDLISTVIEW_GET,
+//   BoardApi.findBoardAllView
+// );
+export const boardListAfterView = createPromiseThunk(
+  BOARDLISTVIEW_AFTER_GET,
+  BoardApi.findBoardAllAfterView
 );

@@ -13,6 +13,7 @@ import styled from "styled-components";
 import MoodIcon from "@mui/icons-material/Mood";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { green } from "@mui/material/colors";
+import ScrollTo from "../shared/ScrollTo";
 
 // carousel
 const Container = styled.div`
@@ -68,23 +69,25 @@ function BoardDetail() {
   }, []);
 
   useEffect(() => {
-    if (boardStore) {
+    if (boardStore?.data) {
       const boardfetch = () => {
-        setBoard([...boardStore.data.result]);
+        setBoard([...boardStore?.data?.result]);
       };
-      boardfetch();
+      setTimeout(() => {
+        boardfetch();
+      }, 200);
     }
-    console.log(board);
-  }, [boardStore]);
+  }, [boardStore?.data]);
 
   useEffect(() => {
+    console.log(board);
     if (board) {
       const spliceStep = () => {
-        setSteps(step(board[0][0].content));
+        if (board[0]) setSteps(step(board[0][0]?.content));
       };
       setTimeout(() => {
         spliceStep();
-      }, 100);
+      }, 200);
     }
   }, [board]);
 
@@ -114,7 +117,7 @@ function BoardDetail() {
               <StyledSlider {...settings}>
                 {board[1].map((item, i) => {
                   return (
-                    <div key={item[i]}>
+                    <div key={i}>
                       <ImageContainer>
                         <Image src={item.boardImgPath} />
                       </ImageContainer>
@@ -124,9 +127,19 @@ function BoardDetail() {
               </StyledSlider>
             </Container>
 
-            <hr className="horizontal" />
+            {/* <hr className="horizontal" /> */}
 
-            <div style={{ textAlign: "center", marginTop: "10%" }}>
+            <div
+              style={{
+                width: "60%",
+                borderTop: "1px solid #b3b1b1",
+                textAlign: "center",
+                marginTop: "5%",
+                paddingTop: "10%",
+                marginBottom: "5%",
+                marginLeft: "20%",
+              }}
+            >
               <img
                 style={{
                   borderRadius: "50%",
@@ -141,7 +154,17 @@ function BoardDetail() {
               <div id="detailNick">
                 <b>{board[0][0].nickname}</b>
                 <p style={{ fontSize: "15px", color: "#aaa" }}>
-                  등록일({board[0][0].modifiedAt})
+                  등록일({board[0][0].createAt})
+                  <br />
+                  {!board[0][0].modifiedAt ? (
+                    <></>
+                  ) : (
+                    <>
+                      수정일({board[0][0].modifiedAt})
+                      <br />
+                    </>
+                  )}
+                  조회수({board[0][0].viewCount})
                 </p>
               </div>
               <div id="detailTitle">
@@ -178,16 +201,15 @@ function BoardDetail() {
                     <div style={{ width: "50%" }}>
                       <ul className="hs">
                         {board[2].map((item, i) => {
-                          return <li>{item.keyName}</li>;
+                          return <li key={i}>{item.keyName}</li>;
                         })}
                       </ul>
                     </div>
                     <div style={{ width: "50%" }}>
                       <ul className="hs">
-                        <li>zz</li>
-                        <li>zz</li>
-                        <li>zz</li>
-                        <li>zz</li>
+                        {board[2].map((item, i) => {
+                          return <li key={i}>{item.count}</li>;
+                        })}
                       </ul>
                     </div>
                   </div>
@@ -210,7 +232,7 @@ function BoardDetail() {
                   {steps.map((item, i) => {
                     return (
                       <>
-                        <div>
+                        <div key={i}>
                           <div style={{ padding: "0 0 30px 0" }}>
                             <MoodIcon style={{ padding: "0 5px 0 0" }} />
                             {steps[i]}
@@ -242,6 +264,7 @@ function BoardDetail() {
           </div>
         )}
       </div>
+      <ScrollTo />
     </>
   );
 }

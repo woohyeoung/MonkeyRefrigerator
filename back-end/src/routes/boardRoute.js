@@ -6,6 +6,8 @@ module.exports = function (app) {
 
   app.route("/board").get(board.findBoardAll);
   app.route("/board/page").get(board.findBoardAllAfter);
+  // app.route("/board/view").get(board.findBoardViewAll);
+  app.route("/board/view/page").get(board.findBoardViewAllAfter);
   app.route("/board/keyword").get(board.findBoardAllKeyword);
   app.route("/board/keyword/page").get(board.findBoardAllKeywordAfter);
   app.route("/board/category").get(board.findBoardCategory);

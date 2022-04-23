@@ -51,7 +51,7 @@ export default function BoardCard(props) {
           </IconButton>
         }
         title={board.nickname}
-        subheader="2022-04-13"
+        subheader={board.createAt}
       />
       {/* boardImgPath */}
 

@@ -22,7 +22,6 @@ import TableRow from "@mui/material/TableRow";
 import CheckIcon from "@mui/icons-material/Check";
 import "./Main.css";
 //User
-<<<<<<< HEAD
 import { Login } from "./user/Login";
 import SignUp from "./user/SignUp";
 import { didVoteChk, handleLogin } from "../store/actions/UserAction";
@@ -37,25 +36,8 @@ import { voteBtnClick } from "../store/actions/UserAction";
 import BoardList from "./board/BoardList";
 import BoardCreate from "./board/BoardCreate";
 import Cart from "../components/cart/Cart";
+import Search from "../components/search/Search";
 import { Cookies } from "react-cookie";
-=======
-import { Login } from './user/Login';
-import SignUp from './user/SignUp';
-import { didVoteChk, handleLogin } from '../store/actions/UserAction';
-import PublicRoute from './user/PublicRoute';
-import PrivateRoute from './user/PrivateRoute';
-import Header from './Header';
-import BoardDetail from './board/BoardDetail';
-import Profile from './user/Profile';
-import { Refrigerator } from './search/Refrigerator';
-import { boardList } from '../store/actions/BoardAction';
-import { voteBtnClick } from '../store/actions/UserAction';
-import BoardList from './board/BoardList';
-import BoardCreate from './board/BoardCreate';
-import Cart from '../components/cart/Cart';
-import Search from '../components/search/Search';
-import { Cookies } from 'react-cookie';
->>>>>>> upstream/master
 
 export default function Main() {
   const dispatch = useDispatch();
@@ -64,7 +46,6 @@ export default function Main() {
     if (tokenReducer === null) dispatch(handleLogin());
   });
 
-<<<<<<< HEAD
   return (
     <>
       <Header />
@@ -91,61 +72,24 @@ export default function Main() {
             path="/board"
             exact
           />
+          <PublicRoute
+            restricted={false}
+            component={Search}
+            path="/search"
+            exact
+          />
           <PublicRoute component={BoardCreate} path="/create" exact />
           <PrivateRoute component={Profile} path="/profile" exact />
           <PrivateRoute component={Refrigerator} path="/refrigerator" exact />
           <PrivateRoute component={BoardDetail} path="/board/:id" exact />
-          <PrivateRoute component={Cart} path="/cart/:id" exact />
+          <Route path="/cart">
+            <Cart />
+          </Route>
+          {/* <PrivateRoute component={Cart} path="/cart" exact /> */}
         </Switch>
       </div>
     </>
   );
-=======
-	return (
-		<>
-			<Header />
-			<div className="mainContainer">
-				<Switch>
-					<PublicRoute restricted={false} exact path="/">
-						<MainPage />
-					</PublicRoute>
-					<PublicRoute
-						restricted={true}
-						component={Login}
-						path="/login"
-						exact
-					/>
-					<PublicRoute
-						restricted={true}
-						component={SignUp}
-						path="/signup"
-						exact
-					/>
-					<PublicRoute
-						restricted={false}
-						component={BoardList}
-						path="/board"
-						exact
-					/>
-					<PublicRoute
-						restricted={false}
-						component={Search}
-						path="/search"
-						exact
-					/>
-					<PublicRoute component={BoardCreate} path="/create" exact />
-					<PrivateRoute component={Profile} path="/profile" exact />
-					<PrivateRoute component={Refrigerator} path="/refrigerator" exact />
-					<PrivateRoute component={BoardDetail} path="/board/:id" exact />
-					<Route path="/cart">
-						<Cart />
-					</Route>
-					{/* <PrivateRoute component={Cart} path="/cart" exact /> */}
-				</Switch>
-			</div>
-		</>
-	);
->>>>>>> upstream/master
 }
 
 const MainLogo = (
@@ -447,9 +391,9 @@ const MainPage = () => {
     setBoard();
   }, []);
   useEffect(() => {
-    if (boardReducer.boardList.data)
+    if (boardReducer?.boardList?.data)
       setBoardRank([...boardReducer.boardList.data.data.result]);
-  }, [boardReducer.boardList.data]);
+  }, [boardReducer?.boardList?.data]);
   return (
     <>
       {boardRank.length === 0 ? (
