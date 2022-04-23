@@ -117,3 +117,7 @@
 
   font-family: "Noto Sans KR", sans-serif;
 }
+.moveToCart {
+  float: right;
+  color: #9d2437;
+}

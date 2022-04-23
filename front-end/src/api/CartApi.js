@@ -1,21 +1,51 @@
 import axios from "axios";
 import { baseUrl } from "./BaseUrl";
 
-//장바구니 추가, 삭제
-export const functionName1 = async (data, token) => {
+export const getUserCartInfo = async (token) => {
   const result = await axios
-    .post(`${baseUrl}/`, {
-      body: { id: data },
-      headers: { accessToken: token },
+    .get(`${baseUrl}cart/get`, {
+      headers: {
+        accessToken: token,
+      },
     })
     .then((res) => res.data)
     .catch();
   return result;
 };
-//유저 장바구니 조회
-export const functionName2 = async (token) => {
+export const addUserCartInfo = async (data) => {
   const result = await axios
-    .get(`${baseUrl}/cart`, { headers: { accessToken: token } })
+    .post(
+      `${baseUrl}cart/add`,
+      {
+        body: {
+          board: data.board,
+        },
+      },
+      {
+        headers: {
+          accessToken: data.token,
+        },
+      }
+    )
+    .then((res) => res.data)
+    .catch();
+  return result;
+};
+export const delUserCartInfo = async (data) => {
+  const result = await axios
+    .post(
+      `${baseUrl}cart/del`,
+      {
+        body: {
+          board: data.board,
+        },
+      },
+      {
+        headers: {
+          accessToken: data.token,
+        },
+      }
+    )
     .then((res) => res.data)
     .catch();
   return result;

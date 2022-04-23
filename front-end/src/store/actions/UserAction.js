@@ -52,7 +52,7 @@ export const loginVali = (email, pw) => {
       if (token !== undefined) {
         setCookie("accessToken", token, {
           path: "/",
-          maxAge: 1750,
+          maxAge: 1680,
           withCredentials: true,
         });
       }
@@ -148,7 +148,24 @@ export const searchRefrigerator = createPromiseThunk(
   REFRIGERATOR_GET,
   UserApi.searchRefrigeratorList
 );
+
 export const updateUserInfo = createPromiseThunk(
   USERINFO_UPDATE,
   UserApi.updateUserInfo
+);
+
+export const BOARD_RANK_CHECK = "BOARD_RANK_CHECK";
+export const BOARD_RANK_CHECK_SUCCESS = "BOARD_RANK_CHECK_SUCCESS";
+export const BOARD_RANK_CHECK_ERROR = "BOARD_RANK_CHECK_ERROR";
+export const boardRankChk = createPromiseThunk(
+  BOARD_RANK_CHECK,
+  UserApi.boardRankSend
+);
+
+export const VOTE_BOARD_RANK = "VOTE_BOARD_RANK";
+export const VOTE_BOARD_RANK_SUCCESS = "VOTE_BOARD_RANK_SUCCESS";
+export const VOTE_BOARD_RANK_ERROR = "VOTE_BOARD_RANK_ERROR";
+export const voteboardRank = createPromiseThunk(
+  VOTE_BOARD_RANK,
+  UserApi.getrankboard
 );

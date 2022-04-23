@@ -12,12 +12,20 @@ import {
   REFRIGERATOR_GET,
   REFRIGERATOR_GET_SUCCESS,
   REFRIGERATOR_GET_ERROR,
+  BOARD_RANK_CHECK,
+  BOARD_RANK_CHECK_SUCCESS,
+  BOARD_RANK_CHECK_ERROR,
+  VOTE_BOARD_RANK,
+  VOTE_BOARD_RANK_SUCCESS,
+  VOTE_BOARD_RANK_ERROR,
 } from "../actions/UserAction";
 
 const initialState = {
   userInformation: reducerUtils.initial(),
   userMaterialList: reducerUtils.initial(),
   userRefrigeratorList: reducerUtils.initial(),
+  voteBoardRankList: reducerUtils.initial(),
+  voteboardrank: reducerUtils.initial(),
 };
 const initialVoteState = {
   result: false,
@@ -49,6 +57,20 @@ export default function UserReducer(state = initialState, action) {
     case REFRIGERATOR_GET_SUCCESS:
     case REFRIGERATOR_GET_ERROR:
       return handleAsyncActions(REFRIGERATOR_GET, "userRefrigeratorList")(
+        state,
+        action
+      );
+    case BOARD_RANK_CHECK:
+    case BOARD_RANK_CHECK_SUCCESS:
+    case BOARD_RANK_CHECK_ERROR:
+      return handleAsyncActions(BOARD_RANK_CHECK, "voteBoardRankList")(
+        state,
+        action
+      );
+    case VOTE_BOARD_RANK:
+    case VOTE_BOARD_RANK_SUCCESS:
+    case VOTE_BOARD_RANK_ERROR:
+      return handleAsyncActions(VOTE_BOARD_RANK, "voteboardrank")(
         state,
         action
       );

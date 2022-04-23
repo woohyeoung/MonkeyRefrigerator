@@ -262,4 +262,42 @@ module.exports = {
       );
     }
   },
+  selectVoteBoardRank: async () => {
+    try {
+      const query = `select bp.id, bp.boardId, bp.votedAt, bp.voteCount, b.title, b.subtitle, bi.id, bi.path, bi.type, bi.imageSize, bi.createAt 
+      from boardpopular bp 
+      join board b 
+         on bp.boardId = b.id 
+      left outer join (select * from boardimage where id in (select min(id) from boardimage group by boardId )) bi 
+         on b.id = bi.boardId
+      where bp.votedAt >= (select ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 0 ) from dual) 
+      and bp.votedAt <= (select ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 6 ) from dual) 
+      order by bp.voteCount desc
+      limit 10;
+      `;
+      const connection = await pool.getConnection(async (conn) => conn);
+      const [selectQuery] = await connection.query(query);
+      connection.release();
+      return selectQuery;
+    } catch (error) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - insertUserVote"
+      );
+    }
+  },
+  selectRankBoardVote: async () => {
+    try {
+      const query = `select * from board where viewCount >= (select avg(viewCount) from board)  order by  rand() desc  limit 12;`;
+      const connection = await pool.getConnection(async (conn) => conn);
+      const [seletList] = await connection.query(query);
+      connection.release();
+      return seletList;
+    } catch (error) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - insertUserVote"
+      );
+    }
+  },
 };
