@@ -6,5 +6,4 @@ module.exports = function (app) {
   require("./boardRoute")(app);
   require("./userRoute")(app);
   require("./refrigeratorRoute")(app);
-
 };

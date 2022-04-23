@@ -170,9 +170,9 @@ module.exports = {
   deleteUserGetMaterial: async function (userId, materialId) {
     try {
       const query = `delete
-                       from usergetmaterial
-                       where userId = ?
-                         and materialId = ?;`;
+                           from usergetmaterial
+                           where userId = ?
+                             and materialId = ?;`;
       const connection = await pool.getConnection(async (conn) => conn);
       const params = [userId, materialId];
       const [info] = await connection.query(query, params);

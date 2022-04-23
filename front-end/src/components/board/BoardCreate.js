@@ -401,7 +401,7 @@ function BoardCreate() {
 	const stepInput = useRef();
 	const categoryInput = useRef();
 	const difficultyInput = useRef();
-	const cookTimeInput = useRef();
+	const cookTimeInput = useRef()
 
 	return (
 		<>
