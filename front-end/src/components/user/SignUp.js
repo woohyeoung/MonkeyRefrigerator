@@ -41,12 +41,14 @@ function SignUp() {
 
   const onChangeId = (e) => {
     setId(e.target.value);
+    setIdCheck(-1);
   };
   const onChangeName = (e) => {
     setName(e.target.value);
   };
   const onChangeNickName = (e) => {
     setNickName(e.target.value);
+    setNicknameCheck(-1);
   };
   const onChangePassword = (e) => {
     setPassword(e.target.value);
@@ -95,6 +97,7 @@ function SignUp() {
         alert("닉네임 중복체크를 해주세요.");
         return;
       }
+
       let formData = {
         email: id,
         password: password,
@@ -104,6 +107,7 @@ function SignUp() {
         gender: gender,
         birth: moment(startDate).format("YYYYMMDD"),
       };
+      // console.log(startDate);
       dispatch(signupform(formData));
       window.location.href = "/login";
     }
@@ -154,7 +158,7 @@ function SignUp() {
   //비밀번호 정규식 확인(8자 이상, 문자, 숫자, 특수문자 포함)
   const isPw = (password) => {
     const pwRegex =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{7,}$/;
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,}$/;
     return pwRegex.test(password);
   };
 

@@ -61,7 +61,6 @@ export const findUserMaterialUserId = (token) => {
     .catch((err) => {
       console.log(err);
     });
-  console.log(result);
   return result;
 };
 
@@ -107,7 +106,6 @@ export const deleteUserGetMaterialUserId = (data) => {
     .catch((err) => {
       console.log(err);
     });
-  console.log(result);
   return result;
 };
 
@@ -122,6 +120,7 @@ export const userVoteValid = async (token) => {
     .catch();
   return result;
 };
+
 export const userVoteAdd = async (board, token) => {
   const result = axios
     .post(
@@ -156,5 +155,31 @@ export const searchRefrigeratorList = (data) => {
     .catch((err) => {
       console.log(err);
     });
+  return result;
+};
+
+export const updateUserInfo = async (data) => {
+  const result = axios
+    .post(
+      `${baseUrl}updateinfo`,
+      {
+        body: {
+          data: data.data,
+        },
+      },
+      {
+        headers: {
+          accessToken: data.token,
+        },
+      }
+    )
+    .then(() => {
+      alert("수정이 완료되었습니다.");
+      window.location.reload();
+    })
+    .catch(() => {
+      alert("수정 실패");
+    });
+
   return result;
 };

@@ -235,4 +235,31 @@ module.exports = {
       );
     }
   },
+  updateInfo: async function (data) {
+    try {
+      const query = `update useraccount set nickname= ? , gender = ? , jobId = ? , birthday = ? where id = ?;`;
+      const params = [
+        data.nickname,
+        data.gender,
+        data.jobId,
+        data.birthday,
+        data.id,
+      ];
+      const connection = await pool.getConnection(async (conn) => conn);
+      connection.query(query, params, function (err, rows, fields) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(rows.insertId);
+        }
+      });
+      connection.release();
+      return solution;
+    } catch (err) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - updateInfo"
+      );
+    }
+  },
 };

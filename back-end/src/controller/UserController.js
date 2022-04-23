@@ -250,4 +250,24 @@ module.exports = {
       );
     }
   },
+  updateUserIn: async (req, res) => {
+    try {
+      let data = req.body.body.data;
+      const updateinfo = await UserDao.updateInfo(data);
+      return res.json(
+        response.successTrue(
+          1001,
+          "유저 정보의 업데이트를 완료하였습니다.",
+          updateinfo
+        )
+      );
+    } catch (err) {
+      return res.json(
+        response.successFalse(
+          1001,
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - updateUserInfo"
+        )
+      );
+    }
+  },
 };
