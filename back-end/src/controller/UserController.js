@@ -117,7 +117,6 @@ module.exports = {
                 );
             }
             let insertInfo = await userDao.insertUserGetMaterial(userId, materialId);
-            console.log(insertInfo);
             return res.json(
                 response.successTrue(
                     1001,
@@ -162,8 +161,9 @@ module.exports = {
     },
 
     deleteUserMaterialOne: async function (req, res) {
-        const materialId = req.body.material.id;
+        const materialId = req.query.materialId;
         const userId = req.tokenInfo.userId;
+
         try {
             if (materialId === null || materialId === undefined) {
                 return res.json(
@@ -179,8 +179,6 @@ module.exports = {
             }
 
             let deleteInfo = await userDao.deleteUserGetMaterial(userId, materialId);
-            console.log(deleteInfo);
-
 
             return res.json(
                 response.successTrue(

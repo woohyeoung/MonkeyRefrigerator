@@ -5,7 +5,6 @@ module.exports = {
     findRefrigerator: async function (req, res) {
         const userId = req.tokenInfo.userId;
         const materialId = req.query.materialId;
-
         try {
 
             if(materialId ===null || materialId === undefined){
@@ -19,6 +18,7 @@ module.exports = {
                     response.successFalse(1001, '목록이 없습니다.')
                 );
             }
+            console.log(List)
             return res.json(
                 response.successTrue(
                     2001,

@@ -1,5 +1,5 @@
 //Header.js
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import './Header.css';
 import {
 	mdiMagnify,
@@ -16,10 +16,12 @@ import {
 
 import Icon from '@mdi/react';
 //router
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Cookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleLogin } from '../store/actions/UserAction';
+import { useLocation } from 'react-router';
+import { keywordSave } from '../store/actions/SearchAction';
 
 function Header() {
 	const [isLogin, setIsLogin] = useState(false);
@@ -31,6 +33,9 @@ function Header() {
 	const menu2 = useRef();
 	const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
 	const cookie = new Cookies();
+	const history = useHistory();
+	const location = useLocation();
+
 	useEffect(() => {
 		dispatch(handleLogin());
 	});
@@ -47,6 +52,39 @@ function Header() {
 	useEffect(() => {
 		tokenReducer ? setIsLogin(true) : setIsLogin(false);
 	}, [tokenReducer]);
+
+	const searchInput = useRef();
+
+	const [keyword, setKeyword] = useState('');
+
+	const onChangeKeyword = useCallback(
+		(e) => {
+			setKeyword(e.target.value);
+		},
+		[keyword]
+	);
+	//엔터시 재료 검색
+	const onKeyPress = async (e) => {
+		if (e.key == 'Enter') {
+			if (e.target.value === '') {
+				window.alert('한글자 이상 입력해주세요.');
+				return;
+			}
+			if (location.pathname === '/search') {
+				e.target.value = '';
+				dispatch(keywordSave(keyword));
+			} else {
+				e.target.value = '';
+				async function pushSearch() {
+					await history.push({
+						pathname: '/search',
+					});
+				}
+				dispatch(keywordSave(keyword));
+				pushSearch();
+			}
+		}
+	};
 
 	return (
 		<>
@@ -76,7 +114,13 @@ function Header() {
 							<span>Monkey Refrigerator</span>
 						</div>
 						<div className="h-nav-item-alw">
-							<input className="inputbox" type="text" placeholder="Search" />
+							<input
+								onKeyPress={onKeyPress}
+								onChange={onChangeKeyword}
+								className="inputbox"
+								type="text"
+								placeholder="Search"
+							/>
 							<Icon
 								className="searchIcon"
 								path={mdiMagnify}

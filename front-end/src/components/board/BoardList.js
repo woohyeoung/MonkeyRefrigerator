@@ -24,11 +24,11 @@ function BoardList() {
 
 	const [token, setToken] = useState('');
 
-	//날짜순
+	//최신순
 	const [boards, setBoards] = useState([]);
 	//조회순
 	const [viewBoards, setViewBoards] = useState([]);
-	//최신순
+	//장바구니순
 	const [likeBoards, setLikeBoards] = useState([]);
 
 	const [boardId, setBoardId] = useState(0);

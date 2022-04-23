@@ -36,6 +36,7 @@ import { voteBtnClick } from '../store/actions/UserAction';
 import BoardList from './board/BoardList';
 import BoardCreate from './board/BoardCreate';
 import Cart from '../components/cart/Cart';
+import Search from '../components/search/Search';
 import { Cookies } from 'react-cookie';
 
 export default function Main() {
@@ -69,6 +70,12 @@ export default function Main() {
 						restricted={false}
 						component={BoardList}
 						path="/board"
+						exact
+					/>
+					<PublicRoute
+						restricted={false}
+						component={Search}
+						path="/search"
 						exact
 					/>
 					<PublicRoute component={BoardCreate} path="/create" exact />

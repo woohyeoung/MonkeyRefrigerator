@@ -15,6 +15,12 @@ import {
 	MATERIALLIST_GET,
 	MATERIALLIST_GET_SUCCESS,
 	MATERIALLIST_GET_ERROR,
+	KEWORDBOARDLIST_GET,
+	KEWORDBOARDLIST_GET_SUCCESS,
+	KEWORDBOARDLIST_GET_ERROR,
+	KEWORDBOARDLIST_AFTER_GET,
+	KEWORDBOARDLIST_AFTER_SUCCESS,
+	KEWORDBOARDLIST_AFTER_ERROR,
 } from '../actions/BoardAction';
 import { reducerUtils, handleAsyncActions } from '../../api/AsyncUtil';
 const initialState = {
@@ -23,6 +29,8 @@ const initialState = {
 	boardDetail: reducerUtils.initial(),
 	categoryList: reducerUtils.initial(),
 	searchMaterialList: reducerUtils.initial(),
+	boardListKeyword: reducerUtils.initial(),
+	boardListKeywordAfter: reducerUtils.initial(),
 };
 
 export default function boardReducer(state = initialState, action) {
@@ -56,6 +64,20 @@ export default function boardReducer(state = initialState, action) {
 				state,
 				action
 			);
+		case KEWORDBOARDLIST_GET:
+		case KEWORDBOARDLIST_GET_SUCCESS:
+		case KEWORDBOARDLIST_GET_ERROR:
+			return handleAsyncActions(KEWORDBOARDLIST_GET, 'boardListKeyword')(
+				state,
+				action
+			);
+		case KEWORDBOARDLIST_AFTER_GET:
+		case KEWORDBOARDLIST_AFTER_SUCCESS:
+		case KEWORDBOARDLIST_AFTER_ERROR:
+			return handleAsyncActions(
+				KEWORDBOARDLIST_AFTER_GET,
+				'boardListKeywordAfter'
+			)(state, action);
 		default:
 			return state;
 	}
