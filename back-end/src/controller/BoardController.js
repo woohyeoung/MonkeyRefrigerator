@@ -10,6 +10,7 @@ module.exports = {
   findBoardAll: async function (req, res) {
     try {
       const boardList = await boardDao.selectBoardListFirst();
+<<<<<<< HEAD
       for (let i = 0; i < boardList.length; i++) {
         for (let j = 0; j < boardList[i].length; j++) {
           let boardImg = await boardDao.selectBoardImg(boardList[i][j].id);
@@ -25,6 +26,16 @@ module.exports = {
       boardList[0][0].boardCount = boardCount[0].boardCount;
 
       if (boardList[0].length === 0) {
+=======
+
+      for (let i = 0; i < boardList.length; i++) {
+        let boardImg = await boardDao.selectBoardImg(boardList[i].id);
+        boardList[i].boardImgPath = boardImg[0].boardImgPath;
+      }
+      const boardCount = await boardDao.selectBoardCount();
+      boardList[0].boardCount = boardCount[0].boardCount;
+      if (boardList.length === 0) {
+>>>>>>> upstream/master
         return res.json(
           response.successFalse(1001, "전체 게시물 목록이 없습니다.")
         );
@@ -55,11 +66,15 @@ module.exports = {
       const boardList = await boardDao.selectBoardList(id, newCreateAt);
       for (let i = 0; i < boardList.length; i++) {
         let boardImg = await boardDao.selectBoardImg(boardList[i].id);
+<<<<<<< HEAD
         if (boardImg.length === 0) {
           boardList[i].boardImgPath = "";
         } else {
           boardList[i].boardImgPath = boardImg[0].boardImgPath;
         }
+=======
+        boardList[i].boardImgPath = boardImg[0].boardImgPath;
+>>>>>>> upstream/master
       }
 
       if (boardList.length === 0) {
@@ -313,7 +328,6 @@ module.exports = {
     try {
       let id = req.query.id;
       const boardDetail = await boardDao.selectBoardDetail(id);
-      console.log(boardDetail);
       if (boardDetail === undefined) {
         return res.json(
           response.successFalse(1006, "전체 게시물 목록이 없습니다.")
@@ -337,38 +351,6 @@ module.exports = {
     }
   },
 
-  // findBoardViewAll: async function (req, res) {
-  //   try {
-  //     const boardList = await boardDao.selectBoardListViewFirst();
-
-  //     for (let i = 0; i < boardList.length; i++) {
-  //       let boardImg = await boardDao.selectBoardImg(boardList[i].id);
-  //       boardList[i].boardImgPath = boardImg[0].boardImgPath;
-  //     }
-  //     const boardCount = await boardDao.selectBoardCount();
-  //     boardList[0].boardCount = boardCount[0].boardCount;
-  //     if (boardList.length === 0) {
-  //       return res.json(
-  //         response.successFalse(1001, "전체 게시물 목록이 없습니다.")
-  //       );
-  //     }
-
-  //     return res.json(
-  //       response.successTrue(
-  //         2001,
-  //         "전체 게시물 첫번째 목록 조회에 성공하였습니다.",
-  //         boardList
-  //       )
-  //     );
-  //   } catch (err) {
-  //     return res.json(
-  //       response.successFalse(
-  //         1001,
-  //         "서버와 통신에 실패하였습니다. BoardController/BoardDao error - findBoardAll"
-  //       )
-  //     );
-  //   }
-  // },
   findBoardViewAllAfter: async function (req, res) {
     try {
       let id = req.query.id;

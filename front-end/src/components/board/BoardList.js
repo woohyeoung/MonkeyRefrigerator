@@ -180,13 +180,7 @@ function BoardList() {
                     >
                       조회순
                     </Button>
-                    {/* <Button
-                      onClick={btn3Click}
-                      variant="outline-primary"
-                      ref={btn3}
-                    >
-                      추천순
-                    </Button> */}
+                   
                   </div>
                 </div>
                 {/* <BoardCard /> */}
@@ -242,16 +236,11 @@ function BoardList() {
                     >
                       조회순
                     </Button>
-                    {/* <Button
-                      onClick={btn3Click}
-                      variant="outline-primary"
-                      ref={btn3}
-                    >
-                      추천순
-                    </Button> */}
+                   
                   </div>
                 </div>
                 {/* <BoardCard /> */}
+                조회순
                 <Grid
                   container
                   direction="rows"

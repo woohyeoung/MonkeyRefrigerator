@@ -112,26 +112,3 @@ export const saveBoardOne = (data) => {
 
   return result;
 };
-
-// //board API -- 조회순 첫번째 목록
-// export const findBoardAllView = () => {
-//   const result = axios.get(baseUrl + "board/view").catch((err) => {
-//     console.log(err);
-//   });
-//   return result;
-// };
-
-// //board API -- 조회순 첫번째 이후 목록
-// export const findBoardAllAfterView = (page) => {
-//   const result = axios
-//     .get(baseUrl + "board/view/page", {
-//       params: {
-//         id: page.id,
-//         createAt: page.createAt,
-//       },
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-//   return result;
-// };
