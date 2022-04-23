@@ -367,25 +367,30 @@ const MainPage = () => {
       }
     );
   });
+
   useEffect(() => {
     setVoteLoading(true);
     dispatch(didVoteChk());
     setVoteLoading(false);
   }, []);
+
   useEffect(() => {
     if (voteReducer?.result) setIsVote(voteReducer.result);
     console.log(voteReducer);
   }, [voteReducer?.result]);
+
   useEffect(() => {
     setLoading(true);
     dispatch(boardRankChk());
   }, []);
+
   useEffect(() => {
     if (userReducer?.voteBoardRankList?.data) {
       setBoardRank([...userReducer.voteBoardRankList.data.result]);
       setLoading(false);
     }
   }, [userReducer?.voteBoardRankList?.data]);
+  
   return (
     <>
       <div className="mainHeadLine">
