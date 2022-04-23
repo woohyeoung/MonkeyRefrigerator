@@ -23,42 +23,34 @@ import ProfileBody from "./ProfileBody";
 
 function Profile(props) {
   const tokenReducer = useSelector((state) => state.tokenReducer);
-  const tokenStore = Cookies.get("accessToken");
-
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(Cookies.get("accessToken"));
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-
-  console.log(tokenStore);
-  console.log(props.token);
-  useEffect(() => {
-    const test = async () => {
-      setLoading(true);
-      await dispatch(userInformation(tokenStore));
-      setToken(tokenStore);
-    };
-    test();
-    setLoading(false);
-  }, []);
-
   const userStore = useSelector((state) => state.userReducer);
   const [userInfo, setUserInfo] = useState();
 
-  console.log(userStore);
+  useEffect(() => {
+    setLoading(true);
+    dispatch(userInformation(token));
+    setLoading(false);
+  }, []);
+  useEffect(() => {
+    if (token === undefined && tokenReducer.token !== null)
+      setToken(tokenReducer.token);
+  }, [tokenReducer]);
 
   useEffect(() => {
-    if (userStore.userInformation.data) {
+    if (userStore?.userInformation?.data) {
       setUserInfo([...userStore.userInformation.data.result]);
     }
-  }, [userStore.userInformation.data]);
-  const [test, setTest] = useState(false);
+  }, [userStore?.userInformation?.data]);
 
   return (
     <>
-      {loading ? (
-        <Loading />
+      {!loading && userInfo ? (
+        <ProfileBody data={userInfo} token={token} />
       ) : (
-        <ProfileBody data={userInfo} token={tokenStore} />
+        <Loading />
       )}
     </>
   );

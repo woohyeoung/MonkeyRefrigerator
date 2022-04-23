@@ -18,7 +18,6 @@ export const insertSignupForm = (data) => {
 
 //user information API - 프로필 조회
 export const selectUserInformation = async (token) => {
-  console.log(token);
   const result = axios
     .get(baseUrl + "profile", {
       headers: {
@@ -48,7 +47,7 @@ export const saveUserMaterialOne = (data) => {
     .catch((err) => {
       console.log(err);
     });
-  console.log(result);
+
   return result;
 };
 
@@ -62,13 +61,12 @@ export const findUserMaterialUserId = (token) => {
     .catch((err) => {
       console.log(err);
     });
-  console.log(result);
+
   return result;
 };
 
 //user password change API - 사용자 비밀번호 변경
 export const updatePassword = async (data) => {
-  //console.log(data);
   const result = axios
     .post(
       baseUrl + "pwChange",
@@ -84,8 +82,6 @@ export const updatePassword = async (data) => {
       }
     )
     .then((res) => {
-      console.log(res.data);
-
       if (res.data.result === 0) {
         alert("기존 비밀번호와 동일합니다.");
       } else {
@@ -97,7 +93,6 @@ export const updatePassword = async (data) => {
 };
 
 export const deleteUserGetMaterialUserId = (data) => {
-  console.log(data.token);
   const result = axios
     .delete(
       baseUrl + "user/material",
@@ -111,7 +106,7 @@ export const deleteUserGetMaterialUserId = (data) => {
     .catch((err) => {
       console.log(err);
     });
-  console.log(result);
+
   return result;
 };
 
@@ -126,6 +121,7 @@ export const userVoteValid = async (token) => {
     .catch();
   return result;
 };
+
 export const userVoteAdd = async (board, token) => {
   const result = axios
     .post(
@@ -143,5 +139,31 @@ export const userVoteAdd = async (board, token) => {
     )
     .then((res) => res.data)
     .catch();
+  return result;
+};
+
+export const updateUserInfo = async (data) => {
+  const result = axios
+    .post(
+      `${baseUrl}updateinfo`,
+      {
+        body: {
+          data: data.data,
+        },
+      },
+      {
+        headers: {
+          accessToken: data.token,
+        },
+      }
+    )
+    .then(() => {
+      alert("수정이 완료되었습니다.");
+      window.location.reload();
+    })
+    .catch(() => {
+      alert("수정 실패");
+    });
+
   return result;
 };

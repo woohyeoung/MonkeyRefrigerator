@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Card from "@mui/material/Card";
 import { CardContent } from "@mui/material";
 import "./SignUp.css";
-import BirthPick from "./DatePicker";
+import BirthPick, { yoon } from "./DatePicker";
 import { Button } from "react-bootstrap";
 import { baseUrl } from "../../api/BaseUrl";
 import axios from "axios";
@@ -11,6 +11,7 @@ import {
   userInformation,
   handleLogin,
   pwChange,
+  updateUserInfo,
 } from "../../store/actions/UserAction";
 import Loading from "../shared/CustomLoading";
 import { logout } from "../Header";
@@ -18,40 +19,64 @@ import Cookies from "js-cookie";
 import TextField from "@mui/material/TextField";
 import "./Profile.css";
 import { useCookies } from "react-cookie";
+import moment from "moment";
 
 //icon
 import checkicon from "../../assets/icon/outline_check_circle_black_24dp.png";
 import cancelicon from "../../assets/icon/outline_highlight_off_black_24dp.png";
 import trashIcon from "../../assets/icon/trash.png";
+import { useSelect } from "@mui/base";
 
 const ProfileBody = (props) => {
-  const [userInfo, setUserInfo] = useState(props.data);
+  const [userInfo, setUserInfo] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [token, setToken] = useState(props.token);
 
-  const [nicknameCheck, setNicknameCheck] = useState(-1); //닉네임 중복 체크
-  // const [id, setId] = useState();
+  const [nicknameCheck, setNicknameCheck] = useState(-1);
+  const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
-  const [gender, setGender] = useState();
-  const [job, setJob] = useState();
-  const [startDate, setStartDate] = useState();
+  const [gender, setGender] = useState("");
+  const [jobId, setJobId] = useState();
+  const [birthday, setBirthday] = useState(new Date());
+  const tokenStore = useSelector((state) => state.tokenReducer.token);
 
-  const idInput = useRef();
   const nicknameInput = useRef();
 
+  const birthDatePick = (date) => {
+    setBirthday(date);
+  };
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    console.log(props);
-    dataSet(props.data);
+    if (tokenStore !== undefined) setToken(props.token);
+  });
+  useEffect(() => {
+    setTimeout(() => {
+      setUserInfo(props.data[0]);
+    }, 150);
   }, []);
 
-  function dataSet(data) {
-    setNickname(data.nickname);
-    setGender(data.gender);
-    setStartDate(data.birthday);
-  }
+  useEffect(() => {
+    setTimeout(() => {
+      setEmail(userInfo.email);
+      setNickname(userInfo.nickname);
+      setGender(userInfo.gender);
+      setBirthday(userInfo.birthday);
+      setJobId(userInfo.jobId);
+    }, 500);
+  }, [userInfo]);
 
   const onChangeNickname = (e) => {
     setNickname(e.target.value);
+  };
+
+  const onChangeGender = (e) => {
+    setGender(e.target.value);
+  };
+
+  const onChangeJobId = (e) => {
+    setJobId(e.target.value);
   };
 
   const handleModal = (type) => {
@@ -63,24 +88,6 @@ const ProfileBody = (props) => {
       default:
         setModalOpen(false);
         return;
-    }
-  };
-  console.log(userInfo);
-  const setValue = (type) => {
-    switch (type) {
-      case "email":
-        return userInfo.email;
-      case "password":
-        return userInfo.password;
-      case "nickname":
-        // setNickname(userInfo.nickname);
-        return userInfo.nickname;
-      case "gender":
-        return userInfo.gender;
-      case "jobId":
-        return userInfo.jobId;
-      default:
-        return "none";
     }
   };
 
@@ -97,26 +104,34 @@ const ProfileBody = (props) => {
 
     // 중복 검사를 하기위한 axios api
     async function check(typedata) {
-      const idDoubleChk = (typedata) => {
-        const result = axios
-          .get(`${baseUrl}idChk`, {
-            params: { id: typedata, type: type },
-          })
-          .then((count) => {
-            if (type == "nickname") {
-              if (count.data.result[0].cnt == 0) {
-                setNicknameCheck(0);
-              } else if (count.data.result[0].cnt > 0) {
-                setNicknameCheck(1);
+      if (nickname == userInfo.nickname) {
+        setNicknameCheck(2); //2 : 기존 닉네임과 동일
+      } else {
+        const idDoubleChk = (typedata) => {
+          const result = axios
+            .get(`${baseUrl}idChk`, {
+              params: { id: typedata, type: type },
+            })
+            .then((count) => {
+              if (type == "nickname") {
+                if (count.data.result[0].cnt == 0) {
+                  setNicknameCheck(0);
+                } else if (count.data.result[0].cnt > 0) {
+                  setNicknameCheck(1);
+                  if (nickname === userInfo.nickname) {
+                    setNicknameCheck(2); //2 : 기존 닉네임과 동일
+                  }
+                }
               }
-            }
-            return count;
-          });
+              return count;
+            });
 
+          return result;
+        };
+
+        let result = await idDoubleChk(typedata);
         return result;
-      };
-      let result = await idDoubleChk(typedata);
-      return result;
+      }
     }
     check(typedata);
   };
@@ -124,17 +139,49 @@ const ProfileBody = (props) => {
   function iconRerender(type) {
     if (type == "nickname") {
       if (nicknameCheck == 0) {
-        return <img src={checkicon} />;
+        return <img src={checkicon} alt="images" />;
       } else if (nicknameCheck == 1) {
-        return <img src={cancelicon} />;
+        return <img src={cancelicon} alt="images" />;
       }
     }
   }
 
-  const changeInfo = (type) => {
-    if (type === "nickname") {
+  const updateUserSubmit = () => {
+    if (isSubmit()) {
+      var formData = {
+        data: {
+          id: userInfo.id,
+          nickname: nickname,
+          gender: gender,
+          jobId: jobId,
+          birthday: moment(birthday).format("YYYYMMDD"),
+        },
+        token: token,
+      };
+
+      dispatch(updateUserInfo(formData));
     }
   };
+
+  function isSubmit() {
+    if (!nickname) {
+      alert("닉네임을 입력해주세요.");
+      nicknameInput.current.focus();
+      return false;
+    }
+    if (!jobId) {
+      alert("직업을 선택해주세요.");
+      nicknameInput.current.focus();
+      return false;
+    }
+    if (nicknameCheck != 0) {
+      if (nickname != userInfo.nickname) {
+        alert("닉네임 중복체크를 해주세요.");
+        return false;
+      }
+    }
+    return true;
+  }
 
   return (
     <>
@@ -173,7 +220,7 @@ const ProfileBody = (props) => {
                         type="text"
                         id="idEamil"
                         class="int"
-                        value={setValue("email")}
+                        value={email}
                         maxlength="20"
                         disabled
                       />
@@ -200,12 +247,11 @@ const ProfileBody = (props) => {
                         type="text"
                         class="int"
                         maxlength="20"
-                        //value={setValue("nickname")}
                         value={nickname}
                         onChange={onChangeNickname}
+                        required
                       />
                     </span>
-                    <img src={trashIcon} onclick={changeInfo("nickname")} />
                   </div>
                   <div class="doublechk">
                     <Button
@@ -229,7 +275,8 @@ const ProfileBody = (props) => {
                       id="gender"
                       name="gender"
                       value="m"
-                      checked={setValue("gender") === "m" ? true : false}
+                      checked={gender === "m"}
+                      onChange={onChangeGender}
                     />
                     <label for="gender">남성</label>
                     <input
@@ -237,7 +284,8 @@ const ProfileBody = (props) => {
                       id="gender"
                       name="gender"
                       value="w"
-                      checked={setValue("gender") === "w" ? true : false}
+                      checked={gender === "w"}
+                      onChange={onChangeGender}
                     />
                     <label for="gender">여성</label>
                   </div>
@@ -246,42 +294,29 @@ const ProfileBody = (props) => {
                   <label for="job">직업</label>
                 </h3>
                 <div class="box_id">
-                  <select class="signupList" name="jobList">
+                  <select
+                    class="signupList"
+                    name="jobList"
+                    onChange={onChangeJobId}
+                    required
+                  >
                     <option value="0">--선택--</option>
-                    <option
-                      value="1"
-                      selected={setValue("jobId") == 1 ? true : false}
-                    >
+                    <option value="1" selected={jobId == 1 ? true : false}>
                       학생
                     </option>
-                    <option
-                      value="2"
-                      selected={setValue("jobId") == 2 ? true : false}
-                    >
+                    <option value="2" selected={jobId == 2 ? true : false}>
                       군인
                     </option>
-                    <option
-                      value="3"
-                      selected={setValue("jobId") == 3 ? true : false}
-                    >
+                    <option value="3" selected={jobId == 3 ? true : false}>
                       주부
                     </option>
-                    <option
-                      value="4"
-                      selected={setValue("jobId") == 4 ? true : false}
-                    >
+                    <option value="4" selected={jobId == 4 ? true : false}>
                       직장인
                     </option>
-                    <option
-                      value="5"
-                      selected={setValue("jobId") == 5 ? true : false}
-                    >
+                    <option value="5" selected={jobId == 5 ? true : false}>
                       아빠
                     </option>
-                    <option
-                      value="6"
-                      selected={setValue("jobId") == 6 ? true : false}
-                    >
+                    <option value="6" selected={jobId == 6 ? true : false}>
                       기타
                     </option>
                   </select>
@@ -290,14 +325,18 @@ const ProfileBody = (props) => {
                   <label for="birth">생년월일</label>
                 </h3>
                 <div class="box_id">
-                  <BirthPick birth={userInfo.birthday} type="profile" />
+                  <BirthPick
+                    birthday={birthday}
+                    setBirthday={birthDatePick}
+                    type="profile"
+                  />
                 </div>
               </div>
             </CardContent>
             <div class="btn_submt">
-              <Button variant="success" onClick={() => {}}>
+              <Button variant="success" onClick={updateUserSubmit}>
                 수정
-              </Button>{" "}
+              </Button>
             </div>
           </Card>
         )}
@@ -414,15 +453,5 @@ const PasswordModal = (props) => {
         </section>
       ) : null}
     </div>
-
-    // <div className="modalBody">
-    //   <div
-    //     style={{
-    //       display: modalStyle,
-    //     }}
-    //   >
-
-    //   </div>
-    // </div>
   );
 };

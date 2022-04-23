@@ -43,7 +43,8 @@ module.exports = {
         .createHash("sha512")
         .update(data.password)
         .digest("base64");
-      const query = `insert into useraccount(email, password, nickname, name, jobId, gender, birthday) values(?, ?, ?, ?, ?, ?, ?);`;
+      const query = `insert into useraccount( email, password, nickname, name, jobId, gender, birthday) 
+                      values( ?, ?, ?, ?, ?, ?, ?);`;
       const params = [
         data.email,
         password,
@@ -72,11 +73,11 @@ module.exports = {
   },
   selectUserInfo: async function (id) {
     try {
-      const query = `SELECT * FROM useraccount WHERE id='${id}';`;
+      const query = `SELECT id, email, nickname, name, jobId, gender, birthday, profileImg, createAt, modifiedAt FROM useraccount WHERE id='${id}' and isDeleted = 'N';`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query);
       connection.release();
-      console.log(info);
+      // console.log(info);
       return info;
     } catch (err) {
       response.successFalse(
@@ -204,6 +205,33 @@ module.exports = {
       response.successFalse(
         3001,
         "데이터베이스 연결에 실패하였습니다. UserDao error - insertUserVote"
+      );
+    }
+  },
+  updateInfo: async function (data) {
+    try {
+      const query = `update useraccount set nickname= ? , gender = ? , jobId = ? , birthday = ? where id = ?;`;
+      const params = [
+        data.nickname,
+        data.gender,
+        data.jobId,
+        data.birthday,
+        data.id,
+      ];
+      const connection = await pool.getConnection(async (conn) => conn);
+      connection.query(query, params, function (err, rows, fields) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(rows.insertId);
+        }
+      });
+      connection.release();
+      return solution;
+    } catch (err) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - updateInfo"
       );
     }
   },

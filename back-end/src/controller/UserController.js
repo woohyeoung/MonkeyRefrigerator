@@ -65,7 +65,6 @@ module.exports = {
   },
   getUserInformation: async function (req, res) {
     try {
-      console.log("hihihihihih");
       const token = req.tokenInfo;
 
       const userInfo = await UserDao.selectUserInfo(token.userId);
@@ -94,9 +93,9 @@ module.exports = {
 
   saveUserMaterialOne: async function (req, res) {
     const data = req.body;
-    console.log(data);
+    //console.log(data);
     data.userId = req.tokenInfo.userId;
-    console.log(data.userId);
+    // console.log(data.userId);
     try {
       let cnt = await UserDao.selectUserGetMaterialCount(data.userId);
       if (cnt > 5) {
@@ -150,7 +149,7 @@ module.exports = {
 
   deleteUserMaterialOne: async function (req, res) {
     const data = req.body;
-    console.log(data);
+    //console.log(data);
     data.userId = req.tokenInfo.userId;
     try {
       let deleteInfo = await UserDao.deleteUserGetMaterial(data);
@@ -174,7 +173,7 @@ module.exports = {
     try {
       let tokenId = req.tokenInfo.userId;
       const userVote = await UserDao.selectUserVote(tokenId);
-      console.log(userVote);
+      //console.log(userVote);
       if (userVote.length > 0)
         return res.json(
           response.successTrue(1001, "이미 투표를 완료하였습니다.", userVote)
@@ -225,6 +224,26 @@ module.exports = {
         response.successFalse(
           1001,
           "서버와 통신에 실패하였습니다. UserController/UserDao error - changePassword"
+        )
+      );
+    }
+  },
+  updateUserIn: async (req, res) => {
+    try {
+      let data = req.body.body.data;
+      const updateinfo = await UserDao.updateInfo(data);
+      return res.json(
+        response.successTrue(
+          1001,
+          "유저 정보의 업데이트를 완료하였습니다.",
+          updateinfo
+        )
+      );
+    } catch (err) {
+      return res.json(
+        response.successFalse(
+          1001,
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - updateUserInfo"
         )
       );
     }
