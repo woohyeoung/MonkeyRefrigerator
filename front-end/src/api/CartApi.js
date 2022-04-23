@@ -15,7 +15,7 @@ export const getUserCartInfo = async (token) => {
 export const addUserCartInfo = async (data) => {
   const result = await axios
     .post(
-      `${baseUrl}cart/set`,
+      `${baseUrl}cart/add`,
       {
         body: {
           board: data.board,

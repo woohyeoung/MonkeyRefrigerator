@@ -9,46 +9,56 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
-import { boardList } from "../../store/actions/BoardAction";
 import Skeleton from "@mui/material/Skeleton";
 import "./Cart.css";
-
-export default function Cart(props) {
-  const tokenStore = useSelector((state) => state.tokenReducer);
-  // const dispatch = useDispatch();
-  const [token, setToken] = useState(props.token);
-  const cartStore = useSelector((state) => state.cartReducer);
-
-  useEffect(() => {
-    if (tokenStore) setToken(tokenStore.token);
-  }, [tokenStore]);
-
-  return (
-    <>
-      <div className="carthhead">
-        <h2>236 킹받쥬?</h2>
-      </div>
-      <CartBody />
-    </>
-  );
-}
-const CartBody = () => {
+import { delUserCart, getUserCart } from "../../store/actions/CartAction";
+import { handleLogin } from "../../store/actions/UserAction";
+import Loading from "../shared/CustomLoading";
+import DeleteIcon from "@mui/icons-material/Delete";
+export default function Cart() {
   const dispatch = useDispatch();
-  const cartReducer = useSelector((state) => state.cartReducer);
+  const tokenStore = useSelector((state) => state.tokenReducer);
+  const cartStore = useSelector((state) => state.cartReducer);
   const [cartData, setCartData] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    const setCart = async () => {
-      setLoading(true);
-      await dispatch(boardList());
-      setLoading(false);
-    };
-    setCart();
+    dispatch(handleLogin());
   }, []);
   useEffect(() => {
-    if (cartReducer.usercartget.data)
-      setCartData([...cartReducer.usercartget.data.data.result]);
-  }, [cartReducer.usercartget.data]);
+    if (tokenStore?.token) dispatch(getUserCart(tokenStore.token));
+  }, [tokenStore?.token]);
+
+  useEffect(() => {
+    setLoading(true);
+    if (cartStore?.usercartget?.data?.result) {
+      setCartData([...cartStore.usercartget.data.result]);
+    }
+    setLoading(false);
+  }, [cartStore?.usercartget?.data?.result, cartStore?.usercartdel]);
+  return (
+    <>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="carthhead">
+            <h2>장바구니</h2>
+          </div>
+          <CartBody data={cartData} />
+        </>
+      )}
+    </>
+  );
+}
+const CartBody = (props) => {
+  const [cartData, setCartData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    setCartData(props.data);
+    setLoading(false);
+  }, [props]);
+
   return (
     <>
       <div className="cartbbody">
@@ -60,6 +70,7 @@ const CartBody = () => {
               {cartData.map((item, i) => (
                 <ImageListItem key={i}>
                   <CartCard
+                    id={item.id}
                     path={item.boardImgPath}
                     title={item.title}
                     subtitle={item.subtitle}
@@ -74,8 +85,20 @@ const CartBody = () => {
   );
 };
 const CartCard = (props) => {
+  const dispatch = useDispatch();
+  const tokenStore = useSelector((state) => state.tokenReducer);
+  const DeleteCartCard = () => {
+    const delData = { board: props.id, token: tokenStore.token };
+    dispatch(delUserCart(delData));
+  };
   return (
     <Card sx={{ width: 345 }}>
+      <div className="cartDelIcon" onClick={DeleteCartCard}>
+        <DeleteIcon
+          className="cartdeliicon"
+          sx={{ width: "30px", height: "30px", color: "#9d2437" }}
+        />
+      </div>
       <img style={{ width: "100%" }} src={props.path} alt="images" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
@@ -85,10 +108,6 @@ const CartCard = (props) => {
           {props.subtitle}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">ADD</Button>
-        <Button size="small">DEL</Button>
-      </CardActions>
     </Card>
   );
 };

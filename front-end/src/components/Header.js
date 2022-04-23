@@ -18,10 +18,14 @@ import {
 import Icon from "@mdi/react";
 import "./Header.css";
 import { handleLogin } from "../store/actions/UserAction";
+import { getUserCart } from "../store/actions/CartAction";
 
 function Header() {
   const dispatch = useDispatch();
-  const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
+  const tokenStore = useSelector((state) => state.tokenReducer);
+  const cartStore = useSelector((state) => state.cartReducer);
+  const [isCart, setIsCart] = useState(-1);
+  const [loading, setLoading] = useState(false);
   const cookie = new Cookies();
   const [isLogin, setIsLogin] = useState(false);
   const menu1 = useRef();
@@ -29,8 +33,9 @@ function Header() {
   const [menu, setMenu] = useState(false);
   const [imgUrl, setImgUrl] = useState("/monkey_2.png");
   const monkey = useRef();
+
   useEffect(() => {
-    if (isLogin && !tokenReducer) {
+    if (isLogin && !tokenStore) {
       if (!cookie.get("accessToken")) {
         logout();
         alert("토큰이 만료되어 로그아웃 되었습니다.");
@@ -40,165 +45,188 @@ function Header() {
     }
   });
   useEffect(() => {
-    tokenReducer ? setIsLogin(true) : setIsLogin(false);
-  }, [tokenReducer]);
+    if (tokenStore?.authenticated)
+      tokenStore.authenticated ? setIsLogin(true) : setIsLogin(false);
+  }, [tokenStore?.authenticated]);
+
+  useEffect(() => {
+    setLoading(true);
+    if (tokenStore?.token) dispatch(getUserCart(tokenStore.token));
+    setLoading(false);
+  }, [tokenStore?.token]);
+
+  useEffect(() => {
+    if (isLogin && cartStore?.usercartget?.data?.result) {
+      setIsCart(cartStore.usercartget.data.result[0].userId);
+    }
+  }, [cartStore?.usercartget?.data?.result]);
+  const moveToCart = () => {
+    setTimeout(() => {
+      window.location.href = `/cart/${isCart}`;
+    }, 500);
+  };
   return (
     <>
-      <header>
-        <div className="header">
-          <div className="row-1">
-            <Link to="/">
-              <div className="h-logo">
-                <img
-                  onMouseOver={() => {
-                    setImgUrl("/monkey_3.png");
-                    monkey.current.src = imgUrl;
-                  }}
-                  onMouseOut={() => {
-                    setImgUrl("/monkey_2.png");
-                    monkey.current.src = imgUrl;
-                  }}
-                  ref={monkey}
-                  src={imgUrl}
-                  width={90}
-                  height={90}
-                  alt="homeLogo"
-                ></img>
+      {loading ? (
+        <></>
+      ) : (
+        <header>
+          <div className="header">
+            <div className="row-1">
+              <Link to="/">
+                <div className="h-logo">
+                  <img
+                    onMouseOver={() => {
+                      setImgUrl("/monkey_3.png");
+                      monkey.current.src = imgUrl;
+                    }}
+                    onMouseOut={() => {
+                      setImgUrl("/monkey_2.png");
+                      monkey.current.src = imgUrl;
+                    }}
+                    ref={monkey}
+                    src={imgUrl}
+                    width={90}
+                    height={90}
+                    alt="homeLogo"
+                  ></img>
+                </div>
+              </Link>
+              <div className="h-title">
+                <span>Monkey Refrigerator</span>
               </div>
-            </Link>
-            <div className="h-title">
-              <span>Monkey Refrigerator</span>
-            </div>
-            <div className="h-nav-item-alw">
-              <input className="inputbox" type="text" placeholder="Search" />
-              <Icon
-                className="searchIcon"
-                path={mdiMagnify}
-                title="search"
-                size={2}
-                color="white"
-              />
-              <Link to="/board">
+              <div className="h-nav-item-alw">
+                <input className="inputbox" type="text" placeholder="Search" />
                 <Icon
-                  className="boardIcon"
-                  path={mdiClipboardText}
-                  title="board"
+                  className="searchIcon"
+                  path={mdiMagnify}
+                  title="search"
                   size={2}
                   color="white"
                 />
-              </Link>
-            </div>
-            <div
-              className="h-menu"
-              onClick={(e) => {
-                menu ? setMenu(false) : setMenu(true);
-              }}
-            >
-              <Icon path={mdiMenu} title="menu" size={2} color="white" />
-            </div>
-            <div className="h-nav">
-              {isLogin ? (
-                <div>
-                  <div
-                    className={menu ? "h-nav-item active" : "h-nav-item"}
-                    ref={menu1}
-                  >
-                    <hr />
-                    <Link to="/create">
-                      <Icon
-                        path={mdiClipboardPlus}
-                        title="register"
-                        size={2}
-                        color="#9D2437"
-                      />
-                      <div className="sub-title">Create</div>
-                    </Link>
-                    <hr />
-                    <Link to="/refrigerator">
-                      <Icon
-                        path={mdiFridge}
-                        title="refrigerator"
-                        size={2}
-                        color="#9D2437"
-                      />
-                      <div className="sub-title" style={{ fontSize: "12px" }}>
-                        Refrigerator
+                <Link to="/board">
+                  <Icon
+                    className="boardIcon"
+                    path={mdiClipboardText}
+                    title="board"
+                    size={2}
+                    color="white"
+                  />
+                </Link>
+              </div>
+              <div
+                className="h-menu"
+                onClick={(e) => {
+                  menu ? setMenu(false) : setMenu(true);
+                }}
+              >
+                <Icon path={mdiMenu} title="menu" size={2} color="white" />
+              </div>
+              <div className="h-nav">
+                {isLogin ? (
+                  <div>
+                    <div
+                      className={menu ? "h-nav-item active" : "h-nav-item"}
+                      ref={menu1}
+                    >
+                      <hr />
+                      <Link to="/create">
+                        <Icon
+                          path={mdiClipboardPlus}
+                          title="register"
+                          size={2}
+                          color="#9D2437"
+                        />
+                        <div className="sub-title">Create</div>
+                      </Link>
+                      <hr />
+                      <Link to="/refrigerator">
+                        <Icon
+                          path={mdiFridge}
+                          title="refrigerator"
+                          size={2}
+                          color="#9D2437"
+                        />
+                        <div className="sub-title" style={{ fontSize: "12px" }}>
+                          Refrigerator
+                        </div>
+                      </Link>
+                      <hr />
+                      <Link to="/profile">
+                        <Icon
+                          path={mdiAccount}
+                          title="profile"
+                          size={2}
+                          color="#9D2437"
+                        />
+                        <div className="sub-title">Profile</div>
+                      </Link>
+                      <hr />
+                      <Link>
+                        <Icon
+                          path={mdiCart}
+                          title="cart"
+                          size={2}
+                          color="#9D2437"
+                          onClick={moveToCart}
+                        />
+                        <div className="sub-title">Cart</div>
+                      </Link>
+                      <hr />
+                      <Link>
+                        <Icon
+                          path={mdiLogout}
+                          title="logout"
+                          size={2}
+                          onClick={logout}
+                          color="#9D2437"
+                        />
+                        <div className="sub-title">Logout</div>
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                {!isLogin ? (
+                  <div>
+                    <div
+                      className={menu ? "h-nav-items active" : "h-nav-items"}
+                      ref={menu2}
+                    >
+                      <div>
+                        <Link to="/signup">
+                          <Icon
+                            path={mdiAccountPlus}
+                            title="signup"
+                            size={2}
+                            color={"#9D2437"}
+                          />
+                          <div className="sub-title">Sign Up</div>
+                        </Link>
                       </div>
-                    </Link>
-                    <hr />
-                    <Link to="/profile">
-                      <Icon
-                        path={mdiAccount}
-                        title="profile"
-                        size={2}
-                        color="#9D2437"
-                      />
-                      <div className="sub-title">Profile</div>
-                    </Link>
-                    <hr />
-                    <Link to="/cart">
-                      <Icon
-                        path={mdiCart}
-                        title="cart"
-                        size={2}
-                        color="#9D2437"
-                      />
-                      <div className="sub-title">Cart</div>
-                    </Link>
-                    <hr />
-                    <Link>
-                      <Icon
-                        path={mdiLogout}
-                        title="logout"
-                        size={2}
-                        onClick={logout}
-                        color="#9D2437"
-                      />
-                      <div className="sub-title">Logout</div>
-                    </Link>
-                  </div>
-                </div>
-              ) : (
-                <></>
-              )}
-              {!isLogin ? (
-                <div>
-                  <div
-                    className={menu ? "h-nav-items active" : "h-nav-items"}
-                    ref={menu2}
-                  >
-                    <div>
-                      <Link to="/signup">
-                        <Icon
-                          path={mdiAccountPlus}
-                          title="signup"
-                          size={2}
-                          color={"#9D2437"}
-                        />
-                        <div className="sub-title">Sign Up</div>
-                      </Link>
-                    </div>
-                    <hr />
-                    <div>
-                      <Link to="/login">
-                        <Icon
-                          path={mdiAccountArrowRight}
-                          title="login"
-                          size={2}
-                          color={"#9D2437"}
-                        />
-                        <div className="sub-title">Login</div>
-                      </Link>
+                      <hr />
+                      <div>
+                        <Link to="/login">
+                          <Icon
+                            path={mdiAccountArrowRight}
+                            title="login"
+                            size={2}
+                            color={"#9D2437"}
+                          />
+                          <div className="sub-title">Login</div>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <></>
-              )}
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
     </>
   );
 }

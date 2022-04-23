@@ -22,15 +22,15 @@ export default function CartReducer(state = initialState, action) {
     case USER_CART_GET:
     case USER_CART_GET_SUCCESS:
     case USER_CART_GET_ERROR:
-      return handleAsyncActions(USER_CART_GET, "usercartinfo")(state, action);
+      return handleAsyncActions(USER_CART_GET, "usercartget")(state, action);
     case USER_CART_ADD:
     case USER_CART_ADD_SUCCESS:
     case USER_CART_ADD_ERROR:
-      return handleAsyncActions(USER_CART_ADD, "usercartset")(state, action);
+      return handleAsyncActions(USER_CART_ADD, "usercartadd")(state, action);
     case USER_CART_DEL:
     case USER_CART_DEL_SUCCESS:
     case USER_CART_DEL_ERROR:
-      return handleAsyncActions(USER_CART_ADD, "usercartset")(state, action);
+      return handleAsyncActions(USER_CART_DEL, "usercartdel")(state, action);
     default:
       return state;
   }
