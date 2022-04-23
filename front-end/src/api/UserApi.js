@@ -113,7 +113,7 @@ export const userVoteValid = async (token) => {
   const result = axios
     .get(`${baseUrl}uservote`, {
       headers: {
-        Authorization: token,
+        accessToken: token,
       },
     })
     .then((res) => res.data)
@@ -181,5 +181,20 @@ export const updateUserInfo = async (data) => {
       alert("수정 실패");
     });
 
+  return result;
+};
+//메인페이지 이주의 레시피 투표 게시물 조회
+export const boardRankSend = async () => {
+  const result = axios
+    .get(`${baseUrl}boardrank`)
+    .then((res) => res.data)
+    .catch();
+  return result;
+};
+export const getrankboard = async () => {
+  const result = axios
+    .get(`${baseUrl}getrankboard`)
+    .then((res) => res.data)
+    .catch();
   return result;
 };

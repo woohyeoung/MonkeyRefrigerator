@@ -65,8 +65,7 @@ module.exports = {
   getUserInformation: async function (req, res) {
     try {
       const token = req.tokenInfo;
-
-      const userInfo = await UserDao.selectUserInfo(token.userId);
+      const userInfo = await userDao.selectUserInfo(token.userId);
       if (userInfo === undefined) {
         return res.json(
           response.successFalse(1002, "전체 게시물 목록이 없습니다.")
@@ -108,13 +107,13 @@ module.exports = {
           response.successFalse(7101, "이미 존재하는 재료입니다.")
         );
       }
-      let cnt = await UserDao.selectUserGetMaterialCount(data.userId);
+      let cnt = await userDao.selectUserGetMaterialCount(data.userId);
       if (cnt > 5) {
         return res.json(
           response.successFalse(7101, "5개이상 담을 수 없습니다.")
         );
       }
-      let insertInfo = await UserDao.insertUserGetMaterial(data);
+      let insertInfo = await userDao.insertUserGetMaterial(data);
       return res.json(
         response.successTrue(
           1001,
@@ -203,12 +202,12 @@ module.exports = {
     try {
       let tokenId = req.tokenInfo.userId;
       const userVote = await userDao.selectUserVote(tokenId);
-      if (userVote)
+      if (userVote.length > 0)
         return res.json(
-          response.successFalse(1001, "이미 투표를 완료하였습니다.")
+          response.successTrue(1001, "이미 투표를 완료하였습니다.", userVote)
         );
       return res.json(
-        response.successTrue(2001, "아직 투표를 완료하지 않았습니다.", userVote)
+        response.successFalse(2001, "아직 투표를 완료하지 않았습니다.")
       );
     } catch {
       return res.json(
@@ -222,7 +221,7 @@ module.exports = {
   voteUser: async (req, res) => {
     try {
       const user = req.tokenInfo.userId;
-      const board = req.body.boardId;
+      const board = req.body.body.boardId;
       const result = await userDao.insertUserVote(board, user);
       return res.json(response.successTrue(1001, "투표 입력 완료", result));
     } catch {
@@ -260,7 +259,7 @@ module.exports = {
   updateUserIn: async (req, res) => {
     try {
       let data = req.body.body.data;
-      const updateinfo = await UserDao.updateInfo(data);
+      const updateinfo = await userDao.updateInfo(data);
       return res.json(
         response.successTrue(
           1001,
@@ -273,6 +272,45 @@ module.exports = {
         response.successFalse(
           1001,
           "서버와 통신에 실패하였습니다. UserController/UserDao error - updateUserInfo"
+        )
+      );
+    }
+  },
+  getBoardRank: async (req, res) => {
+    try {
+      const [...rankList] = await userDao.selectVoteBoardRank();
+      if (rankList.length < 1)
+        return res.json(
+          response.successFalse(2001, "게시물 목록 조회에 실패하였습니다.")
+        );
+      return res.json(
+        response.successTrue(2001, "게시물 목록을 조회하였습니다.", rankList)
+      );
+    } catch (error) {
+      return res.json(
+        response.successFalse(
+          1001,
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - getBoardRank"
+        )
+      );
+    }
+  },
+  getRankVote: async (req, res) => {
+    try {
+      const [...voteList] = await userDao.selectRankBoardVote();
+      if (voteList.length < 1) {
+        return res.json(
+          response.successFalse(2001, "게시물 목록 조회에 실패하였습니다.")
+        );
+      }
+      return res.json(
+        response.successTrue(2001, "게시물 목록 조회에 성공하였습니다.")
+      );
+    } catch (error) {
+      return res.json(
+        response.successFalse(
+          1001,
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - getRankVote"
         )
       );
     }

@@ -18,4 +18,6 @@ module.exports = function (app) {
 
   app.route("/pwChange").post(jwtMiddleware, user.changePassword);
   app.route("/updateinfo").post(jwtMiddleware, user.updateUserIn);
+  app.route("/boardrank").get(user.getBoardRank);
+  app.route("/getrankboard").get(user.getRankVote);
 };

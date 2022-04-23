@@ -1,6 +1,6 @@
 //BoardDetail.js
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { boardDetail } from "../../store/actions/BoardAction";
 import "./BoardDetail.css";
@@ -13,7 +13,8 @@ import styled from "styled-components";
 import MoodIcon from "@mui/icons-material/Mood";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { green } from "@mui/material/colors";
-
+import { addUserCart } from "../../store/actions/CartAction";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 // carousel
 const Container = styled.div`
   overflow: hidden;
@@ -48,7 +49,8 @@ function BoardDetail() {
   const dispatch = useDispatch();
   const [board, setBoard] = useState([]);
   const [steps, setSteps] = useState([]);
-  // carousel
+  const tokenStore = useSelector((state) => state.tokenReducer.token);
+  const [loading, setLoading] = useState(false);
 
   const settings = {
     dots: true,
@@ -68,7 +70,22 @@ function BoardDetail() {
     }
     fetchBoardDetail();
   }, []);
-
+  const moveInCart = async (id) => {
+    if (window.confirm("장바구니에 추가하시겠습니까?")) {
+      await setInCart(id);
+      if (window.confirm("장바구니로 이동하시겠습니까?")) {
+        window.location.href = `/cart`;
+      }
+      setLoading(false);
+    } else {
+      alert("취소되었습니다.");
+    }
+  };
+  const setInCart = async (id) => {
+    const data = { board: id, token: tokenStore };
+    setLoading(true);
+    dispatch(addUserCart(data));
+  };
   useEffect(() => {
     if (boardStore) {
       const boardfetch = async () => {
@@ -107,6 +124,8 @@ function BoardDetail() {
           <div>
             <Loading />
           </div>
+        ) : loading ? (
+          <Loading />
         ) : (
           <div className="detailContainer">
             <Container>
@@ -122,7 +141,15 @@ function BoardDetail() {
                 })}
               </StyledSlider>
             </Container>
-
+            <Link>
+              <AddShoppingCartIcon
+                className="moveToCart"
+                sx={{ width: "40px", height: "40px" }}
+                onClick={() => {
+                  moveInCart(board[0][0].id);
+                }}
+              />
+            </Link>
             <hr className="horizontal" />
 
             <div style={{ textAlign: "center", marginTop: "10%" }}>
