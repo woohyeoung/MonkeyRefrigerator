@@ -105,9 +105,6 @@ module.exports = {
         `update board
                      set viewCount = viewCount + 1
                      where id = ?;`;
-
-      // const query2 = `select b.id,
-
       const params = [id];
       const connection = await pool.getConnection(async (conn) => conn);
       const [rows] = await connection.query(query, [
@@ -116,7 +113,6 @@ module.exports = {
         params,
         params,
       ]);
-      // const [rows2] = await connection.query(query2, params);
       connection.release();
       return rows;
     } catch (err) {

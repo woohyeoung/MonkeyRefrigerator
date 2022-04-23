@@ -74,6 +74,7 @@ function BoardDetail() {
       };
       boardfetch();
     }
+    console.log(board);
   }, [boardStore]);
 
   useEffect(() => {
@@ -81,7 +82,9 @@ function BoardDetail() {
       const spliceStep = () => {
         setSteps(step(board[0][0].content));
       };
-      spliceStep();
+      setTimeout(() => {
+        spliceStep();
+      }, 100);
     }
   }, [board]);
 
