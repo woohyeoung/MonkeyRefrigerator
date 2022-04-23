@@ -31,6 +31,14 @@ export const BOARD_POST = 'BOARD_POST';
 export const BOARD_POST_SUCCESS = 'BOARD_POST_SUCCESS';
 export const BOARD_POST_ERROR = 'BOARD_POST_ERROR';
 
+export const KEWORDBOARDLIST_GET = 'KEWORDBOARDLIST_GET';
+export const KEWORDBOARDLIST_GET_SUCCESS = 'KEWORDBOARDLIST_GET_SUCCESS';
+export const KEWORDBOARDLIST_GET_ERROR = 'KEWORDBOARDLIST_GET_ERROR';
+
+export const KEWORDBOARDLIST_AFTER_GET = 'KEWORDBOARDLIST_AFTER_GET';
+export const KEWORDBOARDLIST_AFTER_SUCCESS = 'KEWORDBOARDLIST_AFTER_SUCCESS';
+export const KEWORDBOARDLIST_AFTER_ERROR = 'KEWORDBOARDLIST_AFTER_ERROR';
+
 export const boardList = createPromiseThunk(
 	BOARDLIST_GET,
 	BoardApi.findBoardAll
@@ -55,4 +63,13 @@ export const boardDetail = createPromiseThunk(
 export const boardSaveOne = createPromiseThunk(
 	BOARD_POST,
 	BoardApi.saveBoardOne
+);
+export const kewordBoardList = createPromiseThunk(
+	KEWORDBOARDLIST_GET,
+	BoardApi.findkeyword
+);
+
+export const kewordBoardListAfter = createPromiseThunk(
+	KEWORDBOARDLIST_AFTER_GET,
+	BoardApi.findkeywordAfter
 );

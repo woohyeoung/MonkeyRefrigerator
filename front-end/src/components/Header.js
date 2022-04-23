@@ -1,8 +1,6 @@
-//Install-Style-User
-import React, { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { Cookies } from "react-cookie";
+//Header.js
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import "./Header.css";
 import {
   mdiMagnify,
   mdiAccount,
@@ -15,20 +13,32 @@ import {
   mdiLogout,
   mdiCart,
 } from "@mdi/js";
+
 import Icon from "@mdi/react";
-import "./Header.css";
+//router
+import { Link, useHistory } from "react-router-dom";
+import { Cookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
 import { handleLogin } from "../store/actions/UserAction";
+import { useLocation } from "react-router";
+import { keywordSave } from "../store/actions/SearchAction";
 
 function Header() {
-  const dispatch = useDispatch();
-  const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
-  const cookie = new Cookies();
   const [isLogin, setIsLogin] = useState(false);
+  const [imgUrl, setImgUrl] = useState("/monkey_2.png");
+  const [menu, setMenu] = useState(false);
+  const dispatch = useDispatch();
+  const monkey = useRef();
   const menu1 = useRef();
   const menu2 = useRef();
-  const [menu, setMenu] = useState(false);
-  const [imgUrl, setImgUrl] = useState("/monkey_2.png");
-  const monkey = useRef();
+  const tokenReducer = useSelector((state) => state.tokenReducer.authenticated);
+  const cookie = new Cookies();
+  const history = useHistory();
+  const location = useLocation();
+
+  useEffect(() => {
+    dispatch(handleLogin());
+  });
   useEffect(() => {
     if (isLogin && !tokenReducer) {
       if (!cookie.get("accessToken")) {
@@ -42,6 +52,40 @@ function Header() {
   useEffect(() => {
     tokenReducer ? setIsLogin(true) : setIsLogin(false);
   }, [tokenReducer]);
+
+  const searchInput = useRef();
+
+  const [keyword, setKeyword] = useState("");
+
+  const onChangeKeyword = useCallback(
+    (e) => {
+      setKeyword(e.target.value);
+    },
+    [keyword]
+  );
+  //엔터시 재료 검색
+  const onKeyPress = async (e) => {
+    if (e.key == "Enter") {
+      if (e.target.value === "") {
+        window.alert("한글자 이상 입력해주세요.");
+        return;
+      }
+      if (location.pathname === "/search") {
+        e.target.value = "";
+        dispatch(keywordSave(keyword));
+      } else {
+        e.target.value = "";
+        async function pushSearch() {
+          await history.push({
+            pathname: "/search",
+          });
+        }
+        dispatch(keywordSave(keyword));
+        pushSearch();
+      }
+    }
+  };
+
   return (
     <>
       <header>
@@ -62,15 +106,21 @@ function Header() {
                   src={imgUrl}
                   width={90}
                   height={90}
-                  alt="homeLogo"
                 ></img>
               </div>
             </Link>
+
             <div className="h-title">
               <span>Monkey Refrigerator</span>
             </div>
             <div className="h-nav-item-alw">
-              <input className="inputbox" type="text" placeholder="Search" />
+              <input
+                onKeyPress={onKeyPress}
+                onChange={onChangeKeyword}
+                className="inputbox"
+                type="text"
+                placeholder="Search"
+              />
               <Icon
                 className="searchIcon"
                 path={mdiMagnify}
@@ -78,6 +128,9 @@ function Header() {
                 size={2}
                 color="white"
               />
+              {/* <Link to="/search">
+                <div className="sub-title">검색</div>
+              </Link> */}
               <Link to="/board">
                 <Icon
                   className="boardIcon"
@@ -86,6 +139,7 @@ function Header() {
                   size={2}
                   color="white"
                 />
+                {/* <div className="sub-title">레시피</div> */}
               </Link>
             </div>
             <div
@@ -96,6 +150,7 @@ function Header() {
             >
               <Icon path={mdiMenu} title="menu" size={2} color="white" />
             </div>
+
             <div className="h-nav">
               {isLogin ? (
                 <div>
@@ -111,7 +166,7 @@ function Header() {
                         size={2}
                         color="#9D2437"
                       />
-                      <div className="sub-title">Create</div>
+                      {/* <div className="sub-title">등록</div> */}
                     </Link>
                     <hr />
                     <Link to="/refrigerator">
@@ -121,9 +176,7 @@ function Header() {
                         size={2}
                         color="#9D2437"
                       />
-                      <div className="sub-title" style={{ fontSize: "12px" }}>
-                        Refrigerator
-                      </div>
+                      {/* <div className="sub-title">냉장고</div> */}
                     </Link>
                     <hr />
                     <Link to="/profile">
@@ -133,7 +186,7 @@ function Header() {
                         size={2}
                         color="#9D2437"
                       />
-                      <div className="sub-title">Profile</div>
+                      {/* <div className="sub-title">프로필</div> */}
                     </Link>
                     <hr />
                     <Link to="/cart">
@@ -143,7 +196,7 @@ function Header() {
                         size={2}
                         color="#9D2437"
                       />
-                      <div className="sub-title">Cart</div>
+                      {/* <div className="sub-title">장바구니</div> */}
                     </Link>
                     <hr />
                     <Link>
@@ -154,7 +207,7 @@ function Header() {
                         onClick={logout}
                         color="#9D2437"
                       />
-                      <div className="sub-title">Logout</div>
+                      {/* <div className="sub-title">로그아웃</div> */}
                     </Link>
                   </div>
                 </div>
@@ -175,7 +228,7 @@ function Header() {
                           size={2}
                           color={"#9D2437"}
                         />
-                        <div className="sub-title">Sign Up</div>
+                        {/* <div className="sub-title">회원가입</div> */}
                       </Link>
                     </div>
                     <hr />
@@ -187,7 +240,7 @@ function Header() {
                           size={2}
                           color={"#9D2437"}
                         />
-                        <div className="sub-title">Login</div>
+                        {/* <div className="sub-title">로그인</div> */}
                       </Link>
                     </div>
                   </div>

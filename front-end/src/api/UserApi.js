@@ -47,7 +47,7 @@ export const saveUserMaterialOne = (data) => {
     .catch((err) => {
       console.log(err);
     });
-
+  console.log(result);
   return result;
 };
 
@@ -61,7 +61,6 @@ export const findUserMaterialUserId = (token) => {
     .catch((err) => {
       console.log(err);
     });
-
   return result;
 };
 
@@ -82,6 +81,8 @@ export const updatePassword = async (data) => {
       }
     )
     .then((res) => {
+      console.log(res.data);
+
       if (res.data.result === 0) {
         alert("기존 비밀번호와 동일합니다.");
       } else {
@@ -94,19 +95,17 @@ export const updatePassword = async (data) => {
 
 export const deleteUserGetMaterialUserId = (data) => {
   const result = axios
-    .delete(
-      baseUrl + "user/material",
-      { data },
-      {
-        headers: {
-          accessToken: data.token,
-        },
-      }
-    )
+    .delete(baseUrl + "user/material", {
+      params: {
+        materialId: data.materialId,
+      },
+      headers: {
+        accessToken: data.token,
+      },
+    })
     .catch((err) => {
       console.log(err);
     });
-
   return result;
 };
 
@@ -114,7 +113,7 @@ export const userVoteValid = async (token) => {
   const result = axios
     .get(`${baseUrl}uservote`, {
       headers: {
-        accessToken: token,
+        Authorization: token,
       },
     })
     .then((res) => res.data)
@@ -139,6 +138,23 @@ export const userVoteAdd = async (board, token) => {
     )
     .then((res) => res.data)
     .catch();
+  return result;
+};
+
+export const searchRefrigeratorList = (data) => {
+  console.log(data);
+  const result = axios
+    .get(baseUrl + "refrigerator", {
+      params: {
+        materialId: data.item.materialId,
+      },
+      headers: {
+        accessToken: data.token,
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   return result;
 };
 

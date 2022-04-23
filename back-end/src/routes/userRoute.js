@@ -12,6 +12,7 @@ module.exports = function (app) {
   app.route("/user/material").post(jwtMiddleware, user.saveUserMaterialOne);
   app.route("/user/material").get(jwtMiddleware, user.findUserMaterialUserId);
   app.route("/user/material").delete(jwtMiddleware, user.deleteUserMaterialOne);
+
   app.route("/uservote").get(jwtMiddleware, user.voteValid);
   app.route("/voteadd").post(jwtMiddleware, user.voteUser);
 

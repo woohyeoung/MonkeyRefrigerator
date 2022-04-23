@@ -7,7 +7,10 @@ module.exports = {
   selectUserAccount: async function (email, pw) {
     try {
       const password = crypto.createHash("sha512").update(pw).digest("base64");
-      const query = `SELECT id,email FROM useraccount WHERE email=? and password=?;`;
+      const query = `SELECT id, email
+                           FROM useraccount
+                           WHERE email = ?
+                             and password = ?;`;
       const params = [email, password];
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query, params);
@@ -22,7 +25,9 @@ module.exports = {
   },
   selectIdDoubleChk: async function (id, type) {
     try {
-      const query = `SELECT count(*) as cnt FROM useraccount WHERE ${type}='${id}';`;
+      const query = `SELECT count(*) as cnt
+                           FROM useraccount
+                           WHERE ${type} = '${id}';`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query);
 
@@ -43,8 +48,8 @@ module.exports = {
         .createHash("sha512")
         .update(data.password)
         .digest("base64");
-      const query = `insert into useraccount( email, password, nickname, name, jobId, gender, birthday) 
-                      values( ?, ?, ?, ?, ?, ?, ?);`;
+      const query = `insert into useraccount(email, password, nickname, name, jobId, gender, birthday)
+                           values (?, ?, ?, ?, ?, ?, ?);`;
       const params = [
         data.email,
         password,
@@ -73,11 +78,12 @@ module.exports = {
   },
   selectUserInfo: async function (id) {
     try {
-      const query = `SELECT id, email, nickname, name, jobId, gender, birthday, profileImg, createAt, modifiedAt FROM useraccount WHERE id='${id}' and isDeleted = 'N';`;
+      const query = `SELECT *
+                           FROM useraccount
+                           WHERE id = '${id}';`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query);
       connection.release();
-      // console.log(info);
       return info;
     } catch (err) {
       response.successFalse(
@@ -93,7 +99,9 @@ module.exports = {
         .update(data.pw)
         .digest("base64");
 
-      const query = `UPDATE useraccount SET password = '${password}' WHERE id ='${data.userId}';`;
+      const query = `UPDATE useraccount
+                           SET password = '${password}'
+                           WHERE id = '${data.userId}';`;
 
       const connection = await pool.getConnection(async (conn) => conn);
       const info = await connection.query(query);
@@ -126,11 +134,11 @@ module.exports = {
     }
   },
 
-  insertUserGetMaterial: async function (data) {
+  insertUserGetMaterial: async function (userId, materialId) {
     try {
       const query = `insert into usergetmaterial(userId, materialId) value (?,?);`;
       const connection = await pool.getConnection(async (conn) => conn);
-      const params = [data.userId, data.material.id];
+      const params = [userId, materialId];
       const [info] = await connection.query(query, params);
       connection.release();
       return info;
@@ -159,14 +167,14 @@ module.exports = {
       );
     }
   },
-  deleteUserGetMaterial: async function (data) {
+  deleteUserGetMaterial: async function (userId, materialId) {
     try {
       const query = `delete
-                           from usergetmaterial
-                           where userId = ?
-                             and materialId = ?;`;
+                       from usergetmaterial
+                       where userId = ?
+                         and materialId = ?;`;
       const connection = await pool.getConnection(async (conn) => conn);
-      const params = [data.userId, data.materialId];
+      const params = [userId, materialId];
       const [info] = await connection.query(query, params);
       connection.release();
       return info;
@@ -179,10 +187,11 @@ module.exports = {
   },
   selectUserVote: async function (id) {
     try {
-      const query = `select userId from boardvoteuser 
-		  where userId='${id}'and 
-		  createAt <= (select adddate(curdate(), -weekday(curdate()) + 6) as sunday from dual) and 
-		  createAt >= (select adddate(curdate(), -weekday(curdate()) + 0) as monday from dual);`;
+      const query = `select userId
+                           from boardvoteuser
+                           where userId = '${id}'
+                             and createAt <= (select adddate(curdate(), -weekday(curdate()) + 6) as sunday from dual)
+                             and createAt >= (select adddate(curdate(), -weekday(curdate()) + 0) as monday from dual);`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [vote] = await connection.query(query);
       connection.release();
@@ -196,7 +205,8 @@ module.exports = {
   },
   insertUserVote: async function (board, user) {
     try {
-      const query = `insert into boardvoteuser (boardId, userId) values(${board},${user});`;
+      const query = `insert into boardvoteuser (boardId, userId)
+                           values (${board}, ${user});`;
       const connection = await pool.getConnection(async (conn) => conn);
       const solution = await connection.query(query);
       connection.release();
@@ -205,6 +215,23 @@ module.exports = {
       response.successFalse(
         3001,
         "데이터베이스 연결에 실패하였습니다. UserDao error - insertUserVote"
+      );
+    }
+  },
+
+  selectExistMaterialId: async function (userId, materialId) {
+    try {
+      const query = `select exists(select materialId from usergetmaterial where userId = ? and materialId = ?) exist`;
+      const params = [userId, materialId];
+
+      const connection = await pool.getConnection(async (conn) => conn);
+      const [rows] = await connection.query(query, params);
+      connection.release();
+      return rows[0];
+    } catch (err) {
+      response.successFalse(
+        3001,
+        "데이터베이스 연결에 실패하였습니다. UserDao error - selectExistMaterialId"
       );
     }
   },

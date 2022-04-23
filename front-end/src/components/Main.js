@@ -1,8 +1,9 @@
-//Install-Style-User
+//Main.js
+//Install
 import React, { useEffect, useRef, useState } from "react";
+import { Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Switch } from "react-router-dom";
-import { Cookies } from "react-cookie";
+//Style
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -20,6 +21,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import CheckIcon from "@mui/icons-material/Check";
 import "./Main.css";
+//User
 import { Login } from "./user/Login";
 import SignUp from "./user/SignUp";
 import { didVoteChk, handleLogin } from "../store/actions/UserAction";
@@ -34,6 +36,8 @@ import { voteBtnClick } from "../store/actions/UserAction";
 import BoardList from "./board/BoardList";
 import BoardCreate from "./board/BoardCreate";
 import Cart from "../components/cart/Cart";
+import Search from "../components/search/Search";
+import { Cookies } from "react-cookie";
 
 export default function Main() {
   const dispatch = useDispatch();
@@ -47,7 +51,9 @@ export default function Main() {
       <Header />
       <div className="mainContainer">
         <Switch>
-          <PublicRoute restricted={false} exact path="/" component={MainPage} />
+          <PublicRoute restricted={false} exact path="/">
+            <MainPage />
+          </PublicRoute>
           <PublicRoute
             restricted={true}
             component={Login}
@@ -66,11 +72,20 @@ export default function Main() {
             path="/board"
             exact
           />
-          <PrivateRoute component={BoardCreate} path="/create" exact />
+          <PublicRoute
+            restricted={false}
+            component={Search}
+            path="/search"
+            exact
+          />
+          <PublicRoute component={BoardCreate} path="/create" exact />
           <PrivateRoute component={Profile} path="/profile" exact />
           <PrivateRoute component={Refrigerator} path="/refrigerator" exact />
           <PrivateRoute component={BoardDetail} path="/board/:id" exact />
-          <PrivateRoute component={Cart} path="/cart" exact />
+          <Route path="/cart">
+            <Cart />
+          </Route>
+          {/* <PrivateRoute component={Cart} path="/cart" exact /> */}
         </Switch>
       </div>
     </>
@@ -189,13 +204,10 @@ const VotePage = (props) => {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * 3;
   const voteHandler = (e) => {
-    const votHeesoo = async () => {
-      dispatch(voteBtnClick(e.target.value));
-      await dispatch(didVoteChk());
-    };
-    votHeesoo();
+    dispatch(voteBtnClick(e.target.value));
     alert("투표가 완료되었습니다.");
-    // window.location.reload();
+    dispatch(didVoteChk());
+    window.location.reload();
   };
   useEffect(() => {
     setRows([...props.data]);
@@ -341,8 +353,8 @@ const MainPage = () => {
   const boardReducer = useSelector((state) => state.boardReducer);
   const [boardRank, setBoardRank] = useState([]);
   const logoRef = useRef(null);
-  const [isVote, setIsVote] = useState(false);
-  const [voteLoading, setVoteLoading] = useState(false);
+  const [isVote, setIsVote] = useState(false); //투표를 했으면 did보여줘 true로 바꿔서
+  const [voteLoading, setVoteLoading] = useState(false); //vote를 불러와 기록을 확인하고 didvotechk로 보내
   const voteReducer = useSelector((state) => state.userReducer.result);
 
   useEffect(() => {
@@ -367,6 +379,7 @@ const MainPage = () => {
     setVote();
   }, []);
   useEffect(() => {
+    console.log(voteReducer);
     if (voteReducer) setIsVote(voteReducer);
   }, [voteReducer]);
   useEffect(() => {
@@ -383,63 +396,71 @@ const MainPage = () => {
   }, [boardReducer.boardList.data]);
   return (
     <>
-      <div className="mainHeadLine">
-        <div className="dungdung" ref={logoRef}>
-          {MainLogo}
-        </div>
-        <div className="mainVote">
-          {voteLoading ? (
-            <>
-              <SkeletonLoading />
-            </>
-          ) : isVote ? (
-            <Card variant="outlined">
-              <DidVote />
-            </Card>
-          ) : (
-            <>
-              <Card
-                variant="outlined"
-                onClick={() => {
-                  modalOn ? setModalOn(false) : setModalOn(true);
-                }}
-              >
-                <MainVoteCard data={boardRank} />
-              </Card>
-
-              <VoteModal flag={modalOn} />
-            </>
-          )}
-        </div>
-      </div>
-      {loading ? (
-        <div className="loadingMain">
-          <SkeletonLoadingSet />
-        </div>
+      {boardRank.length === 0 ? (
+        <></>
       ) : (
         <>
-          <div className="mainBody">
-            <div className="mainBodyTitle" style={{ marginLeft: "20%" }}>
-              <h4>Best 10 Recipe</h4>
+          <>
+            <div className="mainHeadLine">
+              <div className="dungdung" ref={logoRef}>
+                {MainLogo}
+              </div>
+              <div className="mainVote">
+                {voteLoading ? (
+                  <>
+                    <SkeletonLoading />
+                  </>
+                ) : isVote ? (
+                  <Card variant="outlined">
+                    <DidVote />
+                  </Card>
+                ) : (
+                  <>
+                    <Card
+                      variant="outlined"
+                      onClick={() => {
+                        modalOn ? setModalOn(false) : setModalOn(true);
+                      }}
+                    >
+                      <MainVoteCard data={boardRank} />
+                    </Card>
+
+                    <VoteModal flag={modalOn} />
+                  </>
+                )}
+              </div>
             </div>
-            <div className="mainBodyCon">
-              {boardRank.slice(offset, offset + 5).map((item, i) => (
-                <RankCard
-                  path={boardRank[i].boardImgPath}
-                  title={boardRank[i].title}
-                  content={boardRank[i].content}
-                />
-              ))}
-            </div>
-            <div className="mainBodyCon">
-              <Pagination
-                total={boardRank.length}
-                limit={5}
-                page={page}
-                setPage={setPage}
-              />
-            </div>
-          </div>
+            {loading ? (
+              <div className="loadingMain">
+                <SkeletonLoadingSet />
+              </div>
+            ) : (
+              <>
+                <div className="mainBody">
+                  <div className="mainBodyTitle" style={{ marginLeft: "20%" }}>
+                    <h4>Best 10 Recipe</h4>
+                  </div>
+                  <div className="mainBodyCon">
+                    {boardRank.slice(offset, offset + 5).map((item, i) => (
+                      <RankCard
+                        path={boardRank[i].boardImgPath}
+                        title={boardRank[i].title}
+                        content={boardRank[i].content}
+                      />
+                    ))}
+                  </div>
+                  <div className="mainBodyCon">
+                    <Pagination
+                      total={boardRank.length}
+                      limit={5}
+                      page={page}
+                      setPage={setPage}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+          </>
         </>
       )}
     </>

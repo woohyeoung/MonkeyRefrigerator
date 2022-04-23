@@ -2,7 +2,6 @@
 const response = require("../utils/response");
 const userDao = require("../dao/UserDao");
 const generateToken = require("../config/secret");
-const UserDao = require("../dao/UserDao");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
@@ -53,7 +52,7 @@ module.exports = {
   signupInsert: async function (req, res) {
     const data = req.body;
     try {
-      const signupformInsert = await UserDao.insertSignup(data);
+      const signupformInsert = await userDao.insertSignup(data);
     } catch (err) {
       return res.json(
         response.successFalse(
@@ -92,11 +91,23 @@ module.exports = {
   },
 
   saveUserMaterialOne: async function (req, res) {
-    const data = req.body;
-    //console.log(data);
-    data.userId = req.tokenInfo.userId;
-    // console.log(data.userId);
+    const materialId = req.body.material.id;
+    const userId = req.tokenInfo.userId;
+
     try {
+      if (materialId === null || materialId === undefined) {
+        return res.json(
+          response.successFalse(7101, "저장하려는 재료가 존재하지 않습니다.")
+        );
+      }
+
+      let exists = await userDao.selectExistMaterialId(userId, materialId);
+
+      if (exists.exist === 1) {
+        return res.json(
+          response.successFalse(7101, "이미 존재하는 재료입니다.")
+        );
+      }
       let cnt = await UserDao.selectUserGetMaterialCount(data.userId);
       if (cnt > 5) {
         return res.json(
@@ -124,11 +135,16 @@ module.exports = {
   findUserMaterialUserId: async function (req, res) {
     let userId = req.tokenInfo.userId;
     try {
-      let userMaterialList = await UserDao.selectUserGetMaterialUserId(userId);
+      let userMaterialList = await userDao.selectUserGetMaterialUserId(userId);
 
-      // if (userMaterialList.length === 0) {
-      //     return res.json(response.successFalse(1004, '회원이 가지고 있는 재료 목록이 없습니다.'));
-      // }
+      if (userMaterialList.length === 0) {
+        return res.json(
+          response.successFalse(
+            1004,
+            "회원이 가지고 있는 재료 목록이 없습니다."
+          )
+        );
+      }
 
       return res.json(
         response.successTrue(
@@ -148,15 +164,29 @@ module.exports = {
   },
 
   deleteUserMaterialOne: async function (req, res) {
-    const data = req.body;
-    //console.log(data);
-    data.userId = req.tokenInfo.userId;
+    const materialId = req.query.materialId;
+    const userId = req.tokenInfo.userId;
+
     try {
-      let deleteInfo = await UserDao.deleteUserGetMaterial(data);
+      if (materialId === null || materialId === undefined) {
+        return res.json(
+          response.successFalse(7101, "삭제 하려는 재료가 존재 하지 않습니다.")
+        );
+      }
+      let exists = await userDao.selectExistMaterialId(userId, materialId);
+
+      if (exists.exist === 0) {
+        return res.json(
+          response.successFalse(7101, "삭제 하려는 재료가 존재 하지 않습니다")
+        );
+      }
+
+      let deleteInfo = await userDao.deleteUserGetMaterial(userId, materialId);
+
       return res.json(
         response.successTrue(
           1001,
-          "해당 회원이 가지고 있는  재료 1개를 추가하였습니다.",
+          "해당 회원이 가지고 있는 재료 1개를 삭제하였습니다.",
           deleteInfo
         )
       );
@@ -164,7 +194,7 @@ module.exports = {
       return res.json(
         response.successFalse(
           1001,
-          "서버와 통신에 실패하였습니다. UserController/UserDao error - saveUserMaterialOne"
+          "서버와 통신에 실패하였습니다. UserController/UserDao error - deleteUserMaterialOne"
         )
       );
     }
@@ -172,14 +202,13 @@ module.exports = {
   voteValid: async (req, res) => {
     try {
       let tokenId = req.tokenInfo.userId;
-      const userVote = await UserDao.selectUserVote(tokenId);
-      //console.log(userVote);
-      if (userVote.length > 0)
+      const userVote = await userDao.selectUserVote(tokenId);
+      if (userVote)
         return res.json(
-          response.successTrue(1001, "이미 투표를 완료하였습니다.", userVote)
+          response.successFalse(1001, "이미 투표를 완료하였습니다.")
         );
       return res.json(
-        response.successFalse(2001, "아직 투표를 완료하지 않았습니다.")
+        response.successTrue(2001, "아직 투표를 완료하지 않았습니다.", userVote)
       );
     } catch {
       return res.json(
@@ -194,7 +223,7 @@ module.exports = {
     try {
       const user = req.tokenInfo.userId;
       const board = req.body.boardId;
-      const result = await UserDao.insertUserVote(board, user);
+      const result = await userDao.insertUserVote(board, user);
       return res.json(response.successTrue(1001, "투표 입력 완료", result));
     } catch {
       return res.json(
