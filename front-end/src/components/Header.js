@@ -25,8 +25,6 @@ import { keywordSave } from "../store/actions/SearchAction";
 function Header() {
   const dispatch = useDispatch();
   const tokenStore = useSelector((state) => state.tokenReducer);
-  const cartStore = useSelector((state) => state.cartReducer);
-  // const [isCart, setIsCart] = useState(0);
   const [loading, setLoading] = useState(false);
   const cookie = new Cookies();
   const [isLogin, setIsLogin] = useState(false);
@@ -41,9 +39,8 @@ function Header() {
   useEffect(() => {
     if (isLogin && !tokenStore) {
       if (!cookie.get("accessToken")) {
-        logout();
         alert("토큰이 만료되어 로그아웃 되었습니다.");
-        window.location.reload();
+        logout();
       }
       dispatch(handleLogin());
     }
@@ -58,23 +55,11 @@ function Header() {
     if (tokenStore?.token) dispatch(getUserCart(tokenStore.token));
     setLoading(false);
   }, [tokenStore]);
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   if (isLogin && cartStore?.usercartget?.data?.result) {
-  //     setIsCart(cartStore.usercartget.data.result[0].userId);
-  //     console.log(cartStore.usercartget.data.result[0].userId);
-  //   }
-  //   setLoading(false);
-  // }, [cartStore?.usercartget?.data?.result]);
   const moveToCart = () => {
     setTimeout(() => {
       window.location.href = `/cart`;
     }, 500);
   };
-
-  const searchInput = useRef();
-
   const [keyword, setKeyword] = useState("");
 
   const onChangeKeyword = useCallback(

@@ -70,6 +70,18 @@ export const loginVali = (email, pw) => {
     }
   };
 };
+export const handleLogout = (data) => async (dispatch) => {
+  console.log(data);
+  if (data) {
+    removeCookie("accessToken", { path: "/", domain: ".localhost:8080" });
+  }
+  // let token = getCookie("accessToken");
+  // console.log(token);
+  // if (token === undefined) {
+  //   dispatch({ type: SET_TOKEN, result: false, token: null });
+  //   dispatch({ type: HEADER_TOKEN_OUT, token: null });
+  // }
+};
 
 export const handleLogin = () => {
   return async (dispatch) => {
@@ -118,18 +130,7 @@ export const deleteUserGetMaterial = createPromiseThunk(
   USERMATERIAL_DELETE,
   UserApi.deleteUserGetMaterialUserId
 );
-export const didVoteChk = () => {
-  return async (dispatch) => {
-    try {
-      let token = getCookie("accessToken");
-      const voteValid = await UserApi.userVoteValid(token);
-      if (voteValid) dispatch({ type: DID_VOTE_CHECK, result: voteValid });
-      else dispatch({ type: DID_VOTE_CHECK, result: voteValid });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-};
+
 export const voteBtnClick = (board) => {
   return async (dispatch) => {
     try {
@@ -142,7 +143,6 @@ export const voteBtnClick = (board) => {
     }
   };
 };
-export const DID_VOTE_CHECK = "DID_VOTE_CHECK";
 
 export const searchRefrigerator = createPromiseThunk(
   REFRIGERATOR_GET,
@@ -168,4 +168,13 @@ export const VOTE_BOARD_RANK_ERROR = "VOTE_BOARD_RANK_ERROR";
 export const voteboardRank = createPromiseThunk(
   VOTE_BOARD_RANK,
   UserApi.getrankboard
+);
+
+export const DID_VOTE_CHECK = "DID_VOTE_CHECK";
+export const DID_VOTE_CHECK_SUCCESS = "DID_VOTE_CHECK_SUCCESS";
+export const DID_VOTE_CHECK_ERROR = "DID_VOTE_CHECK_ERROR";
+
+export const didVoteChk = createPromiseThunk(
+  DID_VOTE_CHECK,
+  UserApi.userVoteValid
 );
