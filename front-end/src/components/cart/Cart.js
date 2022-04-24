@@ -116,6 +116,7 @@ const CartCard = (props) => {
     dispatch(delUserCart(delData));
     dispatch(getUserCart(tokenStore.token));
     setLoading(false);
+    window.location.reload();
   };
   return (
     <>
