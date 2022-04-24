@@ -160,6 +160,7 @@ export const Refrigerator = () => {
 
   const display = useCallback(() => {
     if (flag) {
+      setStyle("hidden");
       setTimeout(() => {
         setStyle("visible");
       }, 250);
@@ -179,8 +180,12 @@ export const Refrigerator = () => {
     if (window.confirm("정말 삭제 하시겠습니까?")) {
       setText("회원 재료 삭제중...");
       setLoading(true);
+      setFlag(false);
       await dispatch(deleteUserGetMaterial(data));
       await dispatch(userMaterialUserId(token));
+      setTimeout(() => {
+        setFlag(true);
+      }, 250);
       setLoading(false);
     } else {
     }
@@ -516,10 +521,10 @@ const SearchModal = (props) => {
     boxShadow: 24,
     p: 4,
   };
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const [openSearch, setOpenSearch] = useState(false);
+  const handleOpen = () => setOpenSearch(true);
   const handleClose = () => {
-    setOpen(false);
+    setOpenSearch(false);
     _setSelectMaterial({});
   };
 
@@ -551,7 +556,7 @@ const SearchModal = (props) => {
           <div className="modalContainer">
             <div>
               <Modal
-                open={open}
+                open={openSearch}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
@@ -602,8 +607,6 @@ const SearchModal = (props) => {
                 rows={searchList}
                 columns={searchKind}
                 ref={dataGridRef}
-                // pageSize={5}
-                // rowsPerPageOptions={[5]}
                 hideFooterPagination={true}
                 hideFooter={true}
               />

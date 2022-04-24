@@ -20,38 +20,38 @@ $(window).scroll(function () {
     setTimeout(function () {
       if ($(this).scrollTop()) {
         $("#to-top").show();
-        $("#to-bottom").show();
+        // $("#to-bottom").show();
       } else {
-        $("#to-bottom").show();
+        // $("#to-bottom").show();
       }
     }, 250)
   );
 });
 // 윈도우 높이 구하기
-function getWindowDimensions() {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height,
-  };
-}
+// function getWindowDimensions() {
+//   const { innerWidth: width, innerHeight: height } = window;
+//   return {
+//     width,
+//     height,
+//   };
+// }
 
-function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions()
-  );
+// function useWindowDimensions() {
+//   const [windowDimensions, setWindowDimensions] = useState(
+//     getWindowDimensions()
+//   );
 
-  useEffect(() => {
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
+//   useEffect(() => {
+//     function handleResize() {
+//       setWindowDimensions(getWindowDimensions());
+//     }
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+//     window.addEventListener("resize", handleResize);
+//     return () => window.removeEventListener("resize", handleResize);
+//   }, []);
 
-  return windowDimensions;
-}
+//   return windowDimensions;
+// }
 
 function ScrollTo() {
   // 스크롤을 하면서 실행할 내용을 이곳에 추가합니다.
@@ -84,9 +84,9 @@ function ScrollTo() {
   return (
     <>
       {/* <!--TO BOTTOM BUTTON--> */}
-      <div onClick={onBottom} ref={toTop} id="to-bottom">
+      {/* <div onClick={onBottom} ref={toTop} id="to-bottom">
         <Icon path={mdiArrowDownDropCircle} title="search" size={2} />
-      </div>
+      </div> */}
       {/* <!--TO TOP BUTTON--> */}
       <div onClick={onTop} ref={toBottom} id="to-top">
         <Icon path={mdiArrowUpDropCircle} title="search" size={2} />

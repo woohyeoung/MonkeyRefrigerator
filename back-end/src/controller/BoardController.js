@@ -101,12 +101,12 @@ module.exports = {
         }
       }
 
-      boardList[0].boardCount = boardList.length;
-      if (boardList.length === 0) {
-        return res.json(
-          response.successFalse(1001, "검색 게시물 목록이 없습니다.")
-        );
-      }
+      // boardList[0].boardCount = boardList.length;
+      // if (boardList.length === 0) {
+      //   return res.json(
+      //     response.successFalse(1001, "검색 게시물 목록이 없습니다.")
+      //   );
+      // }
 
       return res.json(
         response.successTrue(
@@ -201,9 +201,6 @@ module.exports = {
     try {
       let keyword = req.query.keyword;
       const materailList = await boardDao.selectMaterialKey(keyword);
-      if (materailList.length === 0) {
-        return res.json(response.successFalse(1004, "해당 재료가 없습니다."));
-      }
 
       return res.json(
         response.successTrue(
@@ -282,19 +279,32 @@ module.exports = {
       let boardimageType;
       let boardimageSize;
 
-      const promiseboardImg = req.files.map(async (file) => {
-        boardimagePath = file.location;
-        boardimageType = file.contentType;
-        boardimageSize = file.size;
 
+      for(let i=0; i<req.files.length; i++){
+        boardimagePath = req.files[i].location;
+        boardimageType = req.files[i].contentType;
+        boardimageSize = req.files[i].size;
         await boardDao.insertBoardIdImg(
           boardId,
           boardimagePath,
           boardimageType,
           boardimageSize
         );
-      });
-      await Promise.all(promiseboardImg);
+      }
+
+      // const promiseboardImg = req.files.map(async (file) => {
+      //   boardimagePath = file.location;
+      //   boardimageType = file.contentType;
+      //   boardimageSize = file.size;
+      //
+      //   await boardDao.insertBoardIdImg(
+      //     boardId,
+      //     boardimagePath,
+      //     boardimageType,
+      //     boardimageSize
+      //   );
+      // });
+      // await Promise.all(promiseboardImg);
 
       return res.json(
         response.successTrue(5102, "게시물 저장에 성공하였습니다.")
