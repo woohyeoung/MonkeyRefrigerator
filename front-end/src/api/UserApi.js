@@ -47,7 +47,7 @@ export const saveUserMaterialOne = (data) => {
     .catch((err) => {
       console.log(err);
     });
-  console.log(result);
+
   return result;
 };
 
@@ -182,6 +182,7 @@ export const updateUserInfo = async (data) => {
 
   return result;
 };
+
 //메인페이지 이주의 레시피 투표 게시물 조회
 export const boardRankSend = async () => {
   const result = axios
@@ -190,6 +191,7 @@ export const boardRankSend = async () => {
     .catch();
   return result;
 };
+
 export const getrankboard = async () => {
   const result = axios
     .get(`${baseUrl}getrankboard`)

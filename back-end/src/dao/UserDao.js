@@ -53,8 +53,8 @@ module.exports = {
       const params = [
         data.email,
         password,
-        data.name,
         data.nickname,
+        data.name,
         data.jobId,
         data.gender,
         data.birth,

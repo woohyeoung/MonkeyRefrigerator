@@ -424,6 +424,7 @@ const MainPage = () => {
       }
     );
   });
+
   useEffect(() => {
     if (tokenStore?.token) dispatch(didVoteChk(tokenStore.token));
   }, [tokenStore?.token]);
@@ -439,6 +440,7 @@ const MainPage = () => {
     dispatch(boardRankChk());
     dispatch(voteboardRank());
   }, []);
+
   useEffect(() => {
     setTimeout(() => {
       if (userReducer?.voteBoardRankList?.data) {

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { boardDetail } from "../../store/actions/BoardAction";
 import "./BoardDetail.css";
 import { IoIosAlarm, IoMdStar } from "react-icons/io";
+import { MdOutlineDining } from "react-icons/md";
 import Loading from "../shared/CustomLoading";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -16,7 +17,6 @@ import { green } from "@mui/material/colors";
 import { addUserCart } from "../../store/actions/CartAction";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ScrollTo from "../shared/ScrollTo";
-
 // carousel
 const Container = styled.div`
   overflow: hidden;
@@ -24,7 +24,7 @@ const Container = styled.div`
   width: 100%;
 `;
 const ImageContainer = styled.div`
-  padding: 15px 70px;
+  padding: 10px 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,8 +33,8 @@ const ImageContainer = styled.div`
 const Image = styled.img`
   width: 100%;
   max-width: 500px;
-  min-width: 400px;
   max-height: 400px;
+  min-height: 350px;
 `;
 
 const StyledSlider = styled(Slider)`
@@ -53,6 +53,8 @@ function BoardDetail() {
   const [steps, setSteps] = useState([]);
   const tokenStore = useSelector((state) => state.tokenReducer.token);
   const [loading, setLoading] = useState(false);
+  const [subMaterial, setSubMaterial] = useState([]);
+  const [subMC, setSubMC] = useState([]);
 
   const settings = {
     dots: true,
@@ -97,18 +99,6 @@ function BoardDetail() {
     }
   }, [boardStore?.data]);
 
-  useEffect(() => {
-    console.log(board);
-    if (board) {
-      const spliceStep = () => {
-        if (board[0]) setSteps(step(board[0][0]?.content));
-      };
-      setTimeout(() => {
-        spliceStep();
-      }, 200);
-    }
-  }, [board]);
-
   function step(str) {
     let strAry = [];
     let strAry2 = [];
@@ -122,6 +112,38 @@ function BoardDetail() {
       return strAry2;
     }
   }
+
+  function sM(str) {
+    let strAry = [];
+    let strAry2 = [];
+    if (str) {
+      strAry = str.split(",");
+      for (let index = 0; index < strAry.length; index++) {
+        strAry2.push(strAry[index]);
+      }
+      return strAry2;
+    }
+  }
+
+  useEffect(() => {
+    if (board) {
+      const spliceStep = () => {
+        if (board[0]) setSteps(step(board[0][0].content));
+      };
+      const spliceSubMaterial = () => {
+        if (board[0]) setSubMaterial(sM(board[0][0].subMaterial));
+      };
+      const spliceSubCount = () => {
+        if (board[0]) setSubMC(sM(board[0][0].subMaterialCount));
+      };
+      setTimeout(() => {
+        spliceSubMaterial();
+        spliceSubCount();
+        spliceStep();
+      }, 300);
+    }
+  }, [board]);
+
   return (
     <>
       <div>
@@ -146,16 +168,6 @@ function BoardDetail() {
                 })}
               </StyledSlider>
             </Container>
-            <Link>
-              <AddShoppingCartIcon
-                className="moveToCart"
-                sx={{ width: "40px", height: "40px" }}
-                onClick={() => {
-                  moveInCart(board[0][0].id);
-                }}
-              />
-            </Link>
-            <hr className="horizontal" />
 
             <div
               style={{
@@ -163,16 +175,38 @@ function BoardDetail() {
                 borderTop: "1px solid #b3b1b1",
                 textAlign: "center",
                 marginTop: "5%",
-                paddingTop: "10%",
-                marginBottom: "5%",
                 marginLeft: "20%",
               }}
             >
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  background: "#333",
+                  borderRadius: "30%",
+                  opacity: "0.8",
+                  marginLeft: "91%",
+                }}
+              >
+                <Link>
+                  <AddShoppingCartIcon
+                    className="moveToCart"
+                    sx={{
+                      width: "30px",
+                      height: "30px",
+                      marginTop: "13%",
+                    }}
+                    onClick={() => {
+                      moveInCart(board[0][0].id);
+                    }}
+                  />
+                </Link>
+              </div>
               <img
                 style={{
                   borderRadius: "50%",
-                  width: "110px",
-                  height: "110px",
+                  width: "60px",
+                  height: "60px",
                 }}
                 src={board[0][0].profileImg}
                 alt="userprofile"
@@ -181,19 +215,6 @@ function BoardDetail() {
             <div id="detailContent">
               <div id="detailNick">
                 <b>{board[0][0].nickname}</b>
-                <p style={{ fontSize: "15px", color: "#aaa" }}>
-                  등록일({board[0][0].createAt})
-                  <br />
-                  {!board[0][0].modifiedAt ? (
-                    <></>
-                  ) : (
-                    <>
-                      수정일({board[0][0].modifiedAt})
-                      <br />
-                    </>
-                  )}
-                  조회수({board[0][0].viewCount})
-                </p>
               </div>
               <div id="detailTitle">
                 <b>{board[0][0].title}</b>
@@ -201,6 +222,11 @@ function BoardDetail() {
               <div id="detailSubtitle">{board[0][0].subtitle}</div>
 
               <div className="detailInfo">
+                <span className="span1">
+                  <MdOutlineDining size="50" />
+                  <br></br>
+                  <b>{board[0][0].servings}</b>
+                </span>
                 <span className="span1">
                   <IoIosAlarm size="50" />
                   <br></br>
@@ -242,6 +268,33 @@ function BoardDetail() {
                     </div>
                   </div>
                 </div>
+                {!board[0][0].subMaterial ? (
+                  <></>
+                ) : (
+                  <div id="readyMaterial">
+                    <b>[부재료]</b>
+                    <div style={{ display: "flex" }}>
+                      <div style={{ width: "50%" }}>
+                        <ul className="hs">
+                          {subMaterial.map((item, i) => {
+                            return <li key={i}>{item}</li>;
+                          })}
+                        </ul>
+                      </div>
+                      <div style={{ width: "50%" }}>
+                        {!board[0][0].subMC ? (
+                          <></>
+                        ) : (
+                          <ul className="hs">
+                            {subMC.map((item, i) => {
+                              return <li key={i}>{item}</li>;
+                            })}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="view_step">
                 <b style={{ fontWeight: "500", fontSize: "30px" }}>조리순서</b>
@@ -287,6 +340,19 @@ function BoardDetail() {
                     )}
                   </b>
                 </div>
+              </div>
+              <div className="view_notice">
+                <div class="Notice">
+                  등록일({board[0][0]?.createAt})&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="Notice">
+                  {!board[0][0].modifiedAt ? (
+                    <></>
+                  ) : (
+                    <>수정일({board[0][0].modifiedAt})&nbsp;&nbsp;&nbsp;</>
+                  )}
+                </div>
+                <div class="Notice">조회수({board[0][0].viewCount})</div>
               </div>
             </div>
           </div>

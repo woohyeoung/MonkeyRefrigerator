@@ -1,6 +1,12 @@
 //BoardList.js
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   boardList,
@@ -28,12 +34,11 @@ function BoardList() {
   const [boards, setBoards] = useState([]);
   //조회순
   const [viewBoards, setViewBoards] = useState([]);
-  //장바구니순
-  const [likeBoards, setLikeBoards] = useState([]);
+
   const [boardId, setBoardId] = useState(0);
   const [boardpage, setboardPage] = useState({
     id: 0,
-    createAt: 0,
+    createAt: "",
   });
 
   const [viewpage, setviewPage] = useState({
@@ -42,46 +47,34 @@ function BoardList() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [selected, setSelected] = useState(1);
   const [boardCount, setBoardCount] = useState(0);
 
   const btn1 = useRef();
   const btn2 = useRef();
 
-  const btn1Click = async () => {
-    await setSelected(1);
-    btn1.current.disabled = true;
-    btn2.current.disabled = false;
-  };
-  const btn2Click = async () => {
-    await setSelected(2);
-    btn1.current.disabled = false;
-    btn2.current.disabled = true;
-  };
   useEffect(() => {
     async function fetchBoardList() {
       setLoading(true);
       await dispatch(boardList(token));
       setLoading(false);
-      btn1.current.disabled = true;
+      // btn1.current.disabled = true;
     }
 
     fetchBoardList();
   }, []);
+
+  // 첫렌더링
   useEffect(() => {
     if (boardStore?.boardList?.data?.data) {
       setBoards([...boardStore.boardList.data.data.result[0]]);
-    }
-  }, [boardStore?.boardList?.data?.data]);
-
-  useEffect(() => {
-    if (boardStore?.boardList?.data?.data) {
       setViewBoards([...boardStore.boardList.data.data.result[1]]);
     }
   }, [boardStore?.boardList?.data?.data]);
 
   useEffect(() => {
-    if (boards[0]) {
+    if (boards[boards.length - 1]) {
       setBoardCount(boards[0].boardCount);
       setboardPage({
         id: boards[boards.length - 1].id,
@@ -91,13 +84,17 @@ function BoardList() {
   }, [boards]);
 
   useEffect(() => {
-    if (viewBoards[0]) {
+    if (viewBoards[viewBoards.length - 1]) {
       setviewPage({
         id: viewBoards[viewBoards.length - 1].id,
         viewCount: viewBoards[viewBoards.length - 1].viewCount,
       });
     }
   }, [viewBoards]);
+
+  const pick = useMemo(() => {
+    return selected;
+  }, [selected]);
 
   useEffect(() => {
     if (boardStore?.boardListAfter?.data) {
@@ -119,21 +116,28 @@ function BoardList() {
 
   const handleScroll = useCallback(async () => {
     // 스크롤을 하면서 실행할 내용을 이곳에 추가합니다.
+
     const { innerHeight } = window;
     // 브라우저창 내용의 크기 (스크롤을 포함하지 않음)
+
     const { scrollHeight } = document.body;
     // 브라우저 총 내용의 크기 (스크롤을 포함한다)
+
     const { scrollTop } = document.documentElement;
     // 현재 스크롤바의 위치
-    if (Math.round(scrollTop + innerHeight) >= scrollHeight) {
+
+    if (Math.round(scrollTop + innerHeight) > scrollHeight) {
       // scrollTop과 innerHeight를 더한 값이 scrollHeight보다 크다면, 가장 아래에 도달했다는 의미이다.
-      if (selected === 1) {
+      setLoading2(true);
+      if (pick === 1 && boardpage.createAt) {
         await dispatch(boardListAfter(boardpage));
-      } else {
+      } else if (pick === 2 && viewpage.viewCount) {
         await dispatch(boardListAfterView(viewpage));
       }
+      setLoading2(false);
     }
-  }, [boardpage, viewpage, boards, viewBoards]);
+  }, [boards, boardpage, viewBoards, viewpage, selected]);
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, true);
     // 스크롤이 발생할때마다 handleScroll 함수를 호출하도록 추가합니다.
@@ -167,20 +171,23 @@ function BoardList() {
                   <div className="button_d">
                     {/* disabled={true} */}
                     <Button
-                      onClick={btn1Click}
+                      onClick={() => {
+                        setSelected(1);
+                      }}
                       variant="outline-primary"
                       ref={btn1}
                     >
                       최신순
                     </Button>
                     <Button
-                      onClick={btn2Click}
+                      onClick={() => {
+                        setSelected(2);
+                      }}
                       variant="outline-primary"
                       ref={btn2}
                     >
                       조회순
                     </Button>
-                   
                   </div>
                 </div>
                 {/* <BoardCard /> */}
@@ -196,6 +203,13 @@ function BoardList() {
                 </Grid>
               </div>
               <ScrollTo />
+              {loading2 ? (
+                <>
+                  <Loading />
+                </>
+              ) : (
+                <></>
+              )}
             </>
           )}
         </>
@@ -223,24 +237,27 @@ function BoardList() {
                   <div className="button_d">
                     {/* disabled={true} */}
                     <Button
-                      onClick={btn1Click}
+                      onClick={() => {
+                        setSelected(1);
+                      }}
                       variant="outline-primary"
                       ref={btn1}
                     >
                       최신순
                     </Button>
                     <Button
-                      onClick={btn2Click}
+                      onClick={() => {
+                        setSelected(2);
+                      }}
                       variant="outline-primary"
                       ref={btn2}
                     >
                       조회순
                     </Button>
-                   
                   </div>
                 </div>
                 {/* <BoardCard /> */}
-                조회순
+
                 <Grid
                   container
                   direction="rows"
@@ -253,6 +270,13 @@ function BoardList() {
                 </Grid>
               </div>
               <ScrollTo />
+              {loading2 ? (
+                <>
+                  <Loading />
+                </>
+              ) : (
+                <></>
+              )}
             </>
           )}
         </>

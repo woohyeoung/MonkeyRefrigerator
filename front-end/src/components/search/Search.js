@@ -17,6 +17,8 @@ import Grid from "@mui/material/Grid";
 import Loading from "../shared/CustomLoading";
 import "../shared/loading.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { saveBoardOne } from "../../api/BoardApi";
+import "./Search.css";
 
 function Search() {
   const boardStore = useSelector((state) => state.boardReducer);
@@ -34,6 +36,7 @@ function Search() {
     keyword: "",
   });
   const [loading, setLoading] = useState(false);
+  const [errmsg, setErrmsg] = useState("");
 
   useEffect(() => {
     if (searchStore) {
@@ -103,7 +106,7 @@ function Search() {
     if (Math.round(scrollTop + innerHeight) >= scrollHeight) {
       // scrollTop과 innerHeight를 더한 값이 scrollHeight보다 크다면, 가장 아래에 도달했다는 의미이다.
 
-      dispatch(kewordBoardListAfter(page));
+      await dispatch(kewordBoardListAfter(page));
     }
   }, [page, searchBoards]);
 
@@ -126,22 +129,42 @@ function Search() {
       ) : (
         <>
           <div className="">
-            <div className="row row-title">
+            <div
+              className="row row-title"
+              style={{
+                fontFamily: "BMDOHYEON",
+              }}
+            >
               "{keyword ? <div style={{ color: "red" }}>{keyword}</div> : <></>}
               " 검색결과입니다.
             </div>
-
             {/* <BoardCard /> */}
-            <Grid
-              container
-              direction="rows"
-              justifyContent="center"
-              alignItems="center"
-            >
-              {searchBoards.map((item, index) => {
-                return <BoardCard item={item} key={index} />;
-              })}
-            </Grid>
+            {searchBoards.length ? (
+              <>
+                <Grid
+                  container
+                  direction="rows"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  {searchBoards.map((item, index) => {
+                    return <BoardCard item={item} key={index} />;
+                  })}
+                </Grid>
+              </>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  fontFamily: "BMDOHYEON",
+                }}
+              >
+                <br />
+                <br />
+                검색결과가 없습니다.
+              </div>
+            )}
           </div>
           <ScrollTo />
         </>

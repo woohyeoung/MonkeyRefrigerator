@@ -16,7 +16,10 @@ module.exports = {
                                   b.viewCount,
                                   u.nickname,
                                   u.profileImg,
-                                  c.name category
+                                  c.name category,
+                                  b.difficulty,
+                                  b.cookTime
+                                  
 
                            from board b
                                     join useraccount u on b.userId = u.id
@@ -30,8 +33,9 @@ module.exports = {
                            b.viewCount,
                            u.nickname,
                            u.profileImg,
-                           c.name category
-
+                           c.name category,
+                           b.difficulty,
+                           b.cookTime
                     from board b
                              join useraccount u on b.userId = u.id
                              join category c on b.categoryId = c.id
@@ -60,8 +64,10 @@ module.exports = {
                                   b.createAt createAt,
                                   u.nickname,
                                   u.profileImg,
-                                  c.name category
-
+                                  c.name category,
+                                  b.difficulty,
+                                  b.viewCount,  
+                                  b.cookTime
                            from board b
                                     join useraccount u on b.userId = u.id
                                     join category c on b.categoryId = c.id
@@ -90,8 +96,10 @@ module.exports = {
                                   b.createAt,
                                   u.nickname,
                                   u.profileImg,
-                                  c.name category
-
+                                  c.name category,
+                                  b.difficulty,
+                                  b.viewCount,  
+                                  b.cookTime
                            from board b
                                     join useraccount u on b.userId = u.id
                                     join category c on b.categoryId = c.id
@@ -119,8 +127,10 @@ module.exports = {
                                   b.createAt,
                                   u.nickname,
                                   u.profileImg,
-                                  c.name category
-
+                                  c.name category,
+                                  b.difficulty,
+                                  b.viewCount,  
+                                  b.cookTime
                            from board b
                                     join useraccount u on b.userId = u.id
                                     join category c on b.categoryId = c.id
@@ -172,6 +182,7 @@ module.exports = {
                         b.cookTime,
                         b.servings,
                         b.subMaterial,
+                        b.subMaterialCount,
                         b.tagName,
                         b.viewCount,
                         date_format(b.createAt, '%Y-%m-%d') as createAt,
@@ -339,28 +350,7 @@ module.exports = {
       return res.json(
         response.successFalse(
           3005,
-          "데이터베이스 연결에 실패하였습니다. BoardDao error - selectMaterialKey"
-        )
-      );
-    }
-  },
-  selectBoardImg: async function (boardId) {
-    try {
-      const query = `select path as boardImgPath
-                           from boardimage
-                           where boardId = ?
-                           order by id limit 1;`;
-      const params = [boardId];
-      const connection = await pool.getConnection(async (conn) => conn);
-      const [rows] = await connection.query(query, params);
-
-      connection.release();
-      return rows;
-    } catch (err) {
-      return res.json(
-        response.successFalse(
-          3005,
-          "데이터베이스 연결에 실패하였습니다. BoardDao error - selectMaterialKey"
+          "데이터베이스 연결에 실패하였습니다. BoardDao error - selectBoardImg"
         )
       );
     }
@@ -375,8 +365,9 @@ module.exports = {
                                   b.viewCount,
                                   u.nickname,
                                   u.profileImg,
-                                  c.name category 
-
+                                  c.name category, 
+                                  b.difficulty,
+                                  b.cookTime 
                            from board b
                                     join useraccount u on b.userId = u.id
                                     join category c on b.categoryId = c.id

@@ -14,7 +14,9 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Link } from "react-router-dom";
 import { mdiCartVariant, mdiHeart, mdiComment } from "@mdi/js";
 import Icon from "@mdi/react";
-
+import { mdiBookmark } from "@mdi/js";
+import { mdiLeadPencil } from "@mdi/js";
+import { mdiClock } from "@mdi/js";
 import "./BoardCard.css";
 
 const ExpandMore = styled((props) => {
@@ -37,6 +39,11 @@ export default function BoardCard(props) {
   const [board, setBoard] = useState(props.item);
   useEffect(() => {}, []);
 
+  function convertTime(time) {
+    let convert = time.split("T")[0];
+    return convert;
+  }
+
   return (
     <Card className="card" sx={{ maxWidth: 345, width: 345 }}>
       <CardHeader
@@ -51,7 +58,7 @@ export default function BoardCard(props) {
           </IconButton>
         }
         title={board.nickname}
-        subheader={board.createAt}
+        subheader={convertTime(board.createAt)}
       />
       {/* boardImgPath */}
 
@@ -76,29 +83,74 @@ export default function BoardCard(props) {
         </Link>
       )}
 
-      <CardContent style={{ height: "60px" }}>
+      <CardContent
+        style={{
+          height: "80px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          borderBottom: "1px solid #d3d3d3",
+        }}
+      >
         <Typography
           variant="body2"
           color="text.secondary"
-          style={{ fontFamily: "BMDOHYEON" }}
+          style={{
+            fontFamily: "BMDOHYEON",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
         >
           {board.title}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        <Icon path={mdiCartVariant} title="menu" size={1} color="black" />
-        <div style={{ fontFamily: "BMDOHYEON", margin: "0 5px 0 0" }}>{99}</div>
-        {/* <Icon path={mdiHeart} title="menu" size={1} color="red" />
-				<div style={{ fontFamily: 'BMDOHYEON', margin: '0 5px 0 0' }}>{99}</div> */}
-        {/* <Icon path={mdiComment} title="menu" size={1} color="#ffeb3b" />
-				<div style={{ fontFamily: 'BMDOHYEON', margin: '0 5px 0 0' }}>{99}</div> */}
 
-        {/* <IconButton aria-label="add to favorites">
-					
-				</IconButton> */}
-        {/* <IconButton aria-label="share">
-					<ShareIcon />
-				</IconButton> */}
+      <br />
+
+      <CardActions style={{ height: "35px" }} disableSpacing>
+        <Typography
+          style={{
+            fontFamily: "BMDOHYEON",
+            fontSize: "13px",
+            margin: "8px",
+            borderRadius: "30px",
+            padding: "3px",
+            background: "#DBFFCF",
+            boxShadow: "1px 1px 3px 1px #dadce0",
+          }}
+        >
+          <Icon path={mdiBookmark} title="menu" size={1} color="orange" />
+
+          {board.category}
+        </Typography>
+        <Typography
+          style={{
+            fontFamily: "BMDOHYEON",
+            fontSize: "13px",
+            margin: "8px",
+            borderRadius: "30px",
+            padding: "3px",
+            background: "#FFDDDC",
+            boxShadow: "1px 1px 3px 1px #dadce0",
+          }}
+        >
+          <Icon path={mdiLeadPencil} title="menu" size={1} color="red" />
+          {board.difficulty}
+        </Typography>
+        <Typography
+          style={{
+            fontFamily: "BMDOHYEON",
+            fontSize: "10px",
+            margin: "5px",
+            borderRadius: "30px",
+            padding: "3px",
+            background: "lightyellow",
+            boxShadow: "1px 1px 3px 1px #dadce0",
+          }}
+        >
+          <Icon path={mdiClock} title="menu" size={1} color="black" />
+          {board.cookTime}
+        </Typography>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

@@ -107,7 +107,7 @@ module.exports = {
           response.successFalse(7101, "이미 존재하는 재료입니다.")
         );
       }
-      let cnt = await userDao.selectUserGetMaterialCount(data.userId);
+      let cnt = await userDao.selectUserGetMaterialCount(userId);
       if (cnt > 5) {
         return res.json(
           response.successFalse(7101, "5개이상 담을 수 없습니다.")
