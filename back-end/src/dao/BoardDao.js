@@ -182,6 +182,7 @@ module.exports = {
                         b.cookTime,
                         b.servings,
                         b.subMaterial,
+                        b.subMaterialCount,
                         b.tagName,
                         b.viewCount,
                         date_format(b.createAt, '%Y-%m-%d') as createAt,

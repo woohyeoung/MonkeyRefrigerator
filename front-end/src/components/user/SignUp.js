@@ -107,7 +107,7 @@ function SignUp() {
         gender: gender,
         birth: moment(startDate).format("YYYYMMDD"),
       };
-      // console.log(startDate);
+
       dispatch(signupform(formData));
       window.location.href = "/login";
     }
@@ -167,6 +167,11 @@ function SignUp() {
     if (type == "email") {
       if (id == null || id == "") {
         alert("아이디를 입력해주세요.");
+        idInput.current.focus();
+        return;
+      }
+      if (!isEmail(id)) {
+        alert("아이디(이메일)이 형식에 맞지 않습니다.");
         idInput.current.focus();
         return;
       }
@@ -249,6 +254,7 @@ function SignUp() {
                       ref={idInput}
                       onChange={onChangeId}
                       placeholder="ex)example123@naver.com"
+                      autocomplete="off"
                     />
                   </span>
                 </div>
@@ -333,6 +339,7 @@ function SignUp() {
                     maxlength="20"
                     required
                     onChange={onChangeName}
+                    autocomplete="off"
                   />
                 </span>
               </div>
@@ -351,6 +358,7 @@ function SignUp() {
                       required
                       ref={nicknameInput}
                       onChange={onChangeNickName}
+                      autocomplete="off"
                     />
                   </span>
                 </div>

@@ -69,9 +69,9 @@ app.js
                   ㄴ cartRoute
                               ㄴcartController
                                               ㄴcartDao
-                  ㄴ materialRoute
-                              ㄴmaterailController
-                                              ㄴmaterialDao
+                  ㄴ refrigeratorRoute
+                              ㄴRefrigeratorController
+                                              ㄴRefrigeratorDao
 ```
 ## 역할분담( 4/1~ )
 
