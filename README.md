@@ -30,20 +30,32 @@ index.js
                         ㄴ before-login
                                       ㄴloginButton
                                       ㄴsignUpButton
+                                      ㄴsearchButton
+                                      ㄴboardListButton
                         ㄴ after-login
                                       ㄴprofileButton
-                                      ㄴsearchButton
+                                      ㄴcartButton
                                       ㄴrefrigeratorButton
-                                      ㄴboardListButton
                                       ㄴboardCreateButton
                 ㄴMain.js
                         ㄴ Login.js
                         ㄴ Signup.js
-                        ㄴ boardList.js
-                                      ㄴboardCard.js
-                                      ㄴboardDetail.js
-                        ㄴ boardCreate.js
-                        ㄴ refrigerator.js
+                        ㄴ Profile.js
+                                      ㄴProfileBody.js
+                                                    ㄴDatePicker.js
+                        ㄴ BoardList.js
+                                      ㄴBoardCard.js
+                                                  ㄴBoardDetail.js
+                        ㄴ BoardCreate.js
+                        ㄴ Refrigerator.js
+                        ㄴ Search.js
+                        ㄴ Cart.js
+                        
+                       
+          - shared  
+                ㄴ loading.js
+                ㄴ scrollTo.js
+                       
                        
 ```
   - redux
