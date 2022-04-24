@@ -97,14 +97,14 @@ function BoardList() {
   }, [selected]);
 
   useEffect(() => {
-    if (boardStore?.boardListAfter?.data) {
+    if (boardStore?.boardListAfter?.data?.data?.result) {
       setBoards([...boards, ...boardStore.boardListAfter.data.data.result]);
     }
   }, [boardStore?.boardListAfter?.data]);
 
   //뷰 볼드
   useEffect(() => {
-    if (boardStore?.boardListAfterView?.data) {
+    if (boardStore?.boardListAfterView?.data?.data?.result) {
       setViewBoards([
         ...viewBoards,
         ...boardStore.boardListAfterView.data.data.result,
@@ -112,7 +112,7 @@ function BoardList() {
     }
   }, [boardStore?.boardListAfterView?.data]);
 
-  useEffect(() => {}, [selected]);
+  // useEffect(() => {}, [selected]);
 
   const handleScroll = useCallback(async () => {
     // 스크롤을 하면서 실행할 내용을 이곳에 추가합니다.
