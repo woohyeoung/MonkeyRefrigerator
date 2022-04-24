@@ -61,17 +61,17 @@ index.js
 app.js
       ㄴ indexRoute
                   ㄴ boardRoute
-                              ㄴboardController
-                                              ㄴboardDao
-                  ㄴ userRoute
-                              ㄴuserController
-                                              ㄴuserDao
-                  ㄴ cartRoute
+                              ㄴboardController                                           
+                                              
+                  ㄴ userRoute                                                         -boardDao
+                              ㄴuserController                                         -userDao
+                                                           ----------                  -cartDao
+                  ㄴ cartRoute                                                         -RefrigeratorDao
                               ㄴcartController
-                                              ㄴcartDao
+                                              
                   ㄴ refrigeratorRoute
                               ㄴRefrigeratorController
-                                              ㄴRefrigeratorDao
+                                              
 ```
 ## 역할분담( 4/1~ )
 
