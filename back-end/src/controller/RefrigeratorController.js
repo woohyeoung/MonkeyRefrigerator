@@ -24,7 +24,6 @@ module.exports = {
       if (List.length === 0) {
         return res.json(response.successFalse(1001, "목록이 없습니다."));
       }
-      console.log(List);
       return res.json(
         response.successTrue(2001, "조회에 성공하였습니다.", List)
       );

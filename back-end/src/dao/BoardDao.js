@@ -17,7 +17,7 @@ module.exports = {
                                   u.nickname,
                                   u.profileImg,
                                   c.name category
-
+                        
                            from board b
                                     join useraccount u on b.userId = u.id
                                     join category c on b.categoryId = c.id
@@ -172,6 +172,7 @@ module.exports = {
                         b.cookTime,
                         b.servings,
                         b.subMaterial,
+                        b.subMaterialCount,
                         b.tagName,
                         b.viewCount,
                         date_format(b.createAt, '%Y-%m-%d') as createAt,
