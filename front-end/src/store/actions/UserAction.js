@@ -70,6 +70,18 @@ export const loginVali = (email, pw) => {
     }
   };
 };
+export const handleLogout = (data) => async (dispatch) => {
+  console.log(data);
+  if (data) {
+    removeCookie("accessToken", { path: "/", domain: ".localhost:8080" });
+  }
+  // let token = getCookie("accessToken");
+  // console.log(token);
+  // if (token === undefined) {
+  //   dispatch({ type: SET_TOKEN, result: false, token: null });
+  //   dispatch({ type: HEADER_TOKEN_OUT, token: null });
+  // }
+};
 
 export const handleLogin = () => {
   return async (dispatch) => {
