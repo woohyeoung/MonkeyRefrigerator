@@ -189,8 +189,8 @@ module.exports = {
     try {
       const query = `select userId
                            from boardvoteuser
-                           where userId = '${id}'
-                             and createAt <= (select adddate(curdate(), -weekday(curdate()) + 6) as sunday from dual)
+                           where userId = ${id}
+                             and createAt <= (select adddate(curdate(), -weekday(curdate()) + 7) as sunday from dual)
                              and createAt >= (select adddate(curdate(), -weekday(curdate()) + 0) as monday from dual);`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [vote] = await connection.query(query);
@@ -268,13 +268,14 @@ module.exports = {
       from boardpopular bp 
       join board b 
          on bp.boardId = b.id 
-      left outer join (select * from boardimage where id in (select min(id) from boardimage group by boardId )) bi 
+      left outer join 
+      (select id, path, type, imageSize, createAt, boardId from boardimage where id in (select min(id) from boardimage group by boardId )) bi 
          on b.id = bi.boardId
       where bp.votedAt >= (select ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 0 ) from dual) 
-      and bp.votedAt <= (select ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 6 ) from dual) 
+      and bp.votedAt <= (select ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 7 ) from dual) 
+      and bi.path is not null
       order by bp.voteCount desc
-      limit 10;
-      `;
+      limit 10;`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [selectQuery] = await connection.query(query);
       connection.release();
@@ -288,7 +289,8 @@ module.exports = {
   },
   selectRankBoardVote: async () => {
     try {
-      const query = `select * from board where viewCount >= (select avg(viewCount) from board)  order by  rand() desc  limit 12;`;
+      const query = `select b.id, b.title, b.subTitle, bi.path from board b 
+left outer join (select boardId, path from boardImage group by boardId having min(id)) bi on b.id = bi.boardId limit 30;`;
       const connection = await pool.getConnection(async (conn) => conn);
       const [seletList] = await connection.query(query);
       connection.release();

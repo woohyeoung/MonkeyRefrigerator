@@ -8,7 +8,6 @@ import {
   USERMATERIAL_GET,
   USERMATERIAL_GET_SUCCESS,
   USERMATERIAL_GET_ERROR,
-  DID_VOTE_CHECK,
   REFRIGERATOR_GET,
   REFRIGERATOR_GET_SUCCESS,
   REFRIGERATOR_GET_ERROR,
@@ -18,6 +17,9 @@ import {
   VOTE_BOARD_RANK,
   VOTE_BOARD_RANK_SUCCESS,
   VOTE_BOARD_RANK_ERROR,
+  DID_VOTE_CHECK,
+  DID_VOTE_CHECK_SUCCESS,
+  DID_VOTE_CHECK_ERROR,
 } from "../actions/UserAction";
 
 const initialState = {
@@ -26,9 +28,7 @@ const initialState = {
   userRefrigeratorList: reducerUtils.initial(),
   voteBoardRankList: reducerUtils.initial(),
   voteboardrank: reducerUtils.initial(),
-};
-const initialVoteState = {
-  result: false,
+  didvotecheck: reducerUtils.initial(),
 };
 export default function UserReducer(state = initialState, action) {
   switch (action.type) {
@@ -48,11 +48,6 @@ export default function UserReducer(state = initialState, action) {
         state,
         action
       );
-    case DID_VOTE_CHECK:
-      return {
-        ...initialVoteState,
-        result: action.result.isSuccess,
-      };
     case REFRIGERATOR_GET:
     case REFRIGERATOR_GET_SUCCESS:
     case REFRIGERATOR_GET_ERROR:
@@ -74,6 +69,10 @@ export default function UserReducer(state = initialState, action) {
         state,
         action
       );
+    case DID_VOTE_CHECK:
+    case DID_VOTE_CHECK_SUCCESS:
+    case DID_VOTE_CHECK_ERROR:
+      return handleAsyncActions(DID_VOTE_CHECK, "didvotecheck")(state, action);
     default:
       return state;
   }
