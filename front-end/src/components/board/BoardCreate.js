@@ -280,9 +280,6 @@ function BoardCreate() {
       window.alert("5개 이상의 사진은 업로드 할 수 없습니다.");
       return false;
     }
-    if (!window.confirm("등록 하시겠습니까?", true)) {
-      return false;
-    }
 
     return true;
   }
