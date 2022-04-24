@@ -193,10 +193,11 @@ module.exports = {
     try {
       let tokenId = req.tokenInfo.userId;
       const userVote = await userDao.selectUserVote(tokenId);
-      if (userVote.length > 0)
+      if (userVote.length > 0) {
         return res.json(
           response.successTrue(1001, "이미 투표를 완료하였습니다.", userVote)
         );
+      }
       return res.json(
         response.successFalse(2001, "아직 투표를 완료하지 않았습니다.")
       );
@@ -288,14 +289,18 @@ module.exports = {
   },
   getRankVote: async (req, res) => {
     try {
-      const [...voteList] = await userDao.selectRankBoardVote();
+      const voteList = await userDao.selectRankBoardVote();
       if (voteList.length < 1) {
         return res.json(
           response.successFalse(2001, "게시물 목록 조회에 실패하였습니다.")
         );
       }
       return res.json(
-        response.successTrue(2001, "게시물 목록 조회에 성공하였습니다.")
+        response.successTrue(
+          2001,
+          "게시물 목록 조회에 성공하였습니다.",
+          voteList
+        )
       );
     } catch (error) {
       return res.json(

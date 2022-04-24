@@ -29,16 +29,16 @@ import {
 } from "../store/actions/UserAction";
 import PublicRoute from "./user/PublicRoute";
 import PrivateRoute from "./user/PrivateRoute";
-import Header from "./Header";
+import Header, { logout } from "./Header";
 import BoardDetail from "./board/BoardDetail";
 import Profile from "./user/Profile";
 import { Refrigerator } from "./search/Refrigerator";
-import { voteBtnClick } from "../store/actions/UserAction";
+import { voteBtnClick, voteboardRank } from "../store/actions/UserAction";
 import BoardList from "./board/BoardList";
 import BoardCreate from "./board/BoardCreate";
 import Cart from "../components/cart/Cart";
 import Search from "../components/search/Search";
-
+import HowToVoteIcon from "@mui/icons-material/HowToVote";
 export default function Main() {
   const dispatch = useDispatch();
   const tokenReducer = useSelector((state) => state.tokenReducer.token);
@@ -95,20 +95,35 @@ const DidVote = () => {
   return (
     <React.Fragment>
       <CheckIcon className="voteCheck" />
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+      <CardContent sx={{ fontFamily: "BMDOHYEON, KoPubDotumMedium" }}>
+        <Typography
+          sx={{ fontSize: 14, fontFamily: "BMDOHYEON" }}
+          color="text.secondary"
+          gutterBottom
+        >
           이주의 레시피
         </Typography>
-        <Typography variant="h5" component="div">
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{ fontFamily: "BMDOHYEON" }}
+        >
           이번주의 레시피를 투표해주세요!
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+        <Typography
+          sx={{ mb: 1.5, fontFamily: "BMDOHYEON" }}
+          color="text.secondary"
+        >
           Pick Me!
         </Typography>
-        <Typography variant="body2">
+        <Typography variant="body2" sx={{ fontFamily: "BMDOHYEON" }}>
           투표해 주신 분들 중 10분을 추첨해서 상품을 드립니다!
         </Typography>
-        <Typography className="voteCheck" variant="body2">
+        <Typography
+          className="voteCheck"
+          variant="body2"
+          sx={{ fontFamily: "BMDOHYEON" }}
+        >
           이미 투표를 완료하셨습니다.
         </Typography>
       </CardContent>
@@ -131,27 +146,46 @@ const MainVoteCard = (props) => {
   };
   return (
     <React.Fragment>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+      <CardContent sx={{ fontFamily: "BMDOHYEON, KoPubDotumMedium" }}>
+        <Typography
+          sx={{ fontSize: 14, fontFamily: "BMDOHYEON, KoPubDotumMedium" }}
+          color="text.secondary"
+          gutterBottom
+        >
           이주의 레시피
         </Typography>
-        <Typography variant="h5" component="div">
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{ fontFamily: "BMDOHYEON" }}
+        >
           이번주의 레시피를 투표해주세요!
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+        <Typography
+          sx={{ mb: 1.5, fontFamily: "BMDOHYEON, KoPubDotumMedium" }}
+          color="text.secondary"
+        >
           Pick Me!
         </Typography>
-        <Typography variant="body2">
-          투표해 주신 분들 중 10분을 추첨해서 상품을 드립니다!
+        <Typography
+          variant="body2"
+          sx={{ fontFamily: "BMDOHYEON, KoPubDotumMedium" }}
+        >
+          투표해 주신 분들 중 5분을 추첨해서 상품을 드립니다!
         </Typography>
       </CardContent>
       <CardActions>
         <Button
           size="small"
           onClick={() =>
-            cookies.get("accessToken")
-              ? handleModal("OPEN")
-              : alert("로그인 후에 이용해주세요.")
+            cookies.get("accessToken") ? (
+              handleModal("OPEN")
+            ) : (
+              <>
+                {alert("로그인 후에 이용해주세요.")}
+                {logout()}
+              </>
+            )
           }
         >
           Learn More
@@ -162,7 +196,7 @@ const MainVoteCard = (props) => {
         close={() => handleModal("CLOSE")}
         header="이주의 레시피!"
       >
-        <VotePage data={props.data} />
+        <VotePage data={props.data} token={cookies.get("accessToken")} />
       </VoteModal>
     </React.Fragment>
   );
@@ -191,7 +225,6 @@ const VoteModal = (props) => {
     </div>
   );
 };
-
 const VotePage = (props) => {
   const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
@@ -200,7 +233,7 @@ const VotePage = (props) => {
   const voteHandler = async (id) => {
     dispatch(voteBtnClick(id));
     setTimeout(() => {
-      dispatch(didVoteChk());
+      dispatch(didVoteChk(props.token));
       alert("투표가 완료되었습니다.");
       window.location.reload();
     }, 250);
@@ -211,34 +244,49 @@ const VotePage = (props) => {
   return (
     <div className="votePage">
       <TableContainer component={Paper}>
-        <Table sx={{ width: "100%" }} aria-label="simple table">
+        <Table
+          sx={{ width: "100%", fontFamily: "BMDOHYEON, KoPubDotumMedium" }}
+          aria-label="simple table"
+        >
           <TableHead>
             <TableRow>
-              <TableCell sx={{ width: 100 }}>번호</TableCell>
-              <TableCell align="center" sx={{ width: 200 }}>
+              <TableCell
+                align="center"
+                sx={{ width: 200, fontFamily: "BMDOHYEON, KoPubDotumMedium" }}
+              >
                 사진
               </TableCell>
-              <TableCell align="center">제목</TableCell>
-              <TableCell sx={{ width: 100 }} align="center">
-                투표
+              <TableCell
+                align="center"
+                sx={{ fontFamily: "BMDOHYEON, KoPubDotumMedium" }}
+              >
+                제목
+              </TableCell>
+              <TableCell
+                sx={{ width: 100, fontFamily: "BMDOHYEON, KoPubDotumMedium" }}
+                align="center"
+              >
+                <HowToVoteIcon />
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody sx={{ fontFamily: "BMDOHYEON, KoPubDotumMedium" }}>
             {rows.slice(offset, offset + 5).map((row, i) => (
               <TableRow>
-                <TableCell component="th" scope="row">
-                  {offset > 4 ? i + 6 : i + 1}
-                </TableCell>
                 <TableCell align="center">
                   <img
-                    style={{ width: "180px", height: "100px" }}
-                    src={row.boardImgPath}
+                    style={{ width: "120px", height: "60px" }}
+                    src={row.path}
                     alt="레시피사진"
                   />
                 </TableCell>
-                <TableCell align="left">{row.title}</TableCell>
-                <TableCell align="center">
+                <TableCell align="left" style={{ fontFamily: "BMDOHYEON" }}>
+                  {row.title}
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ fontFamily: "BMDOHYEON, KoPubDotumMedium" }}
+                >
                   <button
                     onClick={() => {
                       voteHandler(row.id);
@@ -296,11 +344,18 @@ const RankCard = (props) => {
             gutterBottom
             variant="h5"
             component="div"
-            style={{ fontSize: "15px" }}
+            sx={{
+              fontSize: "15px",
+              fontFamily: "BMDOHYEON, KoPubDotumMedium",
+            }}
           >
             {props.title}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontFamily: "BMDOHYEON, KoPubDotumMedium" }}
+          >
             {props.subtitle}
           </Typography>
         </CardContent>
@@ -353,6 +408,8 @@ const MainPage = () => {
   const [voteLoading, setVoteLoading] = useState(false);
   const [isVote, setIsVote] = useState(false);
   const voteReducer = useSelector((state) => state.userReducer);
+  const [boardVote, setBoardVote] = useState([]);
+  const tokenStore = useSelector((state) => state.tokenReducer);
 
   useEffect(() => {
     gsap.fromTo(
@@ -368,24 +425,35 @@ const MainPage = () => {
     );
   });
   useEffect(() => {
-    setVoteLoading(true);
-    dispatch(didVoteChk());
-    setVoteLoading(false);
-  }, []);
+    if (tokenStore?.token) dispatch(didVoteChk(tokenStore.token));
+  }, [tokenStore?.token]);
   useEffect(() => {
-    if (voteReducer?.result) setIsVote(voteReducer.result);
-    console.log(voteReducer);
-  }, [voteReducer?.result]);
+    setVoteLoading(true);
+    if (voteReducer?.didvotecheck?.data) {
+      setIsVote(voteReducer.didvotecheck.data.isSuccess);
+    }
+    setVoteLoading(false);
+  }, [voteReducer?.didvotecheck?.data]);
   useEffect(() => {
     setLoading(true);
     dispatch(boardRankChk());
+    dispatch(voteboardRank());
   }, []);
   useEffect(() => {
-    if (userReducer?.voteBoardRankList?.data) {
-      setBoardRank([...userReducer.voteBoardRankList.data.result]);
+    setTimeout(() => {
+      if (userReducer?.voteBoardRankList?.data) {
+        setBoardRank([...userReducer.voteBoardRankList.data.result]);
+      }
       setLoading(false);
-    }
+    }, 1000);
   }, [userReducer?.voteBoardRankList?.data]);
+  useEffect(() => {
+    setTimeout(() => {
+      if (userReducer?.voteboardrank?.data) {
+        setBoardVote([...userReducer.voteboardrank.data.result]);
+      }
+    }, 1500);
+  }, [userReducer?.voteboardrank?.data]);
   return (
     <>
       <div className="mainHeadLine">
@@ -407,13 +475,14 @@ const MainPage = () => {
                   modalOn ? setModalOn(false) : setModalOn(true);
                 }}
               >
-                <MainVoteCard data={boardRank} />
+                <MainVoteCard data={boardVote} />
               </Card>
               <VoteModal flag={modalOn} />
             </>
           )}
         </div>
       </div>
+      <hr style={{ width: "60%" }} />
       {loading ? (
         <SkeletonLoadingSet />
       ) : (
@@ -426,7 +495,7 @@ const MainPage = () => {
               {boardRank.slice(offset, offset + 5).map((item, i) => (
                 <Link to={`/board/${item.boardId}`}>
                   <RankCard
-                    path={item.boardImgPath}
+                    path={item.path}
                     title={item.title}
                     content={item.content}
                   />

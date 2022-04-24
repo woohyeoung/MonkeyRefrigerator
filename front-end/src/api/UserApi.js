@@ -142,7 +142,6 @@ export const userVoteAdd = async (board, token) => {
 };
 
 export const searchRefrigeratorList = (data) => {
-  console.log(data);
   const result = axios
     .get(baseUrl + "refrigerator", {
       params: {

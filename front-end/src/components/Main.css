@@ -1,19 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&family=Nanum+Gothic:wght@400;700&display=swap");
+@font-face {
+  font-family: "BMDOHYEON";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "KoPubDotumMedium";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/KoPubDotumMedium.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 .mainContainer {
   padding-top: 90px;
   padding-bottom: 90px;
   background: #fcf6f5ff;
+  font-family: BMDOHYEON, KoPubDotumMedium;
 }
 .mainHeadLine {
   display: flex;
+  font-family: KoPubDotumMedium;
   justify-content: center;
   align-items: center;
-  height: 450px;
+  height: 400px;
 }
 .mainVote {
   margin-left: 100px;
   min-width: 275px;
   width: 30%;
   border: 1px solid #000;
+}
+.mainBody {
+  margin-top: 50px;
 }
 .mainBodyCon {
   margin-top: 20px;

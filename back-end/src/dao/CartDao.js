@@ -4,14 +4,13 @@ const { pool } = require("../config/database");
 module.exports = {
   selectUserCart: async function (id) {
     try {
-      const query = `select
-                      u.userId,
-                      b.id,
-                      b.title,
-                      b.subtitle
-                      from boardcartuser u 
-                      join board b on u.boardId = b.id 
-                      where u.userid = ?;`;
+      const query = `select u.userId, b.id, b.title, b.subtitle, i.path
+      from boardcartuser u 
+      join board b 
+      on u.boardId = b.id 
+      left outer join (select boardId, path, type, imageSize, id from boardimage group by boardId having min(id) ) i
+      on b.id = i.boardId
+     where u.userid = ${id};`;
       const params = [id];
       const connection = await pool.getConnection(async (conn) => conn);
       const [info] = await connection.query(query, params);

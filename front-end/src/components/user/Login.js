@@ -1,11 +1,7 @@
-//Login.js
-//Install Component;
+//Install-Style-User
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-//User Component
-import { handleLogin, loginVali } from "../../store/actions/UserAction";
-//Style
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,7 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Assignment from "@mui/icons-material/Assignment";
 import "./SignUp.css";
-
+import { handleLogin, loginVali } from "../../store/actions/UserAction";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");

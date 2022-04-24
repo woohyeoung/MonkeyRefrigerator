@@ -5,8 +5,6 @@ module.exports = {
     try {
       const id = req.tokenInfo.userId;
       const result = await cartDao.selectUserCart(id);
-      // if (result.length < 1)
-      //   return res.json(response.successFalse(1201, "유저 목록이 없습니다."));
       return res.json(
         response.successTrue(
           2201,
