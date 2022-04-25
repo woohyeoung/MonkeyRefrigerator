@@ -12,7 +12,7 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 #### 발표 구성 : 요구사항 분석(문제인식, 문제분석, 해결전제) -> 전략 -> 전략에 대한 문제점-> 해결방안
 
 ### [스토리보드](https://ovenapp.io/view/RY03iHLvicj9EbCmSsBtuFAkUPoPhPvK/WtQlw)
-### [플로우차트]()
+### [플로우차트](https://github.com/Douzone2th/MonkeyRefrigerator/tree/master/document/flowchart)
 ### [ERD](https://aquerytool.com/aquerymain/index/?rurl=9813bafe-98ff-43ee-b8db-9fec37264918)
 ### [API문서](https://docs.google.com/spreadsheets/d/1sNnvS_xTT11h36ptsI6zyGYK5P7Y7mFk6cYkF9kuIX8/edit?usp=sharing)
 ---
@@ -107,6 +107,7 @@ app.js
 |레시피 게시물 상세조회 |상윤|4/16~|
 |회원가입, 이메일 중복검사|희수|4/13~|
 |jwt + 쿠키를 이용한 로그인|우형|4/13~|
+|jwt + 쿠키를 이용한 로그인|재빈|4/13~|
     
 ---
 
