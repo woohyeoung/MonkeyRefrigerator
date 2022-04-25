@@ -287,6 +287,7 @@ function SignUp() {
                       ref={pwInput}
                       onChange={onChangePassword}
                       placeholder="문자, 숫자, 특수기호 포함 8자 이상"
+                      style={{ fontFamily: "Arial,sans-serif" }}
                     />
                   </span>
                 </div>
@@ -317,6 +318,7 @@ function SignUp() {
                       required
                       ref={pwCheckInput}
                       onChange={onChangePasswordChk}
+                      style={{ fontFamily: "Arial,sans-serif" }}
                     />
                   </span>
                 </div>
