@@ -54,6 +54,7 @@ function BoardList() {
   const btn1 = useRef();
   const btn2 = useRef();
 
+  // 시작
   useEffect(() => {
     async function fetchBoardList() {
       setLoading(true);
@@ -61,7 +62,6 @@ function BoardList() {
       setLoading(false);
       // btn1.current.disabled = true;
     }
-
     fetchBoardList();
   }, []);
 
@@ -115,8 +115,6 @@ function BoardList() {
   // useEffect(() => {}, [selected]);
 
   const handleScroll = useCallback(async () => {
-    // 스크롤을 하면서 실행할 내용을 이곳에 추가합니다.
-
     const { innerHeight } = window;
     // 브라우저창 내용의 크기 (스크롤을 포함하지 않음)
 
