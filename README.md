@@ -25,9 +25,7 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 ### [ERD](https://github.com/Douzone2th/MonkeyRefrigerator/blob/master/document/DB_file/MonkeyRefrigerator_ERD_20220417.png)  
 ### [회의록](https://github.com/Douzone2th/MonkeyRefrigerator/tree/master/document/%ED%9A%8C%EC%9D%98%EB%A1%9D)
 ### [최종 PPT](https://github.com/Douzone2th/MonkeyRefrigerator/blob/master/document/team4_react_nodejs_project_%EB%A7%88%EC%A7%80%EB%A7%89.pptx)
-
-
-<!-- ### [API문서](https://docs.google.com/spreadsheets/d/1sNnvS_xTT11h36ptsI6zyGYK5P7Y7mFk6cYkF9kuIX8/edit?usp=sharing) -->
+### [API 문서](https://docs.google.com/spreadsheets/d/1sNnvS_xTT11h36ptsI6zyGYK5P7Y7mFk6cYkF9kuIX8/edit?usp=sharing)
 
 ---
 
