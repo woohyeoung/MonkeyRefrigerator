@@ -103,7 +103,6 @@ export const saveBoardOne = (data) => {
   const result = axios.post(baseUrl + "board/create", data.formData, {
     headers: {
       "Content-Type": "multipart/form-data",
-      "content-type": "multipart/form-data",
       Accept: "*/*",
       accessToken: data.token,
     },
