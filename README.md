@@ -18,10 +18,17 @@ Douzone Zoo MonekeyRefrigerator : 더존 동물원 원숭이 냉장고
 #### 프로젝트 구성 : 요구사항 분석 -> 계획 -> 설계 -> 구현 -> 시험
 #### 발표 구성 : 요구사항 분석(문제인식, 문제분석, 해결전제) -> 전략 -> 전략에 대한 문제점-> 해결방안
 
+
 ### [스토리보드](https://ovenapp.io/view/RY03iHLvicj9EbCmSsBtuFAkUPoPhPvK/WtQlw)
 ### [플로우차트](https://github.com/Douzone2th/MonkeyRefrigerator/tree/master/document/flowchart)
-### [ERD](https://aquerytool.com/aquerymain/index/?rurl=9813bafe-98ff-43ee-b8db-9fec37264918)  --- 종료
-### [API문서](https://docs.google.com/spreadsheets/d/1sNnvS_xTT11h36ptsI6zyGYK5P7Y7mFk6cYkF9kuIX8/edit?usp=sharing)
+### [ERD - aquerytool](https://aquerytool.com/aquerymain/index/?rurl=9813bafe-98ff-43ee-b8db-9fec37264918)  --- 종료
+### [ERD](https://github.com/Douzone2th/MonkeyRefrigerator/blob/master/document/DB_file/MonkeyRefrigerator_ERD_20220417.png)  
+### [회의록](https://github.com/Douzone2th/MonkeyRefrigerator/tree/master/document/%ED%9A%8C%EC%9D%98%EB%A1%9D)
+### [최종 PPT](https://github.com/Douzone2th/MonkeyRefrigerator/blob/master/document/team4_react_nodejs_project_%EB%A7%88%EC%A7%80%EB%A7%89.pptx)
+
+
+<!-- ### [API문서](https://docs.google.com/spreadsheets/d/1sNnvS_xTT11h36ptsI6zyGYK5P7Y7mFk6cYkF9kuIX8/edit?usp=sharing) -->
+
 ---
 
 ## 전체 구성 단계 (SPA 형식)
