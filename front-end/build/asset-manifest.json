@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.3924a0de.css",
+    "main.js": "/static/js/main.d87bb76f.js",
+    "static/js/787.22edae46.chunk.js": "/static/js/787.22edae46.chunk.js",
+    "static/media/backRefri.png": "/static/media/backRefri.b8ac86b79713d2c9296b.png",
+    "static/media/RefriOuter.png": "/static/media/RefriOuter.b1a0bd9ea57cacba8358.png",
+    "static/media/monkey_3.png": "/static/media/monkey_3.947a93789757dff7a956.png",
+    "static/media/monkey_4.png": "/static/media/monkey_4.4e9ffbd2ef68bab489a2.png",
+    "static/media/RefriBottom.png": "/static/media/RefriBottom.a0b5a311ddb11a9b3a64.png",
+    "static/media/monkey_2.png": "/static/media/monkey_2.a568863e38b647a8e450.png",
+    "static/media/RefriInner.png": "/static/media/RefriInner.1ad47074cc169c01db6d.png",
+    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/UploadIcon.svg": "/static/media/UploadIcon.469126df4127e870c21611e576b85d00.svg",
+    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/index.html",
+    "main.3924a0de.css.map": "/static/css/main.3924a0de.css.map",
+    "main.d87bb76f.js.map": "/static/js/main.d87bb76f.js.map",
+    "787.22edae46.chunk.js.map": "/static/js/787.22edae46.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3924a0de.css",
+    "static/js/main.d87bb76f.js"
+  ]
+}

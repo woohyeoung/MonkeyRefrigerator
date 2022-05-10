@@ -9,11 +9,11 @@
 /coverage
 
 # production
-/build
+# /build
 
 # misc
 .DS_Store
-.env
+# .envina
 
 npm-debug.log*
 yarn-debug.log*
