@@ -271,8 +271,8 @@ module.exports = {
       left outer join 
       (select id, path, type, imageSize, createAt, boardId from boardimage where id in (select min(id) from boardimage group by boardId )) bi 
          on b.id = bi.boardId
-      where bp.votedAt >= (select ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) -7) from dual) 
-      and bp.votedAt <= (select ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) +0 ) from dual) 
+      where bp.votedAt >= (select ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) -7 ) from dual) 
+      and bp.votedAt <= (select ADDDATE( CURDATE(), - WEEKDAY(CURDATE()) + 0 ) from dual) 
       and bi.path is not null
       order by bp.voteCount desc
       limit 10;`;
